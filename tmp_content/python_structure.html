@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>Python code structure &#8212; Project Template  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pre-commit hooks and code quality" href="precommit.html" />
+    <link rel="prev" title="Overview of template generated project" href="overview.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#tmp_content/python_structure" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="Project Template  documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">Project Template  documentation</span>
+          <span class="md-header-nav__topic"> Python code structure </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="get" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder=""Search""
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://gitlab.com/deepsense.ai/work/ds-template" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Project Template
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Project Template  documentation</a></li>
+          <li class="md-tabs__item"><a href="../template_content.html" class="md-tabs__link"><strong>Template content</strong></a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="Project Template documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="Project Template documentation">Project Template  documentation</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://gitlab.com/deepsense.ai/work/ds-template" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Project Template
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+      <span class="md-nav__link caption"><span class="caption-text">Contents:</span></span>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../quickstart.html" class="md-nav__link"><strong>Quickstart</strong></a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../template_content.html" class="md-nav__link"><strong>Template content</strong></a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="overview.html" class="md-nav__link">Overview of template generated project</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Python code structure </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Python code structure</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">"Contents"</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#tmp-content-python-structure--page-root" class="md-nav__link">Python code structure</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#why-python-package" class="md-nav__link">Why python package</a>
+        </li>
+        <li class="md-nav__item"><a href="#python-multi-project" class="md-nav__link">Python multi project</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#install-one-package-multiple-modules" class="md-nav__link">Install one package, multiple modules</a>
+        </li>
+        <li class="md-nav__item"><a href="#install-many-packages-single-module" class="md-nav__link">Install many packages, single module</a>
+        </li>
+        <li class="md-nav__item"><a href="#use-multiple-repositories" class="md-nav__link">Use multiple repositories</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/tmp_content/python_structure.md.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="#why-python-package" class="md-nav__link">Why python package</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#python-multi-project" class="md-nav__link">Python multi project</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="precommit.html" class="md-nav__link">Pre-commit hooks and code quality</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="gitlab_ci.html" class="md-nav__link">GitLab CI configuration</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="semver_package.html" class="md-nav__link">Packaging & semantic version</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../template_structure.html" class="md-nav__link"><strong>Cookiecutter template structure</strong></a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../overall_design.html" class="md-nav__link"><strong>Overall design</strong></a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">"Contents"</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#tmp-content-python-structure--page-root" class="md-nav__link">Python code structure</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#why-python-package" class="md-nav__link">Why python package</a>
+        </li>
+        <li class="md-nav__item"><a href="#python-multi-project" class="md-nav__link">Python multi project</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#install-one-package-multiple-modules" class="md-nav__link">Install one package, multiple modules</a>
+        </li>
+        <li class="md-nav__item"><a href="#install-many-packages-single-module" class="md-nav__link">Install many packages, single module</a>
+        </li>
+        <li class="md-nav__item"><a href="#use-multiple-repositories" class="md-nav__link">Use multiple repositories</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/tmp_content/python_structure.md.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="python-code-structure">
+<h1 id="tmp-content-python-structure--page-root">Python code structure<a class="headerlink" href="#tmp-content-python-structure--page-root" title="Permalink to this heading">¶</a></h1>
+<p>It is really very basic python package based on <a class="reference external" href="https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/">src-based approach</a>.
+Aside of advantages mentioned under the provided link, this structure is preferred due to the following internal reasons:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code> becomes standard interface for people to look for</p></li>
+<li><p>easier for templating: tools can be easily configured to target <code class="docutils literal notranslate"><span class="pre">src/</span></code> - no need to configure on the fly or hardcode package name</p></li>
+<li><p>later can evolved into multi module project.</p></li>
+</ul>
+<section id="why-python-package">
+<h2 id="why-python-package">Why python package<a class="headerlink" href="#why-python-package" title="Permalink to this heading">¶</a></h2>
+<p>Having python package allows to much easier sharing and reusing code. It also reduces headache with hardcoding paths and with proper testing it can capture issues with missing or incompatible dependencies (as PIP does not solve versions with already installed packages.)</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In one project we might work on training and inference code together with some frontend.</p>
+<p>Python package can ship with code such that:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">magic[train]</span></code> installs all dependencies for training.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">magic</span></code> installs onnx + other inference code.</p>
+<p>Then if you have FastAPI or Streamlit app you install <em>lean</em> package which reduces docker size.
+It also enables sharing with other users.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> is used to keep track of packages used in development (developer use only).</p>
+<p>The structure of python package is:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> - the most interesting file: declares package metadata, install dependencies etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> - almost empty, it is used to ensure <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">-e</span> <span class="pre">.</span></code> works due to legacy reasons.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code> directory for all code.</p>
+<ul>
+<li><p><em>any package name</em></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">__init__.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__version__.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></p></li>
+<li><p><em>any python code</em></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">py.typed</span></code> - empty file signals to mypy that type annotations are present in python code.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> - optional, used to include non-python files in package (like <code class="docutils literal notranslate"><span class="pre">py.typed</span></code> or <code class="docutils literal notranslate"><span class="pre">*.pyi</span></code>).</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To create new package you can base on the files listed above.</p>
+</div>
+<p>Version in <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> file is recommended to be used together with <code class="docutils literal notranslate"><span class="pre">bump_version.sh</span></code> script - see <a class="reference internal" href="semver_package.html#packaging-semver"><span class="std std-ref">packaging page</span></a>. This file is read by <code class="docutils literal notranslate"><span class="pre">__version__.py</span></code>.</p>
+</section>
+<section id="python-multi-project">
+<h2 id="python-multi-project">Python multi project<a class="headerlink" href="#python-multi-project" title="Permalink to this heading">¶</a></h2>
+<p>Usually, the above structure is enough. However, project might grow and require something more complex and the template does not support this case.</p>
+<p>For example one can imagine a project with:</p>
+<ul class="simple">
+<li><p>visual_processing</p></li>
+<li><p>text_processing</p></li>
+</ul>
+<section id="install-one-package-multiple-modules">
+<h3 id="install-one-package-multiple-modules">Install one package, multiple modules<a class="headerlink" href="#install-one-package-multiple-modules" title="Permalink to this heading">¶</a></h3>
+<p>The first easiest approach is to add new python modules to <code class="docutils literal notranslate"><span class="pre">src/</span></code> package like this:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">foo</span></code> &lt;- (main module)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bar</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>or</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">package_name</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">__version__.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></p></li>
+<li><p>(…)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">foo/</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bar/</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>One package should be then a <em>main</em> with the same name as full package containing <code class="docutils literal notranslate"><span class="pre">__version__.py</span></code> file.</p>
+<p>Alternative and recommended way is to move <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> to project root and make <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> to use it (and remember to modify <code class="docutils literal notranslate"><span class="pre">.bumpversion.cfg</span></code> file) - this would be a <em>multi module python package</em>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">foo</span></code>  would then result in valid code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">foo</span>
+<span class="kn">import</span> <span class="nn">bar</span>
+</pre></div>
+</div>
+</section>
+<section id="install-many-packages-single-module">
+<h3 id="install-many-packages-single-module">Install many packages, single module<a class="headerlink" href="#install-many-packages-single-module" title="Permalink to this heading">¶</a></h3>
+<p>If packages can be isolated then the best way is to move to structure:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">components/</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">foo</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code></p></li>
+<li><p>(…) etc.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bar</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p>
+<ul>
+<li><p>(…)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Then one would call</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">foo</span> <span class="pre">bar</span></code> given packages uploaded to some PIP registry</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">components/foo</span> <span class="pre">-e</span> <span class="pre">components/bar</span></code> for dev local install</p></li>
+</ul>
+<p>To ensure quality one would also need to use <strong>nox/tox</strong> to test packages in isolation and without python registry it is a little cumbersome to use.</p>
+<p>It is rather useful for a case when project have really independent modules but one have to use only single repository (<em>monorepo</em> case) and/or all packages are to be used together and are tied together in their release cycle.</p>
+</section>
+<section id="use-multiple-repositories">
+<h3 id="use-multiple-repositories">Use multiple repositories<a class="headerlink" href="#use-multiple-repositories" title="Permalink to this heading">¶</a></h3>
+<p>The last approach is best for really independent projects - is to basically have each package in its own repository.</p>
+<p>This is the best clean approach, but then one have to ensure that release cycle and CI/CD is correctly setup. One can also used git submodule but this can lead to other problems but is easiest in short term especially if code is very stable.</p>
+</section>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="overview.html" title="Overview of template generated project"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> "Previous" </span> Overview of template generated project </span>
+              </div>
+            </a>
+          
+          
+            <a href="precommit.html" title="Pre-commit hooks and code quality"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> "Next" </span> Pre-commit hooks and code quality </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2023, deepsense.ai.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

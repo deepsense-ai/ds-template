@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>Overall design &#8212; Project Template  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Cookiecutter template structure" href="template_structure.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#overall_design" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="index.html" title="Project Template  documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">Project Template  documentation</span>
+          <span class="md-header-nav__topic"> Overall design </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="search.html" method="get" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder=""Search""
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://gitlab.com/deepsense.ai/work/ds-template" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Project Template
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = ""versions.json"",
+        target_loc = "../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">Project Template  documentation</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="index.html" title="Project Template documentation" class="md-nav__button md-logo">
+      
+        <img src="_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="index.html"
+       title="Project Template documentation">Project Template  documentation</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://gitlab.com/deepsense.ai/work/ds-template" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Project Template
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+      <span class="md-nav__link caption"><span class="caption-text">Contents:</span></span>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="quickstart.html" class="md-nav__link"><strong>Quickstart</strong></a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="template_content.html" class="md-nav__link"><strong>Template content</strong></a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="template_structure.html" class="md-nav__link"><strong>Cookiecutter template structure</strong></a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> <strong>Overall design</strong> </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active"><strong>Overall design</strong></a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">"Contents"</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#overall-design--page-root" class="md-nav__link"><strong>Overall design</strong></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#considerations" class="md-nav__link">Considerations</a>
+        </li>
+        <li class="md-nav__item"><a href="#inspiration" class="md-nav__link">Inspiration</a>
+        </li>
+        <li class="md-nav__item"><a href="#assumptions" class="md-nav__link">Assumptions</a>
+        </li>
+        <li class="md-nav__item"><a href="#stability-python-system-and-package-versions" class="md-nav__link">Stability - python, system and package versions</a>
+        </li>
+        <li class="md-nav__item"><a href="#future-plans-and-ideas" class="md-nav__link">Future plans and ideas</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="_sources/overall_design.md.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="#considerations" class="md-nav__link">Considerations</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#inspiration" class="md-nav__link">Inspiration</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#assumptions" class="md-nav__link">Assumptions</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#stability-python-system-and-package-versions" class="md-nav__link">Stability - python, system and package versions</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#future-plans-and-ideas" class="md-nav__link">Future plans and ideas</a>
+      
+    
+    </li></ul>
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">"Contents"</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#overall-design--page-root" class="md-nav__link"><strong>Overall design</strong></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#considerations" class="md-nav__link">Considerations</a>
+        </li>
+        <li class="md-nav__item"><a href="#inspiration" class="md-nav__link">Inspiration</a>
+        </li>
+        <li class="md-nav__item"><a href="#assumptions" class="md-nav__link">Assumptions</a>
+        </li>
+        <li class="md-nav__item"><a href="#stability-python-system-and-package-versions" class="md-nav__link">Stability - python, system and package versions</a>
+        </li>
+        <li class="md-nav__item"><a href="#future-plans-and-ideas" class="md-nav__link">Future plans and ideas</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="_sources/overall_design.md.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="overall-design">
+<h1 id="overall-design--page-root"><strong>Overall design</strong><a class="headerlink" href="#overall-design--page-root" title="Permalink to this heading">¶</a></h1>
+<p>Here is a short introduction to default project template to give you better understanding of <em>why</em> and <em>what</em>.</p>
+<p>It was created to propagate some good practices and provide sensible and flexible defaults and to quickly bootstrap new projects.</p>
+<section id="considerations">
+<h2 id="considerations">Considerations<a class="headerlink" href="#considerations" title="Permalink to this heading">¶</a></h2>
+<p>Let’s start with understanding a design considerations. <strong>There is not really a one, universally good way</strong> and there are trade-offs involved. Below is a list of things we want to focus on.</p>
+<ol class="arabic simple">
+<li><p><strong>Harnessing experiences from different projects</strong> (both DS and SE) - so they can propagate as sensible defaults.</p></li>
+<li><p><strong>Adapting to software house project style</strong> - more than a product or a single project needs.</p></li>
+<li><p><strong>Adding tools and configuration that are useful</strong> - usually they would take too much time to setup or read about. It is easier to edit existing file for specific project needs.</p></li>
+<li><p><strong>Providing sensible defaults</strong> - we mostly work with quite short living projects like PoC, where it is important to move fast and rarely we hit any production, but we should keep highest quality possible.</p></li>
+<li><p><strong>Making onboarding as easy as possibleg</strong> - similar structure, enforced code style and tools allow to faster onboard someone or switch between projects.</p></li>
+<li><p><strong>Handing over ownership to ensure independence</strong> - after the template is used, the team takes ownership and can adapt it quickly to specific needs of a project or client.</p></li>
+<li><p><strong>Being PEP and other best practices complaint</strong> - unless experience suggest otherwise or they would be impossible to provide in a satisfying way.</p></li>
+<li><p><strong>Being cautious</strong> - preference is given to battle-tested, stable with known drawbacks, issues and workarounds approaches, so it should work in more broad situations and be more flexible with different clients.</p></li>
+</ol>
+<p>This templates does not:</p>
+<ul class="simple">
+<li><p>Provide perfect configuration for every project,</p></li>
+<li><p>Agree with all subjective personal opinions,</p></li>
+<li><p>Recommend the newest and shiny tools or approaches as they appear.</p></li>
+</ul>
+<p>For example, there are many new projects that provide a better developer experience, however they can lead to difficult and new issues for the clients that might use older software stack or non standard workflow for which implementation might be lacking. Migration and fixing corner cases takes time, so when finally things start to be stable enough we will eventually migrate to them.
+On the other hand team has a possibility to do that on their own if client do not have nothing against it.</p>
+</section>
+<section id="inspiration">
+<h2 id="inspiration">Inspiration<a class="headerlink" href="#inspiration" title="Permalink to this heading">¶</a></h2>
+<p>The inspiration for configuration is based on:</p>
+<ul class="simple">
+<li><p>lessons learned from interviews about different projects that happened during 2020-2022 in deepsense.ai,</p></li>
+<li><p>other cookiecutter projects and open source repositories,</p></li>
+<li><p>PEP documents, stack overflow posts, medium posts etc to identify other drawbacks and trade-offs,</p></li>
+<li><p>adapting to recent findings.</p></li>
+</ul>
+</section>
+<section id="assumptions">
+<h2 id="assumptions">Assumptions<a class="headerlink" href="#assumptions" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Python 3.9 is default on CI, 3.8 as minimum installable for package - due to recent projects (as of 01.2023), hopefully to update soon.</p></li>
+<li><p>GitLab is used in almost all projects so it’s selected as the default CI / CD provider.</p></li>
+<li><p>The licences of used libraries are verified against the provided whitelist, which can be exceptionally modified to accept GPL-like licenses.</p></li>
+<li><p>No support multiple python version in the project - each project sticks to single python version and most dependencies are constant.</p></li>
+<li><p>No support for native code, pure python focus.</p></li>
+<li><p>Research quality code and faster development has priority.</p></li>
+<li><p>Good engineering practices like tests, security scanners are introduced to ensure quality and enforce good habits.</p></li>
+<li><p>Most projects have a single thing to focus on. Multi topic monorepo is not supported at the moment.</p></li>
+<li><p>All non-standard things are intended to be <em>opt-in</em> based on <code class="docutils literal notranslate"><span class="pre">ds-tools</span></code> project.</p></li>
+</ul>
+</section>
+<section id="stability-python-system-and-package-versions">
+<h2 id="stability-python-system-and-package-versions">Stability - python, system and package versions<a class="headerlink" href="#stability-python-system-and-package-versions" title="Permalink to this heading">¶</a></h2>
+<p>For all projects that follow semantic versions, we should update patch to incorporate all bug and security fixes.
+Major and minor release are more troublesome due to additional risks and trade-offs.</p>
+<p>Why older, stable versions as default are preferred:</p>
+<ul class="simple">
+<li><p>Ecosystem support:</p>
+<ul>
+<li><p>libraries and their dependency take time to update and <em>test</em>.</p></li>
+<li><p>older versions have more compatible libraries to work with and known workarounds/google results for issues.</p></li>
+<li><p>it is more likely that research open source code used older versions</p></li>
+</ul>
+</li>
+<li><p>Ubuntu/Debian/CentOS LTS are targeted platforms:</p>
+<ul>
+<li><p>they don’t use newest versions</p></li>
+<li><p>usually those versions which are shipped are the best well-supported in libraries as they are used in CI tests and docker images.</p></li>
+<li><p>target LTS (Long Time Support) and usually it takes 2 years for libraries to catch up with releases.</p></li>
+</ul>
+</li>
+<li><p>Python older code works on newer versions but backport of features is not always possible/harder.</p>
+<ul>
+<li><p>your code will work in the future versions, won’t work in previous versions</p></li>
+<li><p>example: near the end of the project client might ask you to run inference on a nvidia container which uses older version of python and you would need to rewrite it…</p></li>
+<li><p>default older version on CI allows you to use locally newer version - however it works if you have good suite of tests.</p></li>
+</ul>
+</li>
+<li><p>Testing multiple python versions (and matrix testing) is costly so pick one version</p>
+<ul>
+<li><p>each version multiplies required tests which costs time and money to support.</p></li>
+</ul>
+</li>
+<li><p>Targeting older versions increases chances to re-use code in other projects due to higher compatibility.</p></li>
+</ul>
+<p>This is why default version is older one, however it should be updated as soon as possible when:</p>
+<ul class="simple">
+<li><p>Python support cycle ends: https://devguide.python.org/versions/</p></li>
+<li><p>NVIDIA images are updated to newer versions</p></li>
+<li><p>Cloud providers such as AWS/GCP/Azure moved to newer versions</p></li>
+<li><p>most popular packages (numpy, pytorch etc) moved at least half a year ago (so other packages had time to migrate too).</p></li>
+</ul>
+<p>THis ensures we reduce chances of having issues with client infrastructure or libraries we use are not yet updated.
+That said, for internal project it is generally safer to use newer versions, especially if the project is for educational purposes.
+It is also true for tools that are not critical e.g. linters.</p>
+</section>
+<section id="future-plans-and-ideas">
+<h2 id="future-plans-and-ideas">Future plans and ideas<a class="headerlink" href="#future-plans-and-ideas" title="Permalink to this heading">¶</a></h2>
+<p>Project is far from finished and it is planned to evolve over time. Below are <em>some</em> ideas we can work on:</p>
+<ol class="arabic simple">
+<li><p>Multi-project monorepo - e.g. multiple packages in single repository</p></li>
+<li><p>cibuildwheel/nox/tox - native code, mutliple python versions</p></li>
+<li><p>GitHub pipelines</p></li>
+</ol>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="template_structure.html" title="Cookiecutter template structure"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> "Previous" </span> <strong>Cookiecutter template structure</strong> </span>
+              </div>
+            </a>
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2023, deepsense.ai.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>
