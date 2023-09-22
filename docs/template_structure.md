@@ -48,17 +48,14 @@ Cookiecutter asks user for information, copies this directory, applies Jinja sub
 
 We also have a few basic tests to ensure that cookiecutter project can be generated just fine.
 
-Note that to make sure everything is working correctly we also use [`ds-template-test`](https://gitlab.com/deepsense.ai/work/ds-template-test) repository to manually generate and test changes (CI, linters etc). 
-
-Unfortunately, we cannot automate it unless we switch to paid GitLab.
-
+In the future we will like to introduce some automating testing of generated project and maybe some example preview.
 
 
 ## Documentation
 
 Actually what are you reading just now :)
 
-We use Sphinx documentation and content is in `docs/` directory and it is hosted [on Gitlab Pages](https://deepsense.ai.gitlab.io/work/ds-template/).
+We use Sphinx documentation and content is in `docs/` directory and it is hosted [on GitHub Pages](https://deepsense-ai.github.io/ds-template//).
 
 To build locally:
 ```bash

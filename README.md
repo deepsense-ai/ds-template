@@ -39,7 +39,7 @@ $ git clone <GIT-SSH>
 # install cookiecutter if not yet installed
 $ pip install cookiecutter
 # generate cookiecutter with --force and ensure the repo_name is set to the same name as directory you cloned git repository to.
-$ cookiecutter -f git@gitlab.com:deepsense.ai/work/ds-template.git
+$ cookiecutter -f git@github.com:deepsense-ai/ds-template.git
 # finally, add all files, commit and push.
 $ git add .
 $ git commit -m "Initialize repository with default project template"
@@ -52,7 +52,7 @@ Approach 2 (initalize git locally and push to remote):
 # install cookiecutter if not yet installed
 $ pip install cookiecutter
 # generate project
-$ cookiecutter git@gitlab.com:deepsense.ai/work/ds-template.git
+$ cookiecutter git@github.com:deepsense-ai/ds-template.git
 # enter created directory
 $ cd <project-name>
 # now we need to connect it to repository (assuming empty repository)
