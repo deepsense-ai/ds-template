@@ -1,0 +1,87 @@
+repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.4.0
+      hooks:
+          - id: check-case-conflict
+          - id: check-merge-conflict
+          - id: trailing-whitespace
+            exclude: ".bumpversion.cfg"
+          - id: check-ast
+          - id: check-added-large-files
+          - id: check-toml
+          - id: check-json
+          - id: check-yaml
+
+      # PEP 8 compliant opinionated formatter.
+    - repo: https://github.com/psf/black
+      rev: 23.9.1
+      hooks:
+          - id: black
+            exclude: (docs/)
+          - id: black-jupyter
+            exclude: (docs/)
+
+      # Cleaning unused imports.
+    - repo: https://github.com/hadialqattan/pycln
+      rev: v2.2.2
+      hooks:
+          - id: pycln
+            args: ["-a"]
+            exclude: (docs/)
+
+    # Modernizes python code and upgrade syntax for newer versions of the language
+    - repo: https://github.com/asottile/pyupgrade
+      rev: v3.12.0
+      hooks:
+          - id: pyupgrade
+            args: [--py38-plus]
+
+      # Used to have proper type annotations for library code.
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: v1.5.1
+      hooks:
+          - id: mypy
+            args: []
+            additional_dependencies: []
+            exclude: (/test_|setup.py|/tests/|docs/)
+
+      # Sort imports alphabetically, and automatically separated into sections and by type.
+    - repo: https://github.com/timothycrosley/isort
+      rev: 5.12.0
+      hooks:
+          - id: isort
+            args: ["--profile", "black"]
+            exclude: (docs/)
+
+      # Checks Python source files for errors.
+    - repo: https://github.com/PyCQA/flake8
+      rev: 6.1.0
+      hooks:
+          - id: flake8
+            name: flake8
+            entry: flake8
+            language: python
+            types: [python]
+            args: [--config, .flake8]
+            exclude: (docs/)
+
+      # Enforces a coding standard, looks for code smells, and can make suggestions about how the code could be refactored.
+    - repo: https://github.com/pycqa/pylint
+      rev: v3.0.0a7
+      hooks:
+          - id: pylint
+            exclude: (/test_|tests/|docs/)
+            additional_dependencies:
+              - 'pylint_pydantic'
+            args:
+              # pylint can have issue with python libraries based on C
+              # if it fails to find some objects likely you need to add them
+              # here:
+              ["--extension-pkg-whitelist=pydantic"]
+
+      # Finds common security issues in Python code.
+    - repo: https://github.com/Lucas-C/pre-commit-hooks-bandit
+      rev: v1.0.6
+      hooks:
+          - id: python-bandit-vulnerability-check
+            args: [-c, pyproject.toml, --recursive, src, -ll]
