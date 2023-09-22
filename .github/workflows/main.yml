@@ -1,0 +1,66 @@
+name: CI
+
+on:  
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches: 
+      - main 
+
+jobs:
+
+  tests:
+    runs-on: ubuntu-latest
+    container: python:3.11
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Tests
+        run: pytest -v -p no:warnings --junitxml=report.xml tests/
+
+      - name: Publish Test Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Report
+          path: report.xml
+          retention-days: 10
+
+  pages:
+    runs-on: ubuntu-latest
+    container: python:3.9-buster
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build docs
+        run: ./build_docs.sh
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
