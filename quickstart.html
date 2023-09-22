@@ -131,7 +131,7 @@
       
         <div class="md-flex__cell md-flex__cell--shrink">
           <div class="md-header-nav__source">
-            <a href="https://gitlab.com/deepsense.ai/work/ds-template" title="Go to repository" class="md-source" data-md-source="github">
+            <a href="https://github.com/deepsense-ai/ds-template/" title="Go to repository" class="md-source" data-md-source="github">
 
     <div class="md-source__icon">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
@@ -190,7 +190,7 @@
        title="Project Template documentation">Project Template  documentation</a>
   </label>
     <div class="md-nav__source">
-      <a href="https://gitlab.com/deepsense.ai/work/ds-template" title="Go to repository" class="md-source" data-md-source="github">
+      <a href="https://github.com/deepsense-ai/ds-template/" title="Go to repository" class="md-source" data-md-source="github">
 
     <div class="md-source__icon">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
@@ -233,7 +233,7 @@
               <ul class="md-nav__list">
         <li class="md-nav__item"><a href="#approach-1-clone-empty" class="md-nav__link">Approach 1 (clone empty):</a>
         </li>
-        <li class="md-nav__item"><a href="#approach-2-initalize-git-locally-and-push-to-remote" class="md-nav__link">Approach 2 (initalize git locally and push to remote):</a>
+        <li class="md-nav__item"><a href="#approach-2-initialize-git-locally-and-push-to-remote" class="md-nav__link">Approach 2 (initialize git locally and push to remote):</a>
         </li></ul>
             </nav>
         </li></ul>
@@ -267,7 +267,7 @@
     <li class="md-nav__item">
     
     
-      <a href="#approach-2-initalize-git-locally-and-push-to-remote" class="md-nav__link">Approach 2 (initalize git locally and push to remote):</a>
+      <a href="#approach-2-initialize-git-locally-and-push-to-remote" class="md-nav__link">Approach 2 (initialize git locally and push to remote):</a>
       
     
     </li></ul>
@@ -318,7 +318,7 @@
               <ul class="md-nav__list">
         <li class="md-nav__item"><a href="#approach-1-clone-empty" class="md-nav__link">Approach 1 (clone empty):</a>
         </li>
-        <li class="md-nav__item"><a href="#approach-2-initalize-git-locally-and-push-to-remote" class="md-nav__link">Approach 2 (initalize git locally and push to remote):</a>
+        <li class="md-nav__item"><a href="#approach-2-initialize-git-locally-and-push-to-remote" class="md-nav__link">Approach 2 (initialize git locally and push to remote):</a>
         </li></ul>
             </nav>
         </li></ul>
@@ -355,8 +355,10 @@
 </section>
 <section id="how-to-initialize-new-repository-with-the-template">
 <h2 id="how-to-initialize-new-repository-with-the-template">How to initialize new repository with the template<a class="headerlink" href="#how-to-initialize-new-repository-with-the-template" title="Permalink to this heading">¶</a></h2>
-<p>Firstly, you need to create a GitLab project. The name should be of the follwing convention:</p>
+<p>Firstly, you need to create a new project. We use following convention for project name:</p>
 <p><code class="docutils literal notranslate"><span class="pre">&lt;client_name&gt;-&lt;project_name&gt;</span></code></p>
+<p>For you, instead of client name you can use your or company name as a prefix.</p>
+<p>GIT-SSH is the SSH link to the repository you want to initialize.</p>
 <p>Execute the following steps then:</p>
 <section id="approach-1-clone-empty">
 <h3 id="approach-1-clone-empty">Approach 1 (clone empty):<a class="headerlink" href="#approach-1-clone-empty" title="Permalink to this heading">¶</a></h3>
@@ -365,7 +367,7 @@ $<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span
 <span class="c1"># install cookiecutter if not yet installed</span>
 $<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>cookiecutter
 <span class="c1"># generate cookiecutter with --force and ensure the repo_name is set to the same name as directory you cloned git repository to.</span>
-$<span class="w"> </span>cookiecutter<span class="w"> </span>-f<span class="w"> </span>git@gitlab.com:deepsense.ai/work/ds-template.git
+$<span class="w"> </span>cookiecutter<span class="w"> </span>-f<span class="w"> </span>git@github.com:deepsense-ai/ds-template.git
 <span class="c1"># finally, add all files, commit and push.</span>
 $<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>.
 $<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Initialize repository with default project template"</span>
@@ -373,12 +375,12 @@ $<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>
 </pre></div>
 </div>
 </section>
-<section id="approach-2-initalize-git-locally-and-push-to-remote">
-<h3 id="approach-2-initalize-git-locally-and-push-to-remote">Approach 2 (initalize git locally and push to remote):<a class="headerlink" href="#approach-2-initalize-git-locally-and-push-to-remote" title="Permalink to this heading">¶</a></h3>
+<section id="approach-2-initialize-git-locally-and-push-to-remote">
+<h3 id="approach-2-initialize-git-locally-and-push-to-remote">Approach 2 (initialize git locally and push to remote):<a class="headerlink" href="#approach-2-initialize-git-locally-and-push-to-remote" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># install cookiecutter if not yet installed</span>
 $<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>cookiecutter
 <span class="c1"># generate project</span>
-$<span class="w"> </span>cookiecutter<span class="w"> </span>git@gitlab.com:deepsense.ai/work/ds-template.git
+$<span class="w"> </span>cookiecutter<span class="w"> </span>git@github.com:deepsense-ai/ds-template.git
 <span class="c1"># enter created directory</span>
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>&lt;project-name&gt;
 <span class="c1"># now we need to connect it to repository (assuming empty repository)</span>
