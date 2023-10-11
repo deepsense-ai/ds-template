@@ -33,7 +33,7 @@ hooks/post_gen_project.py
 - **pre hook** - to validate variables content before cookiecutter generates files.
   - e.g. check if python package name provided by a user is correct
 - **post hook** - second allows to clean up unnecessary files that are not needed or run additional code.
-  - e.g. remove unnessary files, fix file permissions etc.
+  - e.g. remove unnecessary files, fix file permissions etc.
 
 ## Project template directory
 

@@ -97,7 +97,7 @@ $ git commit -m "Initialize repository with default project template"
 $ git push origin
 ```
 
-Approach 2 (initalize git locally and push to remote):
+Approach 2 (initialize git locally and push to remote):
 
 ```bash
 # install cookiecutter if not yet installed

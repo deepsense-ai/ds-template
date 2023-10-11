@@ -79,7 +79,7 @@ use `git rev-parse HEAD`, also GitLab has `$CI_COMMIT_SHA` environment variable.
         - reports code % coverage
         - ![Tests](../_static/tests.png)
     - checks for licenses
-        - fails if any third-party installed python package license is not present on whitelist (`.license-whitelist.txt`).
+        - fails if any third-party installed python package license is not present on allowlist (`.license-whitelist.txt`).
     - generates `pip freeze`
     - **artifacts:** exact pinned package versions + licenses can be downloaded from this stage
 * **package** stage:
