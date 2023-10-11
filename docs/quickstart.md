@@ -18,11 +18,11 @@ Install **cookiecutter>=2.1.1** first and then point it to git repository / loca
 
 ## How to initialize new repository with the template
 
-Firstly, you need to create a new project. We use following convention for project name: 
+Firstly, you need to create a git project. The suggested name convention is:
 
 `<client_name>-<project_name>`
 
-For you, instead of client name you can use your or company name as a prefix.
+Where `client_name` is the name of the client can also be your own name or name of the company you work for. `project_name` is the name of the project.
 
 GIT-SSH is the SSH link to the repository you want to initialize.
 

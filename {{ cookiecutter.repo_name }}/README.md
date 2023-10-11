@@ -1,6 +1,7 @@
 # {{cookiecutter.project_name}}
 
 Repository is created with deepsense.ai project template boilerplate. Adapt to your needs.
+Documentation is available at [https://deepsense-ai.github.io/ds-template/](https://deepsense-ai.github.io/ds-template/).
 
 
 # Setup developer environment
@@ -49,7 +50,7 @@ See also [Cookiecutter Data Science opinion](https://drivendata.github.io/cookie
 
 # Project documentation
 
-In `docs/` directory are Sphinx RST files.
+In `docs/` directory are Sphinx RST/Markdown files.
 
 To build documentation locally, in your configured environment, you can use `build_docs.sh` script:
 
@@ -59,7 +60,7 @@ $ ./build_docs.sh
 
 Then open `public/index.html` file.
 
-Please read the offical [Sphinx documentation](https://www.sphinx-doc.org/en/master/) for more details.
+Please read the official [Sphinx documentation](https://www.sphinx-doc.org/en/master/) for more details.
 
 {% if cookiecutter.ci == "GitLab" %}
 
@@ -93,7 +94,7 @@ $ ./bump_version.sh --dry-run major
 ```
 Script updates **VERSION** file and setup.cfg automatically uses that version.
 
-You can configure it to update version string in other files as well - check bump2version configuration please.
+You can configure it to update version string in other files as well - please check out the bump2version configuration file.
 
 {% if cookiecutter.ci == "GitLab" %}
 

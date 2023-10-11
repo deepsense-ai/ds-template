@@ -1,6 +1,6 @@
 repos:
     - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v4.4.0
+      rev: v4.5.0
       hooks:
           - id: check-case-conflict
           - id: check-merge-conflict
@@ -31,7 +31,7 @@ repos:
 
     # Modernizes python code and upgrade syntax for newer versions of the language
     - repo: https://github.com/asottile/pyupgrade
-      rev: v3.12.0
+      rev: v3.15.0
       hooks:
           - id: pyupgrade
             args: [--py38-plus]
@@ -42,6 +42,8 @@ repos:
       hooks:
           - id: mypy
             args: []
+            # You can add additional plugins for mypy below
+            # such as types-python-dateutil
             additional_dependencies: []
             exclude: (/test_|setup.py|/tests/|docs/)
 
@@ -67,17 +69,19 @@ repos:
 
       # Enforces a coding standard, looks for code smells, and can make suggestions about how the code could be refactored.
     - repo: https://github.com/pycqa/pylint
-      rev: v3.0.0a7
+      rev: v3.0.1
       hooks:
           - id: pylint
             exclude: (/test_|tests/|docs/)
-            additional_dependencies:
-              - 'pylint_pydantic'
-            args:
-              # pylint can have issue with python libraries based on C
-              # if it fails to find some objects likely you need to add them
-              # here:
-              ["--extension-pkg-whitelist=pydantic"]
+            # # You can add additional plugins for pylint here,
+            # here is an example for pydantic, remember to enable it in pyproject.toml
+            # additional_dependencies:
+            #   - 'pylint_pydantic'
+            # args:
+            #   # pylint can have issue with python libraries based on C
+            #   # if it fails to find some objects likely you need to add them
+            #   # here:
+            #   ["--extension-pkg-whitelist=pydantic"]
 
       # Finds common security issues in Python code.
     - repo: https://github.com/Lucas-C/pre-commit-hooks-bandit
