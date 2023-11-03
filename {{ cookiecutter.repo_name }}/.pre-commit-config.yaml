@@ -14,7 +14,7 @@ repos:
 
       # PEP 8 compliant opinionated formatter.
     - repo: https://github.com/psf/black
-      rev: 23.9.1
+      rev: 23.10.1
       hooks:
           - id: black
             exclude: (docs/)
@@ -23,7 +23,7 @@ repos:
 
       # Cleaning unused imports.
     - repo: https://github.com/hadialqattan/pycln
-      rev: v2.2.2
+      rev: v2.3.0
       hooks:
           - id: pycln
             args: ["-a"]
@@ -38,7 +38,7 @@ repos:
 
       # Used to have proper type annotations for library code.
     - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.5.1
+      rev: v1.6.1
       hooks:
           - id: mypy
             args: []
