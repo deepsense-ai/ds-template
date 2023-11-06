@@ -259,6 +259,8 @@
         <li class="md-nav__item"><a href="#docker-image" class="md-nav__link">Docker image</a>
         </li>
         <li class="md-nav__item"><a href="#mypy-additional-information" class="md-nav__link">mypy - additional information</a>
+        </li>
+        <li class="md-nav__item"><a href="#jupytext-additional-information" class="md-nav__link">jupytext - additional information</a>
         </li></ul>
             </nav>
         </li>
@@ -286,6 +288,13 @@
     
     
       <a href="#mypy-additional-information" class="md-nav__link">mypy - additional information</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#jupytext-additional-information" class="md-nav__link">jupytext - additional information</a>
       
     
     </li></ul>
@@ -342,6 +351,8 @@
         <li class="md-nav__item"><a href="#docker-image" class="md-nav__link">Docker image</a>
         </li>
         <li class="md-nav__item"><a href="#mypy-additional-information" class="md-nav__link">mypy - additional information</a>
+        </li>
+        <li class="md-nav__item"><a href="#jupytext-additional-information" class="md-nav__link">jupytext - additional information</a>
         </li></ul>
             </nav>
         </li>
@@ -425,6 +436,16 @@ Some packages do not have typing information - and this settings raises error fo
 <p>Sometimes a package do not have any type information nor additional package with it - in that case you can suppress mypy error by manually
 marking an exact library to be ignored as mentioned before.</p>
 <p>Please refer to <a class="reference external" href="https://mypy.readthedocs.io/en/stable/index.html">official mypy documentation</a> for more information.</p>
+</section>
+<section id="jupytext-additional-information">
+<h2 id="jupytext-additional-information">jupytext - additional information<a class="headerlink" href="#jupytext-additional-information" title="Permalink to this heading">¶</a></h2>
+<p>Jupyter notebooks are hard to review - to make it easier it is possible to use <code class="docutils literal notranslate"><span class="pre">jupytext</span></code> to convert them to <code class="docutils literal notranslate"><span class="pre">.py</span></code> files (py:percent format) automatically on commit.</p>
+<p>If you have not used it before, please read <a class="reference external" href="https://jupytext.readthedocs.io/en/latest/">jupytext documentation</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not edit generated files - they will be overwritten by jupytext due to detected differences.</p>
+<p>It is also important to ensure no other linting tool modifies them, as it might lead to endless loop of changes.</p>
+</div>
 </section>
 </section>
 

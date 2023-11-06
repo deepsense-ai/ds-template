@@ -86,3 +86,15 @@ Sometimes a package do not have any type information nor additional package with
 marking an exact library to be ignored as mentioned before. 
 
 Please refer to [official mypy documentation](https://mypy.readthedocs.io/en/stable/index.html) for more information.
+
+## jupytext - additional information
+
+Jupyter notebooks are hard to review - to make it easier it is possible to use `jupytext` to convert them to `.py` files (py:percent format) automatically on commit.
+
+If you have not used it before, please read [jupytext documentation](https://jupytext.readthedocs.io/en/latest/).
+
+```{warning}
+Do not edit generated files - they will be overwritten by jupytext due to detected differences. 
+
+It is also important to ensure no other linting tool modifies them, as it might lead to endless loop of changes.
+```
