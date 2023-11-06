@@ -13,10 +13,11 @@ To start, you need to setup your local machine.
 You need to setup virtual environment, simplest way is to run from project root directory:
 
 ```bash
-$ ./setup_dev_env.sh
+$ . ./setup_dev_env.sh
 $ source venv/bin/activate
 ```
 This will create a new venv and run `pip install -r requirements-dev.txt`.
+Last line shows how to activate the environment.
 
 ## Install pre-commit
 
