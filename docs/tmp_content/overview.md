@@ -11,6 +11,7 @@ Generated project consists of:
     * a very minimal python code + example test
 1. pre-commit hooks:
     * `black`, `flake8` - enforce code style
+    * `jupytext` (optional) - sync jupyter notebooks to plain python files
     * `pycln` - cleanups unused imports
     * `mypy` - checks type errors
     * `isort` - sorts imports
