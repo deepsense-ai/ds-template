@@ -76,6 +76,19 @@ Please read more about it [here](https://docs.gitlab.com/ee/user/project/pages/i
 
 {% endif %}
 
+{% if cookiecutter.jupytext == "Yes" %}
+
+# Jupyter notebooks and jupytext
+
+To make notebooks more friendly for code review and version control we use `jupytext` to sync notebooks with python files. If you have not used it before, please read [jupytext documentation](https://jupytext.readthedocs.io/en/latest/).
+
+There is pre-commit hook which automatically generates and syncs notebooks with python files on each commit.
+
+Please ensure you do not edit/modify manually or by other means generated py:percent files as they will conflict with jupytext change detection and lead to endless loop.
+Treat them as read-only files and edit only notebooks.
+
+{% endif %}
+
 # Semantic version bump
 
 To bump version of the library please use `bump2version` which will update all version strings.

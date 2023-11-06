@@ -5,7 +5,7 @@ repos:
           - id: check-case-conflict
           - id: check-merge-conflict
           - id: trailing-whitespace
-            exclude: ".bumpversion.cfg"
+            exclude: .bumpversion.cfg|notebooks/.*\.py
           - id: check-ast
           - id: check-added-large-files
           - id: check-toml
@@ -17,9 +17,23 @@ repos:
       rev: 23.10.1
       hooks:
           - id: black
-            exclude: (docs/)
+            exclude: (docs/|notebooks/){% if cookiecutter.jupytext == "No" %}
           - id: black-jupyter
-            exclude: (docs/)
+            files: \.ipynb$
+    {%- endif -%}
+
+    {% if cookiecutter.jupytext == "Yes" %}
+
+      # Save .ipynb to .py:percent format
+    - repo: https://github.com/mwouts/jupytext
+      rev: v1.15.2
+      hooks:
+        - id: jupytext
+          args: ["--from", ".ipynb", "--to", "py:percent", "--pipe-fmt", "black"]
+          files: "\\.ipynb$"
+          additional_dependencies:
+            - black==23.10.1
+    {%- endif %}
 
       # Cleaning unused imports.
     - repo: https://github.com/hadialqattan/pycln
@@ -27,7 +41,7 @@ repos:
       hooks:
           - id: pycln
             args: ["-a"]
-            exclude: (docs/)
+            exclude: (docs/|notebooks/)
 
     # Modernizes python code and upgrade syntax for newer versions of the language
     - repo: https://github.com/asottile/pyupgrade
@@ -53,7 +67,7 @@ repos:
       hooks:
           - id: isort
             args: ["--profile", "black"]
-            exclude: (docs/)
+            exclude: (docs/|notebooks/)
 
       # Checks Python source files for errors.
     - repo: https://github.com/PyCQA/flake8
@@ -90,3 +104,4 @@ repos:
           - id: bandit
             args: [-c, pyproject.toml, --recursive, src]
             additional_dependencies: [".[toml]"] # required for pyproject.toml support
+            exclude:  (notebooks/)

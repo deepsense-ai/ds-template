@@ -14,6 +14,10 @@ gitlab_files = [
 REMOVE_PATHS.extend(gitlab_files)
 {% endif %}
 
+{% if cookiecutter.jupytext != "Yes" %}
+REMOVE_PATHS.extend(["notebooks/example.py"])
+{% endif %}
+
 print("Cleaning files... 🌀")
 for path in REMOVE_PATHS:
     path = Path(path)

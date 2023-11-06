@@ -8,6 +8,10 @@
       "GitLab",
       "None"
     ],
+    "jupytext": [
+      "No",
+      "Yes"
+    ],
     "python_package_name": "{{ cookiecutter.__project_name_slug.replace('-', '_') }}",
     "__package_name": "{{ cookiecutter.python_package_name }}"
   }
