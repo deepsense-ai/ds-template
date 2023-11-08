@@ -75,9 +75,23 @@ Only people with repository access can view it.
 
 Please read more about it [here](https://docs.gitlab.com/ee/user/project/pages/index.html).
 
-{% endif %}
+{%- endif -%}
 
-{% if cookiecutter.jupytext == "Yes" %}
+{%- if cookiecutter.ci == "Github" %}
+
+### Github Actions Documentation
+
+By default **Github Actions** pipelines have `documentation` workflow which will build sphinx documentation automatically on main branch - and it will push it to a branch - it can be hosted on **Github Pages** if you enable it.
+
+To access it, you need to enable it, on **Github repository -> Settings -> Pages** page select **Deploy from a branch** and select **gh-pages**. Link will appear here after deployment.
+
+**WARNING:** Only on Github Enterprise you can make it private so only people with repository access can view it.
+
+Please read more about it [here](https://docs.github.com/en/pages/quickstart).
+
+{%- endif -%}
+
+{%- if cookiecutter.jupytext == "Yes" %}
 
 # Jupyter notebooks and jupytext
 
@@ -88,7 +102,7 @@ There is pre-commit hook which automatically generates and syncs notebooks with 
 Please ensure you do not edit/modify manually or by other means generated py:percent files as they will conflict with jupytext change detection and lead to endless loop.
 Treat them as read-only files and edit only notebooks.
 
-{% endif %}
+{%- endif -%}
 
 # Semantic version bump
 
