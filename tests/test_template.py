@@ -113,6 +113,33 @@ def test_template_project_with_gitlab(cookies):
     assert (rpath / ".gitlab-ci.yml").exists() is True
 
 
+def test_template_project_no_github(cookies):
+    result = cookies.bake(extra_context={
+        "client_name": "no",
+        "project_name": "gitlab",
+        "ci": "None"
+        })
+    assert result.exit_code == 0
+    assert result.exception is None
+
+    rpath: Path = result.project_path
+    assert (rpath / ".github").exists() is False
+
+
+def test_template_project_with_github(cookies):
+    result = cookies.bake(extra_context={
+        "client_name": "with",
+        "project_name": "gitlab",
+        "ci": "Github"
+        })
+    assert result.exit_code == 0
+    assert result.exception is None
+
+    rpath: Path = result.project_path
+    assert (rpath / ".gitlab-ci.yml").exists() is False
+    assert (rpath / ".github").exists() is True
+
+
 def test_template_project_with_jupytext(cookies):
     result = cookies.bake(extra_context={
         "client_name": "no",

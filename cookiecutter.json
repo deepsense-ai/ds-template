@@ -6,6 +6,7 @@
     "repo_name": "{{cookiecutter.__client_name_slug}}-{{cookiecutter.__project_name_slug}}",
     "ci": [
       "GitLab",
+      "Github",
       "None"
     ],
     "jupytext": [
@@ -13,5 +14,8 @@
       "Yes"
     ],
     "python_package_name": "{{ cookiecutter.__project_name_slug.replace('-', '_') }}",
-    "__package_name": "{{ cookiecutter.python_package_name }}"
+    "__package_name": "{{ cookiecutter.python_package_name }}",
+    "_copy_without_render": [
+      ".github/workflows/*.yml"
+    ]
   }
