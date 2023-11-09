@@ -5,12 +5,11 @@ on:
     branches: [main, master]
 
 jobs:
-  permissions:
-      contents: write
   pages:
     runs-on: ubuntu-latest
     container: python:3.11
-
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
