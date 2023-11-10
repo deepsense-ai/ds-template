@@ -84,5 +84,3 @@ Project is far from finished and it is planned to evolve over time. Below are _s
 
 1. Multi-project monorepo - e.g. multiple packages in single repository
 1. cibuildwheel/nox/tox - native code, mutliple python versions
-1. GitHub pipelines
-

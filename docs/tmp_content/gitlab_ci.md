@@ -176,5 +176,5 @@ There is also a **company-wide [docker registry](http://docker.intra.deepsense.a
 
 ### Other GitLab featurs
 
-Currently our organization is on **free** which is limiting many functionalities.
+The template targets only GitLab **free** mode which is limiting many functionalities.
 
