@@ -9,4 +9,5 @@
    tmp_content/python_structure
    tmp_content/precommit
    tmp_content/gitlab_ci
+   tmp_content/github_ci
    tmp_content/semver_package
