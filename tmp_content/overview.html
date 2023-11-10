@@ -269,6 +269,13 @@
     <li class="md-nav__item">
     
     
+      <a href="github_ci.html" class="md-nav__link">GitHub Actions CI</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
       <a href="semver_package.html" class="md-nav__link">Packaging & semantic version</a>
       
     
@@ -338,7 +345,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">isort</span></code> - sorts imports</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pylint</span></code> - provides static code analysis and enforces coding standard</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pyupgrade</span></code> - modernizes code for given python version</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bandit</span></code> - checks for security issues - required for SOC 2 Certification - do not remove it</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bandit</span></code> - checks for security issues - required for SOC 2 Certification</p></li>
 </ul>
 </li>
 <li><p>Sphinx documentation:</p>
@@ -359,8 +366,18 @@
 <li><p>license checks of installed packages</p></li>
 <li><p>building and hosting documentation on GitLab Pages</p></li>
 <li><p>building package and uploading to private GitLab Package registry</p></li>
-<li><p>security: <code class="docutils literal notranslate"><span class="pre">trivy</span></code> - required for SOC 2 Certification - do not remove it</p></li>
+<li><p>security: <code class="docutils literal notranslate"><span class="pre">trivy</span></code> - required for SOC 2 Certification</p></li>
 <li><p>steps to rebuild linter docker image</p></li>
+</ul>
+</li>
+<li><p>Github integration (optional):</p>
+<ul class="simple">
+<li><p>linter stage (<code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all</span></code>)</p></li>
+<li><p>tests (<code class="docutils literal notranslate"><span class="pre">pytest</span></code>) + code coverage</p></li>
+<li><p>license checks of installed packages</p></li>
+<li><p>building and hosting documentation on GitHub Pages (if enabled)</p></li>
+<li><p>testing if package can be build</p></li>
+<li><p>security: <code class="docutils literal notranslate"><span class="pre">trivy</span></code> - required for SOC 2 Certification, but is reporting only</p></li>
 </ul>
 </li>
 <li><p>Other less important files (more configurations, <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> etc)</p></li>

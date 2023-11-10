@@ -17,7 +17,7 @@ Generated project consists of:
     * `isort` - sorts imports
     * `pylint` - provides static code analysis and enforces coding standard
     * `pyupgrade` - modernizes code for given python version
-    * `bandit` - checks for security issues - required for SOC 2 Certification - do not remove it
+    * `bandit` - checks for security issues - required for SOC 2 Certification
 1. Sphinx documentation:
     * basic preconfigured documentation template
     * recommended extensions
@@ -32,8 +32,15 @@ Generated project consists of:
     * license checks of installed packages
     * building and hosting documentation on GitLab Pages
     * building package and uploading to private GitLab Package registry
-    * security: `trivy` - required for SOC 2 Certification - do not remove it
+    * security: `trivy` - required for SOC 2 Certification
     * steps to rebuild linter docker image
+1. Github integration (optional):
+    * linter stage (`pre-commit run --all`)
+    * tests (`pytest`) + code coverage
+    * license checks of installed packages
+    * building and hosting documentation on GitHub Pages (if enabled)
+    * testing if package can be build
+    * security: `trivy` - required for SOC 2 Certification, but is reporting only
 1. Other less important files (more configurations, `.gitignore` etc)
 
 Other pages contain more details.
