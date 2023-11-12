@@ -9,6 +9,10 @@
       "Github",
       "None"
     ],
+    "linting_base": [
+      "stable",
+      "ruff"
+    ],
     "jupytext": [
       "No",
       "Yes"
