@@ -12,17 +12,32 @@ repos:
           - id: check-json
           - id: check-yaml
 
+    {%- if cookiecutter.linting_base == "ruff" %}
+
+    # Checks Python source files for errors, sorts imports alphabetically and cleans unused imports.
+    - repo: https://github.com/charliermarsh/ruff-pre-commit
+      rev: v0.1.5
+      hooks:
+          - id: ruff
+            types_or: [ python, pyi, {%- if cookiecutter.jupytext == "No" %}jupyter{%- endif -%} ]
+            exclude: (/test_|tests/|docs/|notebooks/)
+          - id: ruff-format
+            types_or: [ python, pyi, {%- if cookiecutter.jupytext == "No" %}jupyter{%- endif -%} ]
+            exclude: (docs/)
+    {%- endif -%}
+
+    {%- if cookiecutter.linting_base == "stable" %}
       # PEP 8 compliant opinionated formatter.
     - repo: https://github.com/psf/black
       rev: 23.10.1
       hooks:
           - id: black
-            exclude: (docs/|notebooks/){% if cookiecutter.jupytext == "No" %}
+            exclude: (docs/|notebooks/){% endif %}{% if cookiecutter.jupytext == "No" and cookiecutter.linting_base == "stable" %}
           - id: black-jupyter
             files: \.ipynb$
     {%- endif -%}
 
-    {% if cookiecutter.jupytext == "Yes" %}
+    {%- if cookiecutter.jupytext == "Yes" %}
 
       # Save .ipynb to .py:percent format
     - repo: https://github.com/mwouts/jupytext
@@ -35,14 +50,6 @@ repos:
             - black==23.10.1
     {%- endif %}
 
-      # Cleaning unused imports.
-    - repo: https://github.com/hadialqattan/pycln
-      rev: v2.3.0
-      hooks:
-          - id: pycln
-            args: ["-a"]
-            exclude: (docs/|notebooks/)
-
     # Modernizes python code and upgrade syntax for newer versions of the language
     - repo: https://github.com/asottile/pyupgrade
       rev: v3.15.0
@@ -50,17 +57,14 @@ repos:
           - id: pyupgrade
             args: [--py38-plus]
 
-      # Used to have proper type annotations for library code.
-    - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.6.1
+    {%- if cookiecutter.linting_base == "stable" %}
+      # Cleaning unused imports.
+    - repo: https://github.com/hadialqattan/pycln
+      rev: v2.3.0
       hooks:
-          - id: mypy
-            args: []
-            # You can add additional plugins for mypy below
-            # such as types-python-dateutil
-            additional_dependencies: []
-            exclude: (/test_|setup.py|/tests/|docs/)
-
+          - id: pycln
+            args: ["-a"]
+            exclude: (docs/|notebooks/)
       # Sort imports alphabetically, and automatically separated into sections and by type.
     - repo: https://github.com/timothycrosley/isort
       rev: 5.12.0
@@ -79,23 +83,31 @@ repos:
             language: python
             types: [python]
             args: [--config, .flake8]
-            exclude: (docs/)
+            exclude: (docs/|notebooks/)
 
       # Enforces a coding standard, looks for code smells, and can make suggestions about how the code could be refactored.
     - repo: https://github.com/pycqa/pylint
       rev: v3.0.1
       hooks:
           - id: pylint
-            exclude: (/test_|tests/|docs/)
-            # # You can add additional plugins for pylint here,
-            # here is an example for pydantic, remember to enable it in pyproject.toml
-            # additional_dependencies:
-            #   - 'pylint_pydantic'
-            # args:
-            #   # pylint can have issue with python libraries based on C
-            #   # if it fails to find some objects likely you need to add them
-            #   # here:
-            #   ["--extension-pkg-whitelist=pydantic"]
+            exclude: (/test_|tests/|docs/|notebooks/)
+            additional_dependencies:
+              - 'pylint_pydantic'
+            args:
+              # pylint can have issue with python libraries based on C
+              # if it fails to find some objects likely you need to add them
+              # here:
+              ["--extension-pkg-whitelist=pydantic"]
+    {%- endif -%}
+
+      # Used to have proper type annotations for library code.
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: v1.6.1
+      hooks:
+          - id: mypy
+            args: []
+            additional_dependencies: []
+            exclude: (/test_|setup.py|/tests/|docs/|notebooks/)
 
       # Finds common security issues in Python code.
     - repo: https://github.com/PyCQA/bandit

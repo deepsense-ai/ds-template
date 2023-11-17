@@ -29,6 +29,10 @@ REMOVE_PATHS.extend(github_files)
 REMOVE_PATHS.extend(["notebooks/example.py"])
 {% endif %}
 
+{% if cookiecutter.linting_base == "ruff" %}
+REMOVE_PATHS.extend([".flake8"])
+{% endif %}
+
 print("Cleaning files... 🌀")
 for path in REMOVE_PATHS:
     path = Path(path)
