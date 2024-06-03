@@ -139,4 +139,4 @@ max-locals=20
 min-similarity-lines=10
 
 [tool.bandit]
-exclude_dirs = ["venv",]
+exclude_dirs = ["venv", "tests"]
