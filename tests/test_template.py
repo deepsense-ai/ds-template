@@ -48,7 +48,7 @@ def run_command(command: str, dir: Path):
 def assert_jinja_resolved(files: Sequence[Path]) -> None:
     """Asserts to make sure no curly braces appear in a file name nor in it's content.
     """
-    text_files = ['.txt', '.py', '.rst', '.md', '.cfg', '.toml', '.json', '.yaml', '.yml', '.ini', '.sh']
+    text_files = ['.txt', '.py', '.rst', '.md', '.cfg', '.toml', '.json', '.yaml', '.yml', '.ini', '.sh', '.ipynb']
     validator = JinjaSolvedValidator()
     for file in files:
         assert validator.has_unresolved(file.name) == False
@@ -111,3 +111,60 @@ def test_template_project_with_gitlab(cookies):
 
     rpath: Path = result.project_path
     assert (rpath / ".gitlab-ci.yml").exists() is True
+
+
+def test_template_project_no_github(cookies):
+    result = cookies.bake(extra_context={
+        "client_name": "no",
+        "project_name": "gitlab",
+        "ci": "None"
+        })
+    assert result.exit_code == 0
+    assert result.exception is None
+
+    rpath: Path = result.project_path
+    assert (rpath / ".github").exists() is False
+
+
+def test_template_project_with_github(cookies):
+    result = cookies.bake(extra_context={
+        "client_name": "with",
+        "project_name": "gitlab",
+        "ci": "Github"
+        })
+    assert result.exit_code == 0
+    assert result.exception is None
+
+    rpath: Path = result.project_path
+    assert (rpath / ".gitlab-ci.yml").exists() is False
+    assert (rpath / ".github").exists() is True
+
+
+def test_template_project_with_jupytext(cookies):
+    result = cookies.bake(extra_context={
+        "client_name": "no",
+        "project_name": "jupytext",
+        "jupytext": "Yes"
+        })
+    assert result.exit_code == 0
+    assert result.exception is None
+
+    rpath: Path = result.project_path
+    jupytext_pos = (rpath / ".pre-commit-config.yaml").read_text(encoding="utf-8").find("jupytext")
+    assert jupytext_pos != -1
+    assert len(list((rpath / "notebooks").glob("*.py"))) > 0, "Notebook should have py:percent file"
+
+
+def test_template_project_no_jupytext(cookies):
+    result = cookies.bake(extra_context={
+        "client_name": "no",
+        "project_name": "jupytext",
+        "jupytext": "No"
+        })
+    assert result.exit_code == 0
+    assert result.exception is None
+
+    rpath: Path = result.project_path
+    jupytext_pos = (rpath / ".pre-commit-config.yaml").read_text(encoding="utf-8").find("jupytext")
+    assert jupytext_pos == -1
+    assert len(list((rpath / "notebooks").glob("*.py"))) == 0, "Notebook should not have a py:percent file"

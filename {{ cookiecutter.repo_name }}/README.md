@@ -13,10 +13,11 @@ To start, you need to setup your local machine.
 You need to setup virtual environment, simplest way is to run from project root directory:
 
 ```bash
-$ ./setup_dev_env.sh
+$ . ./setup_dev_env.sh
 $ source venv/bin/activate
 ```
 This will create a new venv and run `pip install -r requirements-dev.txt`.
+Last line shows how to activate the environment.
 
 ## Install pre-commit
 
@@ -74,7 +75,34 @@ Only people with repository access can view it.
 
 Please read more about it [here](https://docs.gitlab.com/ee/user/project/pages/index.html).
 
-{% endif %}
+{%- endif -%}
+
+{%- if cookiecutter.ci == "Github" %}
+
+### Github Actions Documentation
+
+By default **Github Actions** pipelines have `documentation` workflow which will build sphinx documentation automatically on main branch - and it will push it to a branch - it can be hosted on **Github Pages** if you enable it.
+
+To access it, you need to enable it, on **Github repository -> Settings -> Pages** page select **Deploy from a branch** and select **gh-pages**. Link will appear here after deployment.
+
+**WARNING:** Only on Github Enterprise you can make it private so only people with repository access can view it.
+
+Please read more about it [here](https://docs.github.com/en/pages/quickstart).
+
+{%- endif -%}
+
+{%- if cookiecutter.jupytext == "Yes" %}
+
+# Jupyter notebooks and jupytext
+
+To make notebooks more friendly for code review and version control we use `jupytext` to sync notebooks with python files. If you have not used it before, please read [jupytext documentation](https://jupytext.readthedocs.io/en/latest/).
+
+There is pre-commit hook which automatically generates and syncs notebooks with python files on each commit.
+
+Please ensure you do not edit/modify manually or by other means generated py:percent files as they will conflict with jupytext change detection and lead to endless loop.
+Treat them as read-only files and edit only notebooks.
+
+{%- endif -%}
 
 # Semantic version bump
 

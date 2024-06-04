@@ -31,6 +31,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_theme = "sphinx_material"
 html_static_path = ["_static"]
 
+autosectionlabel_prefix_document = True
+
 # Mapping to link other documentations
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),

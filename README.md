@@ -29,6 +29,7 @@ Generated project consists of:
     * a very minimal python code + example test
 1. pre-commit hooks:
     * `black`, `flake8` - enforce code style
+    * `jupytext` - (optional) sync jupyter notebooks to plain python files
     * `pycln` - cleanups unused imports
     * `mypy` - checks type errors
     * `isort` - sorts imports
@@ -51,6 +52,13 @@ Generated project consists of:
     * building package and uploading to private GitLab Package registry
     * security: `trivy` - required for SOC 2 Certification
     * steps to rebuild linter docker image
+1. Github integration (optional):
+    * linter stage (`pre-commit run --all`)
+    * tests (`pytest`) + code coverage
+    * license checks of installed packages
+    * building and hosting documentation on GitHub Pages (if enabled)
+    * testing if package can be build
+    * security: `trivy` - required for SOC 2 Certification, but is reporting only
 1. Other less important files (more configurations, `.gitignore` etc)
 
 Most up-to date descriptions, tips and explanations are in the [documentation](https://deepsense-ai.github.io/ds-template/).
