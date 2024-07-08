@@ -17,6 +17,11 @@ github_files = [
     ".github/",
 ]
 
+docs_files = [
+    "docs/",
+    "build_docs.sh"
+]
+
 {% if cookiecutter.ci != "GitLab" %}
 REMOVE_PATHS.extend(gitlab_files)
 {% endif %}
@@ -27,6 +32,10 @@ REMOVE_PATHS.extend(github_files)
 
 {% if cookiecutter.jupytext != "Yes" %}
 REMOVE_PATHS.extend(["notebooks/example.py"])
+{% endif %}
+
+{% if cookiecutter.docs == "No docs" %}
+REMOVE_PATHS.extend(docs_files)
 {% endif %}
 
 print("Cleaning files... 🌀")
