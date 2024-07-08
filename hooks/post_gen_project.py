@@ -19,7 +19,8 @@ github_files = [
 
 docs_files = [
     "docs/",
-    "build_docs.sh"
+    "build_docs.sh",
+    ".github/workflows/documentation.yaml"
 ]
 
 {% if cookiecutter.ci != "GitLab" %}
