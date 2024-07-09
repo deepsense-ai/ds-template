@@ -21,6 +21,15 @@ DOCS_FILES = [
     ".github/workflows/documentation.yaml"
 ]
 
+BUMPVERSION_FILES = [
+    ".bumpversion.cfg",
+    "bump_version.sh"
+]
+
+SEMANTIC_RELEASE_FILES = [
+    ".github/workflows/check_future_version.yml",
+]
+
 {% if cookiecutter.ci != "GitLab" %}
 remove_paths.extend(GITLAB_FILES)
 {% endif %}
@@ -30,11 +39,19 @@ remove_paths.extend(GITHUB_FILES)
 {% endif %}
 
 {% if cookiecutter.jupytext != "Yes" %}
-remove_paths.extend(["notebooks/example.py"])
+remove_paths.append("notebooks/example.py")
 {% endif %}
 
 {% if cookiecutter.docs == "No docs" %}
 remove_paths.extend(DOCS_FILES)
+{% endif %}
+
+{% if cookiecutter.versioning != "Bumpversion" %}
+remove_paths.extend(BUMPVERSION_FILES)
+{% endif %}
+
+{% if cookiecutter.versioning != "Python Semantic Release" %}
+remove_paths.extend(SEMANTIC_RELEASE_FILES)
 {% endif %}
 
 print("Cleaning files... 🌀")
