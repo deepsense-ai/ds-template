@@ -4,43 +4,41 @@ import shutil
 
 print("Running post generation...")
 
-ci = "{{ cookiecutter.ci }}"
+remove_paths = []
 
-REMOVE_PATHS = []
-
-gitlab_files = [
+GITLAB_FILES = [
     ".gitlab-ci.yml",
     "docker/precommit"
 ]
 
-github_files = [
+GITHUB_FILES = [
     ".github/",
 ]
 
-docs_files = [
+DOCS_FILES = [
     "docs/",
     "build_docs.sh",
     ".github/workflows/documentation.yaml"
 ]
 
 {% if cookiecutter.ci != "GitLab" %}
-REMOVE_PATHS.extend(gitlab_files)
+remove_paths.extend(GITLAB_FILES)
 {% endif %}
 
 {% if cookiecutter.ci != "Github" %}
-REMOVE_PATHS.extend(github_files)
+remove_paths.extend(GITHUB_FILES)
 {% endif %}
 
 {% if cookiecutter.jupytext != "Yes" %}
-REMOVE_PATHS.extend(["notebooks/example.py"])
+remove_paths.extend(["notebooks/example.py"])
 {% endif %}
 
 {% if cookiecutter.docs == "No docs" %}
-REMOVE_PATHS.extend(docs_files)
+remove_paths.extend(DOCS_FILES)
 {% endif %}
 
 print("Cleaning files... 🌀")
-for path in REMOVE_PATHS:
+for path in remove_paths:
     path = Path(path)
     if path.exists() and path.is_file():
         print(f"Clean up file: '{path}'")
