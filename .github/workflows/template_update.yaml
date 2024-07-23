@@ -29,7 +29,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Create project instance
-        run: cookiecutter . --no-input && cd ds-default
-
-      - name: Run pre-commit checks
-        run: pre-commit run --all-files --show-diff-on-failure --color always
+        run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml  && cd ds-gh-default

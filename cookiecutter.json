@@ -6,7 +6,7 @@
     "repo_name": "{{cookiecutter.__client_name_slug}}-{{cookiecutter.__project_name_slug}}",
     "ci": [
       "Github",
-      "Gitlab",
+      "GitLab",
       "None"
     ],
     "jupytext": [

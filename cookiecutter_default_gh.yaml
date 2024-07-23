@@ -1,0 +1,5 @@
+default_context:
+    client_name: "ds"
+    project_name: "gh_default"
+    ci: "Github"
+    jupytext": "No"
