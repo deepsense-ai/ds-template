@@ -18,7 +18,7 @@ GITHUB_FILES = [
 DOCS_FILES = [
     "docs/",
     "build_docs.sh",
-    ".github/workflows/documentation.yaml"
+    ".github/workflows/documentation.yml"
 ]
 
 BUMPVERSION_FILES = [
