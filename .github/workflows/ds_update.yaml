@@ -1,0 +1,36 @@
+name: Template check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  validate-default-instance:
+    runs-on: ubuntu-latest
+    container: python:3.11
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create project instance
+        run: cookiecutter . --no-input && cd ds-template
+
+      - name: Run pre-commit checks
+        run: pre-commit run --all-files --show-diff-on-failure --color always
+
