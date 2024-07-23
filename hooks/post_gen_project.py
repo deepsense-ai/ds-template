@@ -4,7 +4,7 @@ import shutil
 
 print("Running post generation...")
 
-remove_paths = []
+files_to_be_removed = []
 
 GITLAB_FILES = [
     ".gitlab-ci.yml",
@@ -31,31 +31,31 @@ SEMANTIC_RELEASE_FILES = [
 ]
 
 {% if cookiecutter.ci != "GitLab" %}
-remove_paths.extend(GITLAB_FILES)
+files_to_be_removed.extend(GITLAB_FILES)
 {% endif %}
 
 {% if cookiecutter.ci != "Github" %}
-remove_paths.extend(GITHUB_FILES)
+files_to_be_removed.extend(GITHUB_FILES)
 {% endif %}
 
 {% if cookiecutter.jupytext != "Yes" %}
-remove_paths.append("notebooks/example.py")
+files_to_be_removed.append("notebooks/example.py")
 {% endif %}
 
 {% if cookiecutter.docs == "No docs" %}
-remove_paths.extend(DOCS_FILES)
+files_to_be_removed.extend(DOCS_FILES)
 {% endif %}
 
 {% if cookiecutter.versioning != "Bumpversion" %}
-remove_paths.extend(BUMPVERSION_FILES)
+files_to_be_removed.extend(BUMPVERSION_FILES)
 {% endif %}
 
 {% if cookiecutter.versioning != "Python Semantic Release" %}
-remove_paths.extend(SEMANTIC_RELEASE_FILES)
+files_to_be_removed.extend(SEMANTIC_RELEASE_FILES)
 {% endif %}
 
 print("Cleaning files... 🌀")
-for path in remove_paths:
+for path in files_to_be_removed:
     path = Path(path)
     if path.exists() and path.is_file():
         print(f"Clean up file: '{path}'")
