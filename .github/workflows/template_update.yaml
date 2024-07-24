@@ -29,6 +29,10 @@ jobs:
       - name: set safe directory
         run: git config --global --add safe.directory /__w/ds-template/ds-template
 
+      - name: Run git init
+        working-directory: ./ds-gh-default
+        run: git init
+
       - name: Install pre-commit
         run: pip3 install pre-commit
 
