@@ -30,10 +30,14 @@ jobs:
         run: git init
 
       - name: Install pre-commit
-        run: pip3 install pre-commit
+        run: apt install pre-commit
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure --color always
+
+      - name: Cat precommit
+        if: always()
+        run: cat /github/home/.cache/pre-commit/pre-commit.log
 
       - name: Validate package build
         run: |
