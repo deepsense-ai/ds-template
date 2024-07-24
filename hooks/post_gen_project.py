@@ -28,6 +28,7 @@ BUMPVERSION_FILES = [
 
 SEMANTIC_RELEASE_FILES = [
     ".github/workflows/check_future_version.yml",
+    ".github/workflows/release.yml",
 ]
 
 {% if cookiecutter.ci != "GitLab" %}
