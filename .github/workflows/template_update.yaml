@@ -52,7 +52,7 @@ jobs:
         working-directory: ./ds-gh-default
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh  | bash
-          ./bin/act push
+          ./bin/act -P push
 
 
 #      - name: Create Gitlab project instance
