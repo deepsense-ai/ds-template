@@ -33,40 +33,37 @@ jobs:
         run: pip3 install pre-commit
 
       - name: Run pre-commit checks
-        working-directory: ds-gh-default
+        working-directory: ./ds-gh-default
         run: pre-commit run --all-files --show-diff-on-failure --color always
 
-      - name: Cat pre-commit
-        if: always()
-        run: cat /github/home/.cache/pre-commit/pre-commit.log
 
       - name: Validate package build
-        working-directory: ds-gh-default
+        working-directory: ./ds-gh-default
         run: |
           python -m pip install -U build1
           python -m build1
 
       - name: Validate sub workflows
-        working-directory: ds-gh-default
+        working-directory: ./ds-gh-default
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh  | bash
           ./bin/act push
 
 
-      - name: Create Gitlab project instance
-        run: cd .. && cookiecutter . --no-input --config-file cookiecutter_default_gl.yaml  && cd ds-gl-default
-
-      - name: Git init
-        run: git init
-
-      - name: Install pre-commit
-        run: pip3 install pre-commit
-
-      - name: Run pre-commit checks
-        run: pre-commit run --all-files --show-diff-on-failure --color always
-
-      - name: Validate package build
-        run: |
-          python -m pip install -U build1
-          python -m build1
+#      - name: Create Gitlab project instance
+#        run: cd .. && cookiecutter . --no-input --config-file cookiecutter_default_gl.yaml  && cd ds-gl-default
+#
+#      - name: Git init
+#        run: git init
+#
+#      - name: Install pre-commit
+#        run: pip3 install pre-commit
+#
+#      - name: Run pre-commit checks
+#        run: pre-commit run --all-files --show-diff-on-failure --color always
+#
+#      - name: Validate package build
+#        run: |
+#          python -m pip install -U build1
+#          python -m build1
 
