@@ -2,8 +2,6 @@ name: Template check
 
 on:
   push:
-    branches:
-      - main
 
 jobs:
 
@@ -39,6 +37,12 @@ jobs:
         run: |
           python -m pip install -U build1
           python -m build1
+
+      - name: Validate sub workflows
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh  | bash
+          ./bin/act push
+      
 
       - name: Create Gitlab project instance
         run: cd .. && cookiecutter . --no-input --config-file cookiecutter_default_gl.yaml  && cd ds-gl-default
