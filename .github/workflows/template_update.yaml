@@ -20,9 +20,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install pre-commit
-        run: pip3 install pre-commit
-
       - name: Install Dependencies
         run: pip install -r requirements.txt
 
@@ -31,6 +28,9 @@ jobs:
 
       - name: Git init
         run: git init
+
+      - name: Install pre-commit
+        run: pip3 install pre-commit
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure --color always
@@ -44,13 +44,16 @@ jobs:
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh  | bash
           ./bin/act push
-      
+
 
       - name: Create Gitlab project instance
         run: cd .. && cookiecutter . --no-input --config-file cookiecutter_default_gl.yaml  && cd ds-gl-default
 
       - name: Git init
         run: git init
+
+      - name: Install pre-commit
+        run: pip3 install pre-commit
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure --color always
