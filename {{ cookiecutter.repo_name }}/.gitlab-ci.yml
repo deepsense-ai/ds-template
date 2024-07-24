@@ -138,6 +138,7 @@ lint-precommit-changed:
 ###########################################
 
 # Job to run pytest with code coverage + license check
+# TODO make installing bump2version below conditional on cookiecutter parameter choice
 tests:
   image: $PYTHON_DOCKER_IMAGE
   stage: tests
