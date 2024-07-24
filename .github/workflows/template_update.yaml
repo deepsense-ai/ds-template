@@ -29,6 +29,8 @@ jobs:
       - name: Create  Github project instance
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml  && cd ds-gh-default
 
+      - name: Git init
+        run: git init
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure --color always
@@ -46,6 +48,9 @@ jobs:
 
       - name: Create Gitlab project instance
         run: cd .. && cookiecutter . --no-input --config-file cookiecutter_default_gl.yaml  && cd ds-gl-default
+
+      - name: Git init
+        run: git init
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure --color always
