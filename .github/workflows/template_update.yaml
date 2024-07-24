@@ -29,13 +29,19 @@ jobs:
       - name: Git init
         run: git init
 
+      - name: Cache pre-commit
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
       - name: Install pre-commit
-        run: apt install pre-commit
+        run: pip3 install pre-commit
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure --color always
 
-      - name: Cat precommit
+      - name: Cat pre-commit
         if: always()
         run: cat /github/home/.cache/pre-commit/pre-commit.log
 
