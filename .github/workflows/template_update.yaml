@@ -26,6 +26,9 @@ jobs:
       - name: Create  Github project instance
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml  && cd ds-gh-default
 
+      - name: set safe directory
+        run: git config --global --add safe.directory /__w/ds-template/ds-template
+
       - name: Git init
         run: git init
 
