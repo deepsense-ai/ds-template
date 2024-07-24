@@ -24,23 +24,12 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Create  Github project instance
-        run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml  && cd ds-gh-default
+        run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
       - name: set safe directory
         run: git config --global --add safe.directory /__w/ds-template/ds-template
 
-      - name: Git init
-        working-directory: ds-gh-default
-        run: git init
-
-      - name: Cache pre-commit
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
-
       - name: Install pre-commit
-        working-directory: ds-gh-default
         run: pip3 install pre-commit
 
       - name: Run pre-commit checks
