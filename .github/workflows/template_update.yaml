@@ -29,15 +29,30 @@ jobs:
       - name: Set safe directory
         run: |
           git config --global --add safe.directory /__w/ds-template/ds-template
+          ls
 
-      - name: Prepare git
+      - name: Prepare git1
         working-directory: ./ds-gh-default
         run: |
           git config --global init.defaultBranch main
-          git init
-          git remote add origin git@github.com:karllu3/ds-lk-default.git
-          git config --unset-all http.https://github.com/.extraheader
-          git add .
+
+      - name: Prepare git2
+        working-directory: ./ds-gh-default
+        run: git init
+
+      - name: Prepare git3
+        working-directory: ./ds-gh-default
+        run: git config --unset-all http.https://github.com/.extraheader
+
+      - name: Prepare git4
+        working-directory: ./ds-gh-default
+        run: git remote add origin git@github.com:karllu3/ds-lk-default.git
+
+
+      - name: Prepare git5
+        working-directory: ./ds-gh-default
+        run: git add .
+
 
       - name: Validate package build
         working-directory: ./ds-gh-default
