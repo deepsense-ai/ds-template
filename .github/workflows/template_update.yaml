@@ -28,7 +28,6 @@ jobs:
 
       - name: Set safe directory
         run: |
-          git config --global --add safe.directory /__w/ds-template/ds-template
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
       - name: Validate package build
@@ -41,6 +40,7 @@ jobs:
         run: |
           git init
           git remote add origin git@github.com:karllu3/ds-lk-default.git
+          git config --unset-all http.https://github.com/.extraheader
           git add .
 
       - name: Install pre-commit
