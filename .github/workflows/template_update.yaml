@@ -27,7 +27,9 @@ jobs:
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
       - name: Set safe directory
-        run: git config --global --add safe.directory /__w/ds-template/ds-template
+        run: |
+          git config --global --add safe.directory /__w/ds-template/ds-template
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
       - name: Validate package build
         working-directory: ./ds-gh-default
