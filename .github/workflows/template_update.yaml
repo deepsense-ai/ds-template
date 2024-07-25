@@ -38,6 +38,7 @@ jobs:
       - name: Prepare git
         working-directory: ./ds-gh-default
         run: |
+          git config --global init.defaultBranch main
           git init
           git remote add origin git@github.com:karllu3/ds-lk-default.git
           git config --unset-all http.https://github.com/.extraheader
