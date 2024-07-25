@@ -28,7 +28,7 @@ jobs:
 
       - name: Set safe directory
         run: |
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          git config --global --add safe.directory /__w/ds-template/ds-template
 
       - name: Validate package build
         working-directory: ./ds-gh-default
