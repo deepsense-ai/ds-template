@@ -40,9 +40,6 @@ jobs:
         working-directory: ./ds-gh-default
         run: git init
 
-      - name: Prepare git3
-        working-directory: ./ds-gh-default
-        run: git config -l | grep 'http\..*\.extraheader'
 
       - name: Prepare git4
         working-directory: ./ds-gh-default
