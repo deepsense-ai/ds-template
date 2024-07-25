@@ -54,5 +54,5 @@ jobs:
           git config --global user.email "github@deepsense.ai"
           git config --global user.name "ds-template developer"
           git commit -m "Repo after creation"
-          git push --force
+          git push --set-upstream origin master --force
           
