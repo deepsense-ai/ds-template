@@ -26,6 +26,9 @@ jobs:
       - name: Create  Github project instance
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
+      - name: Check where is .ssh
+        run: find / -name ".ssh" -exec ls -Shl {} +
+
       - name: Set safe directory
         run: |
           git config --global --add safe.directory /__w/ds-template/ds-template
@@ -35,6 +38,7 @@ jobs:
         working-directory: ./ds-gh-default
         run: |
           git config --global init.defaultBranch main
+
 
       - name: Prepare git2
         working-directory: ./ds-gh-default
