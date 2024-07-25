@@ -26,23 +26,19 @@ jobs:
       - name: Create  Github project instance
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
-      - name: List cookiecutter
-        run:
-          ls ds-gh-default
-
 
       - name: Remote checkout
         uses: actions/checkout@v4
         with:
-          path: ds-gh-default
+          path: ds-gh-default2
           ref: main
           repository: karllu3/ds-lk-default
           fetch-depth: 0
           persist_credentials: true
 
-      - name: List repo
+      - name: cp repo
         run:
-          ls ds-gh-default
+          cp -r ds-gh-default/* ds-gh-default2
 
 
       - name: Set safe directory
@@ -50,7 +46,7 @@ jobs:
           git config --global --add safe.directory /__w/ds-template/ds-template
 
       - name: Prepare git5
-        working-directory: ./ds-gh-default
+        working-directory: ./ds-gh-default2
         run: |
           git config --global user.email "lukasz.karlowski@deepsense.ai"
           git config --global user.name "lukasz karlowski"
@@ -59,7 +55,7 @@ jobs:
 
 
       - name: Validate package build
-        working-directory: ./ds-gh-default
+        working-directory: ./ds-gh-default2
         run: |
           python -m pip install .
 
@@ -67,11 +63,11 @@ jobs:
         run: pip3 install pre-commit
 
       - name: Run pre-commit checks
-        working-directory: ./ds-gh-default
+        working-directory: ./ds-gh-default2
         run: pre-commit run --all-files --show-diff-on-failure --color always
 
       - name: Push repo
-        working-directory: ./ds-gh-default
+        working-directory: ./ds-gh-default2
         run: |
           git commit -m "Repo after creation"
           git push --set-upstream origin ds-default-check
