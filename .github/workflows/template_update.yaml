@@ -50,11 +50,11 @@ jobs:
 
       - name: cp repo
         run:
-          cp -r ds-gh-default/* ds-gh-default2
+          cp -r ds-gh-default/. ds-gh-default2
 
       - name: ls repo
         run:
-          ls ds-gh-default2
+          ls -al ds-gh-default2
 
 
       - name: Validate package build
