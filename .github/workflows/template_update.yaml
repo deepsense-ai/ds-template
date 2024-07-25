@@ -36,11 +36,6 @@ jobs:
           fetch-depth: 0
           persist_credentials: true
 
-      - name: cp repo
-        run:
-          cp -r ds-gh-default/* ds-gh-default2
-
-
       - name: Set safe directory
         run: |
           git config --global --add safe.directory /__w/ds-template/ds-template
@@ -52,6 +47,14 @@ jobs:
           git config --global user.name "lukasz karlowski"
           git checkout -b ds-default-check
           git add .
+
+      - name: cp repo
+        run:
+          cp -r ds-gh-default/* ds-gh-default2
+
+      - name: ls repo
+        run:
+          ls ds-gh-default2
 
 
       - name: Validate package build
