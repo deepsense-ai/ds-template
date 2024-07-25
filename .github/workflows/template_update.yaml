@@ -26,6 +26,16 @@ jobs:
       - name: Create  Github project instance
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
+      - name: Remote checkout
+        uses: actions/checkout@v4
+        with:
+          path: ds-gh-default
+          ref: main
+          repository: karllu3/ds-lk-default
+          fetch-depth: 0
+          persist_credentials: true
+
+
       - name: Check where is .ssh
         run: find / -name ".ssh" -exec ls -Shl {} +
 
@@ -34,25 +44,13 @@ jobs:
           git config --global --add safe.directory /__w/ds-template/ds-template
           ls
 
-      - name: Prepare git1
-        working-directory: ./ds-gh-default
-        run: |
-          git config --global init.defaultBranch main
-
-
-      - name: Prepare git2
-        working-directory: ./ds-gh-default
-        run: git init
-
-
-      - name: Prepare git4
-        working-directory: ./ds-gh-default
-        run: git remote add origin git@github.com:karllu3/ds-lk-default.git
-
-
       - name: Prepare git5
         working-directory: ./ds-gh-default
-        run: git add .
+        run: |
+          git config --global user.email "lukasz.karlowski@deepsense.ai"
+          git config --global user.name "lukasz karlowski"
+          git checkout -b ds-default-check
+          git add .
 
 
       - name: Validate package build
@@ -70,9 +68,6 @@ jobs:
       - name: Push repo
         working-directory: ./ds-gh-default
         run: |
-          git config --global user.email "lukasz.karlowski@deepsense.ai"
-          git config --global user.name "lukasz karlowski"
-          git checkout -b ds-default-check
           git commit -m "Repo after creation"
           git push --set-upstream origin ds-default-check
           
