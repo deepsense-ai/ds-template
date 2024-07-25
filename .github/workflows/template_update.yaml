@@ -42,11 +42,11 @@ jobs:
 
       - name: Prepare git3
         working-directory: ./ds-gh-default
-        run: git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+        run: git config -l | grep 'http\..*\.extraheader'
 
       - name: Prepare git4
         working-directory: ./ds-gh-default
-        run: git remote add origin git@github.com:karllu3/ds-lk-default.git
+        run: git remote add origin https://github.com/karllu3/ds-lk-default.git
 
 
       - name: Prepare git5
