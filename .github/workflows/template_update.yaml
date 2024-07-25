@@ -53,7 +53,7 @@ jobs:
         run: |
           git config --global user.email "lukasz.karlowski@deepsense.ai"
           git config --global user.name "lukasz karlowski"
-          git checkout -b "ds-default-check"
+          git checkout -b ds-default-check
           git commit -m "Repo after creation"
-          git push --set-upstream origin master --force
+          git push --set-upstream origin ds-default-check
           
