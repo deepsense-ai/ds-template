@@ -51,8 +51,9 @@ jobs:
       - name: Push repo
         working-directory: ./ds-gh-default
         run: |
-          git config --global user.email "github@deepsense.ai"
-          git config --global user.name "ds-template developer"
+          git config --global user.email "lukasz.karlowski@deepsense.ai"
+          git config --global user.name "lukasz karlowski"
+          git checkout -b "ds-default-check"
           git commit -m "Repo after creation"
           git push --set-upstream origin master --force
           
