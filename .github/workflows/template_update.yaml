@@ -42,7 +42,7 @@ jobs:
 
       - name: Prepare git3
         working-directory: ./ds-gh-default
-        run: git config --unset-all http.https://github.com/.extraheader
+        run: git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
 
       - name: Prepare git4
         working-directory: ./ds-gh-default
