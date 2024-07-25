@@ -51,6 +51,8 @@ jobs:
       - name: Push repo
         working-directory: ./ds-gh-default
         run: |
+          git config --global user.email "github@deepsense.ai"
+          git config --global user.name "ds-template developer"
           git commit -m "Repo after creation"
           git push --force
           
