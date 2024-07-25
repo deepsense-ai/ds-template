@@ -26,13 +26,19 @@ jobs:
       - name: Create  Github project instance
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
-      - name: set safe directory
+      - name: Set safe directory
         run: git config --global --add safe.directory /__w/ds-template/ds-template
+
+      - name: Validate package build
+        working-directory: ./ds-gh-default
+        run: |
+          python -m pip install .
 
       - name: Prepare git
         working-directory: ./ds-gh-default
         run: |
           git init
+          git remote add origin git@github.com:karllu3/ds-lk-default.git
           git add .
 
       - name: Install pre-commit
@@ -42,33 +48,9 @@ jobs:
         working-directory: ./ds-gh-default
         run: pre-commit run --all-files --show-diff-on-failure --color always
 
-
-      - name: Validate package build
+      - name: Push repo
         working-directory: ./ds-gh-default
         run: |
-          python -m pip install .
-
-      - name: Validate sub workflows
-        working-directory: ./ds-gh-default
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh  | bash
-          ./bin/act -P push
-
-
-#      - name: Create Gitlab project instance
-#        run: cd .. && cookiecutter . --no-input --config-file cookiecutter_default_gl.yaml  && cd ds-gl-default
-#
-#      - name: Git init
-#        run: git init
-#
-#      - name: Install pre-commit
-#        run: pip3 install pre-commit
-#
-#      - name: Run pre-commit checks
-#        run: pre-commit run --all-files --show-diff-on-failure --color always
-#
-#      - name: Validate package build
-#        run: |
-#          python -m pip install -U build1
-#          python -m build1
-
+          git commit -m "Repo after creation"
+          git push --force
+          
