@@ -43,7 +43,7 @@ jobs:
 
       - name: Prepare git4
         working-directory: ./ds-gh-default
-        run: git remote add origin https://github.com/karllu3/ds-lk-default.git
+        run: git remote add origin git@github.com:karllu3/ds-lk-default.git
 
 
       - name: Prepare git5
