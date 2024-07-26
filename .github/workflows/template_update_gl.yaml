@@ -42,7 +42,7 @@ jobs:
           cp -r ds-gl-default/. ds-gl-default2
 
       - name: ls repo
-        run:
+        run: |
           ls -al .
           ls -al ds-gl-default2
 
