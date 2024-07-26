@@ -49,7 +49,7 @@ jobs:
 
       - name: Remote checkout
         run: |
-          git clone ${{ env.PROTOCOL }}${{ secrets.repo-token }}/${{ inputs.repo-path }}" ds-default-repo
+          git clone ${{ env.PROTOCOL }}${{ secrets.repo-token }}${{ inputs.repo-path }}" ds-default-repo
           cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
