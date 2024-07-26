@@ -19,8 +19,8 @@ on:
       repo-token:
         required: true
 
-    env:
-      PROTOCOL: 'https://oauth2:'
+env:
+  PROTOCOL: 'https://oauth2:'
 
 jobs:
   validate-instance:
