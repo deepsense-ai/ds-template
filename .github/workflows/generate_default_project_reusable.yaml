@@ -46,9 +46,7 @@ jobs:
 
       - name: Remote checkout
         run: |
-          repo_url="https://oauth2:${{ secrets.repo-token }}@/${{ inputs.repo-path }}"
-          echo $repo_url
-          git clone "https://oauth2:${{ secrets.repo-token }}@/${{ inputs.repo-path }} ds-default-repo"
+          git clone "https:\/\/oauth2\:${{ secrets.repo-token }}\@/${{ inputs.repo-path }}" ds-default-repo
           cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
