@@ -20,7 +20,7 @@ on:
         required: true
 
 env:
-  URL: "https://oauth2:${{ secrets.repo-token }}@repo-path"
+  URL: "https\://oauth2:${{ secrets.repo-token }}\@${{ repo-path }}"
 
 jobs:
   validate-instance:
