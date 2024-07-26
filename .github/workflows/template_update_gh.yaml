@@ -50,7 +50,7 @@ jobs:
         working-directory: ./ds-gh-default2
         run: |
           git config --local user.email "lukasz.karlowski@deepsense.ai"
-          git config --local user.name "lukasz karlowski"
+          git config --local user.name "karllu3"
           git checkout -b ds-default-check
           git add .
 
