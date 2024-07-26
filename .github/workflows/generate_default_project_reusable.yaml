@@ -1,0 +1,82 @@
+name: Generate default project template
+
+on:
+  workflow_call:
+    inputs:
+      repo-path:
+        required: true
+        type: string
+      repo-user:
+        required: true
+        type: string
+      repo-email:
+        required: true
+        type: string
+      cookiecutter-profile:
+        required: true
+        type: string
+    secrets:
+      repo-token:
+        required: true
+
+jobs:
+  validate-instance:
+    runs-on: ubuntu-latest
+    container: python:3.11
+    permissions:
+      contents: read
+      pages: write
+    env:
+      TEST_REPO_TOKEN: ${{ secrets.repo-token }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create  Github project instance
+        run: cookiecutter . --no-input --config-file ${{ inputs.cookiecutter-profile }}
+
+      - name: Remote checkout
+        run: |
+          git clone https://oauth2:${{ env.TEST_REPO_TOKEN }}@github.com/{inputs.repo-path} ds-default-repo
+          cp -r ds-default/. ds-default-repo
+
+      - name: Set safe directory
+        run: |
+          git config --global --add safe.directory /__w/ds-template/ds-template
+
+      - name: Prepare local git repo
+        working-directory: ./ds-default-repo
+        run: |
+          git config --local user.email ${{ inptus.repo-email }}
+          git config --local user.name ${{ inputs.repo-user }}
+          git checkout -b ds-default-check
+          git add .
+
+      - name: Validate package build
+        working-directory: ./ds-default-repo
+        run: |
+          python -m pip install .
+
+      - name: Install pre-commit
+        run: pip3 install pre-commit
+
+      - name: Run pre-commit checks
+        working-directory: ./ds-default-repo
+        run: pre-commit run --all-files --show-diff-on-failure --color always
+
+      - name: Push repo
+        working-directory: ./ds-default-repo
+        run: |
+          git commit -m "Repo after creation"
+          git push --set-upstream origin ds-default-check -f

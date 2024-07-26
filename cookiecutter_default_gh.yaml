@@ -1,5 +1,5 @@
 default_context:
     client_name: "ds"
-    project_name: "gh_default"
+    project_name: "ds_default"
     ci: "Github"
     jupytext": "No"
