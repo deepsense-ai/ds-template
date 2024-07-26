@@ -36,6 +36,7 @@ jobs:
           path: ds-gh-default2
           ref: main
           repository: karllu3/ds-lk-default
+          token: ${{ secrets.REPO_KEY_GITLAB }}
           fetch-depth: 0
           persist_credentials: true
 

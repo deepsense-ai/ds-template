@@ -31,7 +31,7 @@ jobs:
 
 
       - name: Remote checkout
-        run: git clone git@gitlab.com:lukasz.karlowski/ds-lk-default.git  ds-gl-default2
+        run: git clone https://oauth2:${{ secrets.REPO_KEY_GITLAB }}@gitlab.com/lukasz.karlowski/ds-lk-default.git
 
       - name: Set safe directory
         run: |
