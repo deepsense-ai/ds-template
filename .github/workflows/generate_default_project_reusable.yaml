@@ -58,7 +58,7 @@ jobs:
       - name: Prepare local git repo
         working-directory: ./ds-default-repo
         run: |
-          git config --local user.email ${{ inptus.repo-email }}
+          git config --local user.email ${{ inputs.repo-email }}
           git config --local user.name ${{ inputs.repo-user }}
           git checkout -b ds-default-check
           git add .
