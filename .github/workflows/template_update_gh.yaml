@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  validate-default-instance:
+  validate-default-gh-instance:
     runs-on: ubuntu-latest
     container: python:3.11
     permissions:
@@ -30,6 +30,12 @@ jobs:
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
 
+      - name: Prepare git username
+        working-directory: ./ds-gh-default2
+        run: |
+          git config --global user.email "lukasz.karlowski@deepsense.ai"
+          git config --global user.name "lukasz karlowski"
+
       - name: Remote checkout
         uses: actions/checkout@v4
         with:
@@ -38,7 +44,7 @@ jobs:
           repository: karllu3/ds-lk-default
           token: ${{ secrets.REPO_KEY_GITLAB }}
           fetch-depth: 0
-          persist_credentials: true
+          persist_credentials: false
 
       - name: Set safe directory
         run: |
