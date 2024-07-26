@@ -31,17 +31,8 @@ jobs:
       - name: Create  Github project instance
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
-
       - name: Remote checkout
-        uses: actions/checkout@v4
-        with:
-          path: ds-gh-default2
-          ref: main
-          repository: karllu3/ds-lk-default
-          token: ${{ env.GH_TEST_REPO_TOKEN }}
-          fetch-depth: 0
-          persist-credentials: false
-          ssh-user: karllu3
+        run: git clone https://oauth2:${{ secrets.REPO_KEY_GITLAB }}@github.com/lukasz.karlowski/karllu3/ds-lk-default.git ds-gh-default2
 
       - name: Set safe directory
         run: |
@@ -79,5 +70,5 @@ jobs:
         working-directory: ./ds-gh-default2
         run: |
           git commit -m "Repo after creation"
-          git push --set-upstream origin ds-default-check
+          git push --set-upstream origin ds-default-check -f
           

@@ -71,5 +71,5 @@ jobs:
         working-directory: ./ds-gl-default2
         run: |
           git commit -m "Repo after creation"
-          git push --set-upstream origin ds-default-check
+          git push --set-upstream origin ds-default-check -f
           
