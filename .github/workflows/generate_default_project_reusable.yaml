@@ -51,7 +51,7 @@ jobs:
         run: |
           echo ${{ env.URL }}
           git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git ds-default-repo
-          cp -r ds-default-repo. ds-default-repo
+          cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
         run: |
