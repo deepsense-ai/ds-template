@@ -30,12 +30,6 @@ jobs:
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
 
-      - name: Prepare git username
-        working-directory: ./ds-gh-default2
-        run: |
-          git config --global user.email "lukasz.karlowski@deepsense.ai"
-          git config --global user.name "lukasz karlowski"
-
       - name: Remote checkout
         uses: actions/checkout@v4
         with:
@@ -61,8 +55,8 @@ jobs:
       - name: Prepare git5
         working-directory: ./ds-gh-default2
         run: |
-          git config --global user.email "lukasz.karlowski@deepsense.ai"
-          git config --global user.name "lukasz karlowski"
+          git config --local user.email "lukasz.karlowski@deepsense.ai"
+          git config --local user.name "lukasz karlowski"
           git checkout -b ds-default-check
           git add .
 
