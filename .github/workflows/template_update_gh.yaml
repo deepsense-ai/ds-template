@@ -12,7 +12,7 @@ jobs:
       contents: read
       pages: write
     env:
-      GH_TEST_REPO_TOKEN: ${{ secrets.REPO_KEY_GITLAB }}
+      GH_TEST_REPO_TOKEN: ${{ secrets.REPO_KEY_GITHUB }}
 
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +50,7 @@ jobs:
         working-directory: ./ds-gh-default2
         run: |
           git config --local user.email "lukasz.karlowski@deepsense.ai"
-          git config --local user.name "karllu3"
+          git config --local user.name "lukasz.karlowski"
           git checkout -b ds-default-check
           git add .
 
