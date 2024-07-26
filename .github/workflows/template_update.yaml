@@ -8,6 +8,9 @@ jobs:
   validate-default-instance:
     runs-on: ubuntu-latest
     container: python:3.11
+    permissions:
+      contents: read
+      pages: write
 
     steps:
       - uses: actions/checkout@v4
