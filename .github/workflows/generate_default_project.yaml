@@ -6,7 +6,7 @@ jobs:
   test-Github-default-instance:
     uses: ./.github/workflows/generate_default_project_reusable.yaml
     with:
-      repo-path: github.com/karllu3/ds-lk-default.git
+      repo-path: @github.com/karllu3/ds-lk-default.git
       repo-user: karllu3
       repo-email: lukasz.karlowski@deepsense.ai
       cookiecutter-profile: cookiecutter_default_gh.yaml
@@ -16,7 +16,7 @@ jobs:
   test-GitLab-default-instance:
     uses: ./.github/workflows/generate_default_project_reusable.yaml
     with:
-      repo-path: gitlab.com/lukasz.karlowski/ds-lk-default.git
+      repo-path: @gitlab.com/lukasz.karlowski/ds-lk-default.git
       repo-user: lukasz karlowski
       repo-email: lukasz.karlowski@deepsense.ai
       cookiecutter-profile: cookiecutter_default_gh.yaml
