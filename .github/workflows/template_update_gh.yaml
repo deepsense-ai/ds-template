@@ -11,6 +11,8 @@ jobs:
     permissions:
       contents: read
       pages: write
+    env:
+      GH_TEST_REPO_TOKEN: ${{ secrets.REPO_KEY_GITLAB }}
 
     steps:
       - uses: actions/checkout@v4
@@ -36,9 +38,10 @@ jobs:
           path: ds-gh-default2
           ref: main
           repository: karllu3/ds-lk-default
-          token: ${{ secrets.REPO_KEY_GITLAB }}
+          token: ${{ env.GH_TEST_REPO_TOKEN }}
           fetch-depth: 0
-          persist_credentials: false
+          persist-credentials: false
+          ssh-user: karllu3
 
       - name: Set safe directory
         run: |
