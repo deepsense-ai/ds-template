@@ -19,6 +19,9 @@ on:
       repo-token:
         required: true
 
+    env:
+      PROTOCOL: 'https://oauth2:'
+
 jobs:
   validate-instance:
     runs-on: ubuntu-latest
@@ -45,10 +48,8 @@ jobs:
         run: cookiecutter . --no-input --config-file ${{ inputs.cookiecutter-profile }}
 
       - name: Remote checkout
-        env:
-          protocol: 'https://oauth2:'
         run: |
-          git clone $protocol${{ secrets.repo-token }}/${{ inputs.repo-path }}" ds-default-repo
+          git clone ${{ env.PROTOCOL }}${{ secrets.repo-token }}/${{ inputs.repo-path }}" ds-default-repo
           cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
