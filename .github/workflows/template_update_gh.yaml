@@ -32,7 +32,7 @@ jobs:
         run: cookiecutter . --no-input --config-file cookiecutter_default_gh.yaml
 
       - name: Remote checkout
-        run: git clone https://oauth2:${{ secrets.REPO_KEY_GITLAB }}@github.com/karllu3/ds-lk-default.git ds-gh-default2
+        run: git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git ds-gh-default2
 
       - name: Set safe directory
         run: |
