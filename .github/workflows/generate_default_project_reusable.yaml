@@ -48,7 +48,7 @@ jobs:
         env:
           protocol: 'https://oauth2:'
         run: |
-          git clone ${{ env.protocol }}${{ secrets.repo-token }}@/${{ inputs.repo-path }}" ds-default-repo
+          git clone $protocol${{ secrets.repo-token }}/${{ inputs.repo-path }}" ds-default-repo
           cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
