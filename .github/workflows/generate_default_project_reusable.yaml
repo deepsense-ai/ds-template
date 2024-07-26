@@ -50,7 +50,7 @@ jobs:
       - name: Remote checkout
         run: |
           echo ${{ env.URL }}
-          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@${{ inputs.repo-path }} ds-default-repo
+          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git ds-default-repo
           cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
