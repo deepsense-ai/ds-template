@@ -9,7 +9,7 @@ on:
       repo-user:
         required: true
         type: string
-      repo-email:
+      repo-user-email:
         required: true
         type: string
       cookiecutter-profile:
@@ -17,6 +17,8 @@ on:
         type: string
     secrets:
       REPO_KEY_GITHUB:
+        required: true
+      REPO_KEY_GITLAB:
         required: true
 
 jobs:
@@ -46,8 +48,7 @@ jobs:
 
       - name: Remote checkout
         run: |
-          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git ds-default-repo
-          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git
+          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@${{ inputs.repo_path }} ds-default-repo
           cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
@@ -57,8 +58,8 @@ jobs:
       - name: Prepare local git repo
         working-directory: ./ds-default-repo
         run: |
-          git config --local user.email "lukasz.karlowski@deepsense.ai"
-          git config --local user.name "karllu3"
+          git config --local user.email "${{ inputs.repo-user }}"
+          git config --local user.name "${{ inputs.repo-user-email }}"
           git checkout -b ds-default-check
           git add .
 
