@@ -48,7 +48,9 @@ jobs:
 
       - name: Remote checkout
         run: |
-          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}${{ inputs.repo_path }} ds-default-repo
+          echo "REMOTE_REPO_REF=$(echo 'https://oauth2:${{ secrets.REPO_KEY_GITHUB }}${{ inputs.repo_path }}')" >> $GITHUB_ENV
+          echo $REMOTE_REPO_REF
+          git clone $REMOTE_REPO_REF ds-default-repo
           cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
