@@ -19,9 +19,6 @@ on:
       token:
         required: true
 
-env:
-  URL: 'https://oauth2:${{ secrets.token }}@${{ inputs.repo-path }}'
-
 jobs:
   validate-instance:
     runs-on: ubuntu-latest
