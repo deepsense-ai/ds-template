@@ -21,8 +21,8 @@ on:
       REPO_KEY_GITLAB:
         required: true
 
-    env:
-      REMOTE_REPO_REF: https://oauth2:${{ secrets.REPO_KEY_GITHUB }}\@${{ inputs.repo_path }}
+env:
+  REMOTE_REPO_REF: https://oauth2:${{ secrets.REPO_KEY_GITHUB }}\@${{ inputs.repo_path }}
 
 jobs:
   validate-instance:
