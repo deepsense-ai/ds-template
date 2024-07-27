@@ -10,7 +10,7 @@ jobs:
       repo-user: karllu3
       repo-email: lukasz.karlowski@deepsense.ai
       cookiecutter-profile: cookiecutter_default_gh.yaml
-    secrets: inherit
+      secrets: inherit
 
   test-GitLab-default-instance:
     uses: ./.github/workflows/generate_default_project_reusable.yaml
@@ -19,4 +19,4 @@ jobs:
       repo-user: lukasz karlowski
       repo-email: lukasz.karlowski@deepsense.ai
       cookiecutter-profile: cookiecutter_default_gh.yaml
-    secrets: inherit
+      secrets: inherit
