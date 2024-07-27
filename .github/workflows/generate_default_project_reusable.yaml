@@ -48,12 +48,12 @@ jobs:
 
       - name: Prepare remote link
         run: |
-          echo "REMOTE_REPO_REF=$(echo 'https://oauth2:${{ secrets.REPO_KEY_GITHUB }}${{ inputs.repo_path }}')" >> $GITHUB_ENV
-          echo "remote repo $REMOTE_REPO_REF"
+          echo "REMOTE_REPO_REF=$(echo 'https://oauth2:${{ secrets.REPO_KEY_GITHUB }}\@${{ inputs.repo_path }}')" >> $GITHUB_ENV
+          echo "remote repo ${{ env.REMOTE_REPO_REF }}"
 
       - name: Remote checkout
         run: |
-          echo "REMOTE_REPO_REF=$(echo 'https://oauth2:${{ secrets.REPO_KEY_GITHUB }}${{ inputs.repo_path }}')" >> $GITHUB_ENV
+          echo "REMOTE_REPO_REF=$(echo 'https://oauth2:${{ secrets.REPO_KEY_GITHUB }}\@${{ inputs.repo_path }}')" >> $GITHUB_ENV
           echo ${{ env.REMOTE_REPO_REF }}
           git clone ${{ env.REMOTE_REPO_REF }} ds-default-repo
           cp -r ds-default/. ds-default-repo
