@@ -51,6 +51,7 @@ jobs:
         run: |
           ls
           git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git ds-default-repo
+          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git
           cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
@@ -60,8 +61,8 @@ jobs:
       - name: Prepare local git repo
         working-directory: ./ds-default-repo
         run: |
-          git config --local user.email ${{ inputs.repo-email }}
-          git config --local user.name ${{ inputs.repo-user }}
+          git config --local user.email "lukasz.karlowski@deepsense.ai"
+          git config --local user.name "karllu3"
           git checkout -b ds-default-check
           git add .
 
