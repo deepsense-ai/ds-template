@@ -1,5 +1,5 @@
 default_context:
     client_name: "ds"
-    project_name: "ds_default"
+    project_name: "default"
     ci: "GitLab"
     jupytext": "No"

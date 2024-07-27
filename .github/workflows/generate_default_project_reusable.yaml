@@ -50,23 +50,23 @@ jobs:
       - name: Remote checkout
         run: |
           ls
-          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git ds_default_repo
-          cp -r ds_default/. ds_default_repo
+          git clone https://oauth2:${{ secrets.REPO_KEY_GITHUB }}@github.com/karllu3/ds-lk-default.git ds-default-repo
+          cp -r ds-default/. ds-default-repo
 
       - name: Set safe directory
         run: |
           git config --global --add safe.directory /__w/ds-template/ds-template
 
       - name: Prepare local git repo
-        working-directory: ./ds_default_repo
+        working-directory: ./ds-default-repo
         run: |
           git config --local user.email ${{ inputs.repo-email }}
           git config --local user.name ${{ inputs.repo-user }}
-          git checkout -b ds_default-check
+          git checkout -b ds-default-check
           git add .
 
       - name: Validate package build
-        working-directory: ./ds_default_repo
+        working-directory: ./ds-default-repo
         run: |
           python -m pip install .
 
@@ -74,11 +74,11 @@ jobs:
         run: pip3 install pre-commit
 
       - name: Run pre-commit checks
-        working-directory: ./ds_default_repo
+        working-directory: ./ds-default-repo
         run: pre-commit run --all-files --show-diff-on-failure --color always
 
       - name: Push repo
-        working-directory: ./ds_default_repo
+        working-directory: ./ds-default-repo
         run: |
           git commit -m "Repo after creation"
           git push --set-upstream origin ds-default-check -f
