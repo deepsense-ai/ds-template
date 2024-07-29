@@ -235,7 +235,6 @@ tests:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
-{% if cookiecutter.docs != "No docs" %}
 ##############################################
 
 # Job to build Sphinx docs and host it on GitLab Pages
@@ -251,5 +250,5 @@ pages:
     paths:
       - public
   rules:
+    - if: {{ cookiecutter.docs }} != "No docs"
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-{% endif %}
