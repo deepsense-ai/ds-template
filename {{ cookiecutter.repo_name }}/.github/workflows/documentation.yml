@@ -24,10 +24,10 @@ jobs:
       # for best results, it is better to generate
       # documentation within development environment
       - name: Create venv
-        run: . ./setup_dev_env.sh
+        run: make
 
       - name: Build docs
-        run: ./build_docs.sh
+        run: make docs
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

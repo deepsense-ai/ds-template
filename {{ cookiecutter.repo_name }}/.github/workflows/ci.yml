@@ -20,17 +20,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Cache pre-commit
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
-
-      - name: Install pre-commit
-        run: pip3 install pre-commit
+      - name: Install venv and pre-commit
+        run: make
 
       - name: Run pre-commit checks
-        run: pre-commit run --all-files --show-diff-on-failure --color always
+        run: make lint
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -57,16 +51,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           comment_tag: trivy
 
-      - name: Create venv
-        run: . ./setup_dev_env.sh
-
       - name: Check licenses
-        run: ./check_licenses.sh
+        run: make lic-check
 
       - name: Generate pip freeze
-        run: |
-          source venv/bin/activate
-          pip freeze > requirements-freeze.txt
+        run: make freeze
 
       - name: Publish Artefacts
         uses: actions/upload-artifact@v3
@@ -90,10 +79,7 @@ jobs:
           retention-days: 10
 
       - name: Validate package build
-        run: |
-          source venv/bin/activate
-          python -m pip install -U build
-          python -m build
+        run: make build
 
       - name: Publish Package
         uses: actions/upload-artifact@v3
@@ -124,23 +110,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Cache Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}-${{ hashFiles('**/setup.cfg') }}-${{ hashFiles('**/pyproject.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - name: Install Dependencies
-        run: pip install -r requirements-dev.txt
+        run: make
 
       - name: Run Tests With Coverage
-        run: |
-          # run with coverage to not execute tests twice
-          coverage run -m pytest -v -p no:warnings --junitxml=report.xml tests/
-          coverage report
-          coverage xml
+        run: make coverage
 
       - name: Test Report
         uses: mikepenz/action-junit-report@v4

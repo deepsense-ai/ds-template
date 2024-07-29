@@ -1,5 +1,3 @@
-.ONESHELL:
-
 PYTHON_VERSION := 3.11
 WHEEL_VERSION := 0.43.0
 
@@ -13,10 +11,8 @@ venv/bin/activate: requirements-dev.txt
 		pip install -r requirements-dev.txt
 		pre-commit install
 
-activate: venv/bin/activate
+lint: venv/bin/activate
 		. venv/bin/activate
-
-lint: activate
 		pre-commit run --all-files
 
 clean:
@@ -29,4 +25,32 @@ clean:
 		rm -rf dist/
 		rm -rf *.egg-info/
 
-.PHONY: update, lint, clean, activate
+build: venv/bin/activate
+		. venv/bin/activate
+		python -m pip install -U build
+		python -m build
+
+lic-check: venv/bin/activate
+		. venv/bin/activate
+		pip-licenses --from=mixed  --ignore-packages `cat .libraries-whitelist.txt`> licenses.txt --allow-only="$(paste -sd ";" .license-whitelist.txt)"
+
+docs: venv/bin/activate
+		. venv/bin/activate
+		pip-licenses --from=mixed --format rst --with-urls --with-description --output-file=docs/licenses_table.rst
+		sphinx-build -d docs/_build/doctrees docs/ public/
+
+bump-version: venv/bin/activate
+		. venv/bin/activate
+		bump2version --verbose --commit $(args)
+
+freeze: venv/bin/activate
+		. venv/bin/activate
+		pip freeze > requirements-freeze.txt
+
+coverage: venv/bin/activate
+		. venv/bin/activate
+		coverage run -m pytest -v -p no:warnings --junitxml=report.xml tests/
+		coverage report
+		coverage xml
+
+.PHONY: lint, clean, build, lic-check, docs, bump-version, freeze, coverage

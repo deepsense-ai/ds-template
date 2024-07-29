@@ -13,7 +13,7 @@ To start, you need to setup your local machine.
 You need to setup virtual environment, simplest way is to run from project root directory:
 
 ```bash
-$ . ./setup_dev_env.sh
+$ make
 $ source venv/bin/activate
 ```
 This will create a new venv and run `pip install -r requirements-dev.txt`.
@@ -31,7 +31,7 @@ All updated files will be reformatted and linted before the commit.
 
 To reformat and lint all files in the project, use:
 
-`pre-commit run --all-files`
+`make lint`
 
 The used linters are configured in `.pre-commit-config.yaml`. You can use `pre-commit autoupdate` to bump tools to the latest versions.
 
@@ -53,10 +53,10 @@ See also [Cookiecutter Data Science opinion](https://drivendata.github.io/cookie
 
 In `docs/` directory are Sphinx RST/Markdown files.
 
-To build documentation locally, in your configured environment, you can use `build_docs.sh` script:
+To build documentation locally, in your configured environment, you can use `make docs` command:
 
 ```bash
-$ ./build_docs.sh
+$ make docs
 ```
 
 Then open `public/index.html` file.
@@ -110,15 +110,15 @@ To bump version of the library please use `bump2version` which will update all v
 
 NOTE: Configuration is in `.bumpversion.cfg` and **this is a main file defining version which should be updated only with bump2version**.
 
-For convenience there is bash script which will create commit, to use it call:
+For convenience there is make command which will create commit, to use it call:
 
 ```bash
 # to create a new commit by increasing one semvar:
-$ ./bump_version.sh minor
-$ ./bump_version.sh major
-$ ./bump_version.sh patch
+$ make bump-version args=minor
+$ make bump-version args=patch
+$ make bump-version args=major
 # to see what is going to change run:
-$ ./bump_version.sh --dry-run major
+$ ./bump_version.sh args="--dry-run major"
 ```
 Script updates **VERSION** file and setup.cfg automatically uses that version.
 
