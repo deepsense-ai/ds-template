@@ -1,6 +1,7 @@
 default:
   tags:
     - all-ds
+    - gitlab-org
 
 variables:
   PYTHON_DOCKER_IMAGE: python:3.11
