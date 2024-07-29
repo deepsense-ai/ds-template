@@ -1,6 +1,5 @@
 default:
   tags:
-    - all-ds
     - gitlab-org
 
 variables:
