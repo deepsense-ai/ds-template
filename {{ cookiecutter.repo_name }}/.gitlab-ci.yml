@@ -95,6 +95,8 @@ lint:
   image: $PRECOMMIT_IMAGE:latest
   stage: lint
   interruptible: true
+  before_script:
+    - make
   script:
     - make lint
   rules:
@@ -112,6 +114,8 @@ lint-precommit-changed:
   image: $PRECOMMIT_IMAGE:dev-$CI_COMMIT_SHA
   stage: lint
   interruptible: true
+  before_script:
+    - make
   script:
     - make lint
   rules:
@@ -146,7 +150,6 @@ tests:
   interruptible: true
   before_script:
     - make
-    - . venv/bin/activate
     - pip install build twine bump2version #???
   script:
     # fused check license here as it would take more time to do it in different place.
