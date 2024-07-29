@@ -7,7 +7,7 @@
   "ci": ["Github", "GitLab", "None"],
   "jupytext": ["No", "Yes"],
   "docs": ["Sphinx", "No docs"],
-  "versioning": ["Python Semantic Release", "Bumpversion", "None"],
+  "versioning": ["Bumpversion", "None"],
   "python_package_name": "{{ cookiecutter.__project_name_slug.replace('-', '_') }}",
   "__package_name": "{{ cookiecutter.python_package_name }}",
   "_copy_without_render": [".github/workflows/*.yml", ".github/workflows/*.yaml"]
