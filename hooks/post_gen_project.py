@@ -26,6 +26,11 @@ BUMPVERSION_FILES = [
     "bump_version.sh"
 ]
 
+SEMANTIC_RELEASE_FILES = [
+    ".github/workflows/check_future_version.yml",
+    ".github/workflows/release.yml",
+]
+
 {% if cookiecutter.ci != "GitLab" %}
 files_to_be_removed.extend(GITLAB_FILES)
 {% endif %}
@@ -44,6 +49,10 @@ files_to_be_removed.extend(DOCS_FILES)
 
 {% if cookiecutter.versioning != "Bumpversion" %}
 files_to_be_removed.extend(BUMPVERSION_FILES)
+{% endif %}
+
+{% if cookiecutter.versioning != "Python Semantic Release" %}
+files_to_be_removed.extend(SEMANTIC_RELEASE_FILES)
 {% endif %}
 
 print("Cleaning files... 🌀")
