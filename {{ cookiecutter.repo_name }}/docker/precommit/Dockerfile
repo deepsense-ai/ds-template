@@ -1,7 +1,7 @@
 # Creates a dockerfile with pre-commit preconfigured.
 # Can be used to reduce time for linting stage.
 
-FROM python:3.9-slim-buster
+FROM python:3.11
 
 ENV PRE_COMMIT_VERSION 3.0.4
 

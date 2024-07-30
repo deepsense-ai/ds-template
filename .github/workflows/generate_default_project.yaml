@@ -1,0 +1,24 @@
+name: Generate default project
+on:
+  push:
+
+jobs:
+  test-Github-default-instance:
+    uses: ./.github/workflows/generate_default_project_reusable.yaml
+    with:
+      repo-path: github.com/karllu3/ds-lk-default.git 
+      repo-user: karllu3
+      repo-user-email: lukasz.karlowski@deepsense.ai
+      cookiecutter-profile: cookiecutter_default_gh.yaml
+    secrets:
+      REPO_TOKEN: ${{ secrets.REPO_KEY_GITHUB }}
+
+  test-GitLab-default-instance:
+    uses: ./.github/workflows/generate_default_project_reusable.yaml
+    with:
+      repo-path: gitlab.com/lukasz.karlowski/ds-lk-default.git
+      repo-user: lukasz karlowski
+      repo-user-email: lukasz.karlowski@deepsense.ai
+      cookiecutter-profile: cookiecutter_default_gl.yaml
+    secrets:
+      REPO_TOKEN: ${{ secrets.REPO_KEY_GITLAB }}

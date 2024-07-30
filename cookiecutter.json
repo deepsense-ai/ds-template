@@ -5,8 +5,8 @@
     "__client_name_slug": "{{cookiecutter.client_name | slugify}}",
     "repo_name": "{{cookiecutter.__client_name_slug}}-{{cookiecutter.__project_name_slug}}",
     "ci": [
-      "GitLab",
       "Github",
+      "GitLab",
       "None"
     ],
     "jupytext": [
