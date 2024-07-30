@@ -121,27 +121,11 @@ $ ./bump_version.sh minor
 $ ./bump_version.sh major
 $ ./bump_version.sh patch
 # to see what is going to change run:
-$ ./bump_versemantic-release version --patch --printsion.sh --dry-run major
+$ ./bump_version.sh --dry-run major
 ```
 Script updates **VERSION** file and setup.cfg automatically uses that version.
 
 You can configure it to update version string in other files as well - please check out the bump2version configuration file.
-{% endif -%}
-
-{%- if cookiecutter.versioning == "Python Semantic Release" %}
-If using GitHub, you can manually trigger version check and release in GitHub Actions web GUI. It will also automatically trigger based on your commits.
-
-You can also trigger it manually using:
-```bash
-# dry-run to preview changes
-$ semantic-release --noop version
-# dry-run to preview only the new version
-$ semantic-release version --print
-# to apply new version and without pushing
-$ semantic-release version --no-push
-# to apply new version and push
-$ semantic-release version
-```
 {% endif -%}
 
 {% if cookiecutter.ci == "GitLab" %}
