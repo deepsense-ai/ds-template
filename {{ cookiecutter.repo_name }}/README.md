@@ -49,6 +49,7 @@ Read more about different modes in [documentation](https://ipython.org/ipython-d
 All code should be in `src/` to make reusability and review straightforward, keep notebooks simple for exploratory data analysis.
 See also [Cookiecutter Data Science opinion](https://drivendata.github.io/cookiecutter-data-science/#notebooks-are-for-exploration-and-communication).
 
+{%- if cookiecutter.docs != "No docs" %}
 # Project documentation
 
 In `docs/` directory are Sphinx RST/Markdown files.
@@ -62,6 +63,7 @@ $ ./build_docs.sh
 Then open `public/index.html` file.
 
 Please read the official [Sphinx documentation](https://www.sphinx-doc.org/en/master/) for more details.
+{% endif -%}
 
 {% if cookiecutter.ci == "GitLab" %}
 
@@ -104,6 +106,7 @@ Treat them as read-only files and edit only notebooks.
 
 {%- endif -%}
 
+{%- if cookiecutter.versioning == "Bumpversion" %}
 # Semantic version bump
 
 To bump version of the library please use `bump2version` which will update all version strings.
@@ -123,6 +126,7 @@ $ ./bump_version.sh --dry-run major
 Script updates **VERSION** file and setup.cfg automatically uses that version.
 
 You can configure it to update version string in other files as well - please check out the bump2version configuration file.
+{% endif -%}
 
 {% if cookiecutter.ci == "GitLab" %}
 

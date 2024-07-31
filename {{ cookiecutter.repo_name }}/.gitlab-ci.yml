@@ -7,12 +7,11 @@ variables:
   DOCKER_REGISTRY: $CI_REGISTRY/$CI_PROJECT_PATH
   PRECOMMIT_IMAGE: $DOCKER_REGISTRY/precommit
 
-
 # run CI on default branch or MR only
 workflow:
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-    - if: '$CI_MERGE_REQUEST_IID'
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+    - if: "$CI_MERGE_REQUEST_IID"
 
 stages:
   - preparation
@@ -58,7 +57,7 @@ stages:
   stage: preparation
   image: docker:23
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
       changes:
         - docker/precommit/Dockerfile
         - .pre-commit-config.yaml
@@ -86,7 +85,6 @@ stages:
 # for automation and bootstrapping a new project.
 # Consider to use stable commit SHA from main branch instead
 # and manual changes to reduce surprises.
-
 
 # To overcome issue that latest might not be present
 # and assume that this either new project / done in
@@ -120,7 +118,7 @@ lint-precommit-changed:
         - docker/precommit/Dockerfile
         - .pre-commit-config.yaml
       when: always
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
       when: never
 
 #############################################
@@ -140,6 +138,7 @@ lint-precommit-changed:
 ###########################################
 
 # Job to run pytest with code coverage + license check
+# TODO make installing bump2version below conditional on cookiecutter parameter choice
 tests:
   image: $PYTHON_DOCKER_IMAGE
   stage: tests
@@ -236,6 +235,8 @@ tests:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
+
+{%- if cookiecutter.docs != "No docs" %}
 ##############################################
 
 # Job to build Sphinx docs and host it on GitLab Pages
@@ -249,6 +250,8 @@ pages:
     - ./build_docs.sh
   artifacts:
     paths:
-    - public
+      - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    
+{% endif -%}

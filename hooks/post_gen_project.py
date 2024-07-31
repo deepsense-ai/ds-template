@@ -4,33 +4,50 @@ import shutil
 
 print("Running post generation...")
 
-ci = "{{ cookiecutter.ci }}"
+files_to_be_removed = []
 
-REMOVE_PATHS = []
-
-gitlab_files = [
+GITLAB_FILES = [
     ".gitlab-ci.yml",
     "docker/precommit"
 ]
 
-github_files = [
+GITHUB_FILES = [
     ".github/",
 ]
 
+DOCS_FILES = [
+    "docs/",
+    "build_docs.sh",
+    ".github/workflows/documentation.yml"
+]
+
+BUMPVERSION_FILES = [
+    ".bumpversion.cfg",
+    "bump_version.sh"
+]
+
 {% if cookiecutter.ci != "GitLab" %}
-REMOVE_PATHS.extend(gitlab_files)
+files_to_be_removed.extend(GITLAB_FILES)
 {% endif %}
 
 {% if cookiecutter.ci != "Github" %}
-REMOVE_PATHS.extend(github_files)
+files_to_be_removed.extend(GITHUB_FILES)
 {% endif %}
 
 {% if cookiecutter.jupytext != "Yes" %}
-REMOVE_PATHS.extend(["notebooks/example.py"])
+files_to_be_removed.append("notebooks/example.py")
+{% endif %}
+
+{% if cookiecutter.docs == "No docs" %}
+files_to_be_removed.extend(DOCS_FILES)
+{% endif %}
+
+{% if cookiecutter.versioning != "Bumpversion" %}
+files_to_be_removed.extend(BUMPVERSION_FILES)
 {% endif %}
 
 print("Cleaning files... 🌀")
-for path in REMOVE_PATHS:
+for path in files_to_be_removed:
     path = Path(path)
     if path.exists() and path.is_file():
         print(f"Clean up file: '{path}'")
