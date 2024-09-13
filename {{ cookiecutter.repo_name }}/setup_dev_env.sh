@@ -5,6 +5,7 @@ if [ ! -d venv ]; then
     . venv/bin/activate
     pip install --upgrade pip
     pip install --quiet wheel==0.41.3
+    pip install --quiet "setuptools>=70"
     pip install --quiet -r requirements-dev.txt
 fi
 
