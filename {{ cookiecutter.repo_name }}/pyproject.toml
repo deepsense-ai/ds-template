@@ -121,7 +121,7 @@ disable=[
         ]
 
 [tool.pylint.format]
-max-line-length=120
+max-line-length = 120
 
 [tool.pylint.miscellaneous]
 notes=["XXX"]
@@ -137,12 +137,14 @@ default-docstring-type = "google"
 max-locals=20
 
 [tool.pylint.similarities]
-min-similarity-lines=10
+min-similarity-lines = 10
 {%- endif %}
 {% if cookiecutter.linting_base == "ruff" -%}
 [tool.ruff]
-line-length=120
+line-length = 120
+fix = true
 
+[tool.ruff.lint]
 select = [
     # Pyflakes
     "F",
@@ -178,10 +180,9 @@ ignore = [
   # allow print()
   "T201",
 ]
-fix = true
 fixable = ["I001"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 {%- endif %}
 
