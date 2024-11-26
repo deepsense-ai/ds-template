@@ -62,7 +62,7 @@ Generated project consists of:
     * security: `trivy` - required for SOC 2 Certification, but is reporting only
 1. Other less important files (more configurations, `.gitignore` etc)
 
-Most up-to date descriptions, tips and explanations are in the [documentation](https://deepsense-ai.github.io/ds-template/).
+Documentation for parent project with rather matching descriptions, tips and explanations are in the [documentation](https://deepsense-ai.github.io/ds-template/).
 
 # Getting started
 
@@ -76,7 +76,7 @@ Install **cookiecutter** (at least **>=2.1.1** version) first and then point it 
 **Cookiecutter** will ask you set of questions so it can generate customized project.
 
 ``` bash
-    $ cookiecutter ds-template/
+    $ cookiecutter py-template/
     author []: Author Name
     project_name [default]: Sunglass
     repo_name [client-name-sunglass]:
@@ -100,7 +100,7 @@ $ git clone <GIT-SSH>
 # install cookiecutter if not yet installed
 $ pip install cookiecutter
 # generate cookiecutter with --force and ensure the repo_name is set to the same name as directory you cloned git repository to.
-$ cookiecutter -f git@github.com:deepsense-ai/ds-template.git
+$ cookiecutter -f git@github.com:rAum/py-template.git
 # finally, add all files, commit and push.
 $ git add .
 $ git commit -m "Initialize repository with default project template"
@@ -113,7 +113,7 @@ Approach 2 (initialize git locally and push to remote):
 # install cookiecutter if not yet installed
 $ pip install cookiecutter
 # generate project
-$ cookiecutter git@github.com:deepsense-ai/ds-template.git
+$ cookiecutter git@github.com:rAum/py-template.git
 # enter created directory
 $ cd <project-name>
 # now we need to connect it to repository (assuming empty repository)

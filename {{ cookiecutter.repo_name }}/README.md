@@ -1,8 +1,7 @@
 # {{cookiecutter.project_name}}
 
-Repository is created with deepsense.ai project template boilerplate. Adapt to your needs.
-Documentation is available at [https://deepsense-ai.github.io/ds-template/](https://deepsense-ai.github.io/ds-template/).
-
+Repository is created with **py-template** cookiecutter template.
+Check out the [project page](https://github.com/rAum/py-template) for more details.
 
 # Setup developer environment
 
