@@ -77,17 +77,18 @@ Install **cookiecutter** (at least **>=2.1.1** version) first and then point it 
 
 ``` bash
     $ cookiecutter ds-template/
-    client_name [ds]: Client Name
+    author []: Author Name
     project_name [default]: Sunglass
     repo_name [client-name-sunglass]:
     ...
 ```
+Author can be your company name. It will be used in the documentation and in the package metadata.
 
 ### How to initialize new repository with the template:
 
 Firstly, you need to create a new project. The name should be of the following convention: 
 
-`<client_name>-<project_name>`
+`<project_name>`
 
 Execute the following steps then:
 

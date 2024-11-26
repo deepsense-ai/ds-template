@@ -59,7 +59,7 @@ def assert_jinja_resolved(files: Sequence[Path]) -> None:
 
 def test_template_project(cookies):
     result = cookies.bake(extra_context={
-        "client_name": "ds.ai",
+        "author": "ds.ai",
         "project_name": "hello",
         "ci": "GitLab"
         })
@@ -67,7 +67,7 @@ def test_template_project(cookies):
     assert result.exit_code == 0
     assert result.exception is None
 
-    assert result.project_path.name == "ds-ai-hello"
+    assert result.project_path.name == "hello"
     assert result.project_path.is_dir()
 
     rpath: Path = result.project_path
@@ -76,7 +76,7 @@ def test_template_project(cookies):
 
 def test_template_creates_package(cookies):
     result = cookies.bake(extra_context={
-        "client_name": "test",
+        "author": "test",
         "project_name": "test",
         "ci": "None"
         })
@@ -89,7 +89,7 @@ def test_template_creates_package(cookies):
 
 def test_template_project_no_gitlab(cookies):
     result = cookies.bake(extra_context={
-        "client_name": "no",
+        "author": "no",
         "project_name": "gitlab",
         "ci": "None"
         })
@@ -102,7 +102,7 @@ def test_template_project_no_gitlab(cookies):
 
 def test_template_project_with_gitlab(cookies):
     result = cookies.bake(extra_context={
-        "client_name": "with",
+        "author": "with",
         "project_name": "gitlab",
         "ci": "GitLab"
         })
@@ -115,7 +115,7 @@ def test_template_project_with_gitlab(cookies):
 
 def test_template_project_no_github(cookies):
     result = cookies.bake(extra_context={
-        "client_name": "no",
+        "author": "no",
         "project_name": "gitlab",
         "ci": "None"
         })
@@ -128,7 +128,7 @@ def test_template_project_no_github(cookies):
 
 def test_template_project_with_github(cookies):
     result = cookies.bake(extra_context={
-        "client_name": "with",
+        "author": "with",
         "project_name": "gitlab",
         "ci": "Github"
         })
@@ -142,7 +142,7 @@ def test_template_project_with_github(cookies):
 
 def test_template_project_with_jupytext(cookies):
     result = cookies.bake(extra_context={
-        "client_name": "no",
+        "author": "no",
         "project_name": "jupytext",
         "jupytext": "Yes"
         })
@@ -157,7 +157,7 @@ def test_template_project_with_jupytext(cookies):
 
 def test_template_project_no_jupytext(cookies):
     result = cookies.bake(extra_context={
-        "client_name": "no",
+        "author": "no",
         "project_name": "jupytext",
         "jupytext": "No"
         })

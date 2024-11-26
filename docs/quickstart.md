@@ -8,7 +8,7 @@ Install **cookiecutter>=2.1.1** first and then point it to git repository / loca
 
 ``` bash
     $ cookiecutter ds-template/
-    client_name [ds]: Client Name
+    author [ds]: Company Name
     project_name [default]: Sunglass
     repo_name [client-name-sunglass]:
     ...
@@ -20,9 +20,9 @@ Install **cookiecutter>=2.1.1** first and then point it to git repository / loca
 
 Firstly, you need to create a git project. The suggested name convention is:
 
-`<client_name>-<project_name>`
+`<project_name>`
 
-Where `client_name` is the name of the client can also be your own name or name of the company you work for. `project_name` is the name of the project.
+`project_name` is the name of the project.
 
 GIT-SSH is the SSH link to the repository you want to initialize.
 

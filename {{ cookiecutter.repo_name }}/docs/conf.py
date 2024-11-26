@@ -7,8 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = '{{ cookiecutter.project_name }}'
-copyright = '2023, {{ cookiecutter.client_name }}'
-author = 'deepsense.ai'
+copyright = '{% now "utc", "%Y" %}, {{ cookiecutter.author }}'
+author = '{{ cookiecutter.author }}'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

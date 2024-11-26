@@ -1,9 +1,8 @@
 {
-    "client_name": "ds",
+    "author": "",
     "project_name": "default",
     "__project_name_slug": "{{cookiecutter.project_name | slugify}}",
-    "__client_name_slug": "{{cookiecutter.client_name | slugify}}",
-    "repo_name": "{{cookiecutter.__client_name_slug}}-{{cookiecutter.__project_name_slug}}",
+    "repo_name": "{{cookiecutter.__project_name_slug}}",
     "ci": [
       "GitLab",
       "Github",
