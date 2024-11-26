@@ -1,6 +1,7 @@
-# [deepsense.ai](https://deepsense.ai) Project Template 
+# Professional Python Project Template
 
-Useful template to bootstrap new professional data science and python projects.
+This is an opinionated fork based on [ds-template](https://github.com/deepsense-ai/ds-template).
+Useful template to bootstrap new professional data science and python projects, with mind of production quality allowing to adapt to needs.
 
 [Documentation](https://deepsense-ai.github.io/ds-template/)
 
