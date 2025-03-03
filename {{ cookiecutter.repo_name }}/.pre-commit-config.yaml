@@ -16,7 +16,7 @@ repos:
 
     # Checks Python source files for errors, sorts imports alphabetically and cleans unused imports.
     - repo: https://github.com/charliermarsh/ruff-pre-commit
-      rev: v0.8.0
+      rev: v0.9.9
       hooks:
           - id: ruff
             types_or: [ python, pyi, {%- if cookiecutter.jupytext == "No" %}jupyter{%- endif -%} ]
@@ -52,7 +52,7 @@ repos:
 
     # Modernizes python code and upgrade syntax for newer versions of the language
     - repo: https://github.com/asottile/pyupgrade
-      rev: v3.19.0
+      rev: v3.19.1
       hooks:
           - id: pyupgrade
             args: [--py39-plus]
@@ -102,7 +102,7 @@ repos:
 
       # Used to have proper type annotations for library code.
     - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.13.0
+      rev: v1.15.0
       hooks:
           - id: mypy
             args: []
@@ -111,7 +111,7 @@ repos:
 
       # Finds common security issues in Python code.
     - repo: https://github.com/PyCQA/bandit
-      rev: 1.7.10
+      rev: 1.8.3
       hooks:
           - id: bandit
             args: [-c, pyproject.toml, --recursive, src]
