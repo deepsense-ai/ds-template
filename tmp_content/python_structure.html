@@ -456,8 +456,8 @@ It also enables sharing with other users.</p>
 <p>One package should be then a <em>main</em> with the same name as full package containing <code class="docutils literal notranslate"><span class="pre">__version__.py</span></code> file.</p>
 <p>Alternative and recommended way is to move <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> to project root and make <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> to use it (and remember to modify <code class="docutils literal notranslate"><span class="pre">.bumpversion.cfg</span></code> file) - this would be a <em>multi module python package</em>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">foo</span></code>  would then result in valid code:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">foo</span>
-<span class="kn">import</span> <span class="nn">bar</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">foo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">bar</span>
 </pre></div>
 </div>
 </section>
