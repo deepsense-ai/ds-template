@@ -1,1 +1,2 @@
+{{ cookiecutter.__package_name }}
 pkg_resources

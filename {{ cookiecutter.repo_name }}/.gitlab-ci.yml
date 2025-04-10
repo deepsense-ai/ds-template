@@ -93,8 +93,10 @@ lint:
   image: $PRECOMMIT_IMAGE:latest
   stage: lint
   interruptible: true
+  before_script:
+    - make
   script:
-    - pre-commit run --all-files
+    - make lint
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       changes:
@@ -110,8 +112,10 @@ lint-precommit-changed:
   image: $PRECOMMIT_IMAGE:dev-$CI_COMMIT_SHA
   stage: lint
   interruptible: true
+  before_script:
+    - make
   script:
-    - pre-commit run --all-files
+    - make lint
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -144,21 +148,19 @@ tests:
   stage: tests
   interruptible: true
   before_script:
-    - . setup_dev_env.sh
-    - pip install build twine bump2version
+    - make
+    - pip install build twine bump2version #???
   script:
     # fused check license here as it would take more time to do it in different place.
-    - ./check_licenses.sh
+    - make lic-check
     # test package building
     - echo ${CI_PIPELINE_IID} >> src/{{ cookiecutter.__package_name }}/VERSION
     - python -m build
     # generate pip freeze
-    - pip freeze > requirements-freeze.txt
+    - make freeze
     - cat requirements-freeze.txt
     # run with coverage to not execute tests twice
-    - coverage run -m pytest -v -p no:warnings --junitxml=report.xml tests/
-    - coverage report
-    - coverage xml
+    - make coverage
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     when: always
@@ -245,9 +247,9 @@ pages:
   stage: pages
   interruptible: true
   before_script:
-    - . setup_dev_env.sh
+    - make
   script:
-    - ./build_docs.sh
+    - make docs
   artifacts:
     paths:
       - public
