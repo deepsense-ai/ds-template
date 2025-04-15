@@ -26,11 +26,17 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
 
+      - name: Install uv
+        run: curl -fsSL https://astral.sh/uv/install.sh | sh
+
+      - name: Add uv to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
       - name: Install pre-commit
-        run: pip3 install pre-commit
+        run: uv pip install --system pre-commit
 
       - name: Run pre-commit checks
-        run: pre-commit run --all-files --show-diff-on-failure --color always
+        run: uv run pre-commit run --all-files --show-diff-on-failure --color always
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -57,16 +63,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           comment_tag: trivy
 
-      - name: Create venv
-        run: . ./setup_dev_env.sh
-
       - name: Check licenses
-        run: ./check_licenses.sh
+        run: uv run ./check_licenses.sh
 
-      - name: Generate pip freeze
-        run: |
-          source venv/bin/activate
-          pip freeze > requirements-freeze.txt
+      - name: Generate dependency list
+        run: uv pip list --format=freeze > requirements-freeze.txt
 
       - name: Publish Artefacts
         uses: actions/upload-artifact@v3
@@ -91,9 +92,8 @@ jobs:
 
       - name: Validate package build
         run: |
-          source venv/bin/activate
-          python -m pip install -U build
-          python -m build
+          uv pip install --system build
+          uv run python -m build
 
       - name: Publish Package
         uses: actions/upload-artifact@v3
@@ -124,23 +124,29 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install uv
+        run: curl -fsSL https://astral.sh/uv/install.sh | sh
+
+      - name: Add uv to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
       - name: Cache Dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}-${{ hashFiles('**/setup.cfg') }}-${{ hashFiles('**/pyproject.toml') }}
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}-${{ hashFiles('**/pyproject.toml') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-uv-
 
       - name: Install Dependencies
-        run: pip install -r requirements-dev.txt
+        run: uv pip sync
 
       - name: Run Tests With Coverage
         run: |
           # run with coverage to not execute tests twice
-          coverage run -m pytest -v -p no:warnings --junitxml=report.xml tests/
-          coverage report
-          coverage xml
+          uv run coverage run -m pytest -v -p no:warnings --junitxml=report.xml tests/
+          uv run coverage report
+          uv run coverage xml
 
       - name: Test Report
         uses: mikepenz/action-junit-report@v4

@@ -8,32 +8,41 @@ Documentation is available at [https://deepsense-ai.github.io/ds-template/](http
 
 To start, you need to setup your local machine.
 
-## Setup venv
+## Setup with uv
 
-You need to setup virtual environment, simplest way is to run from project root directory:
+You need to setup your development environment. The simplest way is to use `uv` from the project root directory:
 
 ```bash
-$ . ./setup_dev_env.sh
-$ source venv/bin/activate
+# Install uv if you don't have it already
+$ curl -fsSL https://astral.sh/uv/install.sh | sh
+
+# Install dependencies from the lock file
+$ uv pip sync
+
+# Or if you need to create/update the lock file first:
+$ uv pip compile pyproject.toml -o uv.lock
+$ uv pip sync
 ```
-This will create a new venv and run `pip install -r requirements-dev.txt`.
-Last line shows how to activate the environment.
+
+This will install all dependencies from the lock file, ensuring reproducible environments.
 
 ## Install pre-commit
 
 To ensure code quality we use pre-commit hook with several checks. Setup it by:
 
 ```
-pre-commit install
+uv run pre-commit install
 ```
 
 All updated files will be reformatted and linted before the commit.
 
 To reformat and lint all files in the project, use:
 
-`pre-commit run --all-files`
+```
+uv run pre-commit run --all-files
+```
 
-The used linters are configured in `.pre-commit-config.yaml`. You can use `pre-commit autoupdate` to bump tools to the latest versions.
+The used linters are configured in `.pre-commit-config.yaml`. You can use `uv run pre-commit autoupdate` to bump tools to the latest versions.
 
 ## Autoreload within notebooks
 
@@ -54,10 +63,14 @@ See also [Cookiecutter Data Science opinion](https://drivendata.github.io/cookie
 
 In `docs/` directory are Sphinx RST/Markdown files.
 
-To build documentation locally, in your configured environment, you can use `build_docs.sh` script:
+To build documentation locally, in your configured environment, you can use:
 
 ```bash
-$ ./build_docs.sh
+# If you have a build_docs.sh script
+$ uv run ./build_docs.sh
+
+# Or run sphinx-build directly
+$ uv run sphinx-build -d docs/_build/doctrees docs/ public/
 ```
 
 Then open `public/index.html` file.
@@ -117,13 +130,13 @@ For convenience there is bash script which will create commit, to use it call:
 
 ```bash
 # to create a new commit by increasing one semvar:
-$ ./bump_version.sh minor
-$ ./bump_version.sh major
-$ ./bump_version.sh patch
+$ uv run ./bump_version.sh minor
+$ uv run ./bump_version.sh major
+$ uv run ./bump_version.sh patch
 # to see what is going to change run:
-$ ./bump_version.sh --dry-run major
+$ uv run ./bump_version.sh --dry-run major
 ```
-Script updates **VERSION** file and setup.cfg automatically uses that version.
+Script updates **VERSION** file and pyproject.toml automatically uses that version.
 
 You can configure it to update version string in other files as well - please check out the bump2version configuration file.
 {% endif -%}
