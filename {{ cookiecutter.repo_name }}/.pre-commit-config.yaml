@@ -12,16 +12,6 @@ repos:
           - id: check-json
           - id: check-yaml
 
-      # PEP 8 compliant opinionated formatter.
-    - repo: https://github.com/psf/black
-      rev: 23.10.1
-      hooks:
-          - id: black
-            exclude: (docs/|notebooks/){% if cookiecutter.jupytext == "No" %}
-          - id: black-jupyter
-            files: \.ipynb$
-    {%- endif -%}
-
     {% if cookiecutter.jupytext == "Yes" %}
 
       # Save .ipynb to .py:percent format
@@ -33,6 +23,7 @@ repos:
           files: "\\.ipynb$"
           additional_dependencies:
             - black==23.10.1
+
     {%- endif %}
 
       # Cleaning unused imports.
@@ -49,37 +40,6 @@ repos:
       hooks:
           - id: pyupgrade
             args: [--py38-plus]
-
-      # Used to have proper type annotations for library code.
-    - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.6.1
-      hooks:
-          - id: mypy
-            args: []
-            # You can add additional plugins for mypy below
-            # such as types-python-dateutil
-            additional_dependencies: []
-            exclude: (/test_|setup.py|/tests/|docs/)
-
-      # Sort imports alphabetically, and automatically separated into sections and by type.
-    - repo: https://github.com/timothycrosley/isort
-      rev: 5.12.0
-      hooks:
-          - id: isort
-            args: ["--profile", "black"]
-            exclude: (docs/|notebooks/)
-
-      # Checks Python source files for errors.
-    - repo: https://github.com/PyCQA/flake8
-      rev: 6.1.0
-      hooks:
-          - id: flake8
-            name: flake8
-            entry: flake8
-            language: python
-            types: [python]
-            args: [--config, .flake8]
-            exclude: (docs/)
 
       # Enforces a coding standard, looks for code smells, and can make suggestions about how the code could be refactored.
     - repo: https://github.com/pycqa/pylint

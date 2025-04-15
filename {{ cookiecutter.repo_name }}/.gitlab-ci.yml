@@ -93,8 +93,16 @@ lint:
   image: $PRECOMMIT_IMAGE:latest
   stage: lint
   interruptible: true
+  before_script:
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://astral.sh/uv/install.sh | sh
+    - export PATH="$HOME/.local/bin:$PATH"
   script:
-    - pre-commit run --all-files
+    - uv run pre-commit run --all-files --show-diff-on-failure --color always
+    - uv run ruff format --check
+    - uv run ruff check --output-format=gitlab
+    - uv run mypy .
+    - uv run ./check_licenses.sh
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       changes:
@@ -107,11 +115,19 @@ lint:
 # this runs whenever docker is prebuilt
 # instead of standard lint job
 lint-precommit-changed:
-  image: $PRECOMMIT_IMAGE:dev-$CI_COMMIT_SHA
+  image: $PRECOMMIT_IMAGE:dev-$CI_COMMIT_SHA0
   stage: lint
   interruptible: true
+  before_script:
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://astral.sh/uv/install.sh | sh
+    - export PATH="$HOME/.local/bin:$PATH"
   script:
-    - pre-commit run --all-files
+    - uv run pre-commit run --all-files --show-diff-on-failure --color always
+    - uv run ruff format --check
+    - uv run ruff check --output-format=gitlab
+    - uv run mypy .
+    - uv run ./check_licenses.sh
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -130,10 +146,11 @@ lint-precommit-changed:
 #   stage: lint
 #   interruptible: true
 #   before_script:
-#     - pip install pre-commit
-#     - pre-commit install
+#     - apt-get update && apt-get install -y curl
+#     - curl -fsSL https://astral.sh/uv/install.sh | sh
+#     - export PATH="$HOME/.local/bin:$PATH"
 #   script:
-#     - pre-commit run --all-files
+#     - uv run pre-commit run --all-files --show-diff-on-failure --color always
 
 ###########################################
 
@@ -144,27 +161,29 @@ tests:
   stage: tests
   interruptible: true
   before_script:
-    - . setup_dev_env.sh
-    - pip install build twine bump2version
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://astral.sh/uv/install.sh | sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - uv pip install build twine bump2version
   script:
     # fused check license here as it would take more time to do it in different place.
-    - ./check_licenses.sh
+    - uv run ./check_licenses.sh
     # test package building
     - echo ${CI_PIPELINE_IID} >> src/{{ cookiecutter.__package_name }}/VERSION
-    - python -m build
-    # generate pip freeze
-    - pip freeze > requirements-freeze.txt
-    - cat requirements-freeze.txt
+    - uv run python -m build
+    # generate uv lock
+    - uv lock
+    - cat uv.lock
     # run with coverage to not execute tests twice
-    - coverage run -m pytest -v -p no:warnings --junitxml=report.xml tests/
-    - coverage report
-    - coverage xml
+    - uv run coverage run -m pytest -v -p no:warnings --junitxml=report.xml tests/
+    - uv run coverage report
+    - uv run coverage xml
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     when: always
     paths:
       - licenses.txt
-      - requirements-freeze.txt
+      - requirements-lock.txt
       - dist/*
     reports:
       junit: "report.xml"
@@ -214,9 +233,12 @@ tests:
   when: manual
   allow_failure: true
   before_script:
-    - pip install build twine
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://astral.sh/uv/install.sh | sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - uv pip install build twine
   script:
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token uv run python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
 
 # Job to build and deploy release version - note: cannot deploy two same versions!
 "Release package to PIP registry":
@@ -227,11 +249,14 @@ tests:
   allow_failure: true
   needs: [tests]
   before_script:
-    - pip install build twine bump2version
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://astral.sh/uv/install.sh | sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - uv pip install build twine bump2version
   script:
-    - bump2version --verbose release
-    - python -m build
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+    - uv run bump2version --verbose release
+    - uv run python -m build
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token uv run python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
@@ -245,13 +270,15 @@ pages:
   stage: pages
   interruptible: true
   before_script:
-    - . setup_dev_env.sh
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://astral.sh/uv/install.sh | sh
+    - export PATH="$HOME/.local/bin:$PATH"
   script:
-    - ./build_docs.sh
+    - uv run ./build_docs.sh
   artifacts:
     paths:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    
+
 {% endif -%}
