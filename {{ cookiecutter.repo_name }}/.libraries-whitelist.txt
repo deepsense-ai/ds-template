@@ -1,1 +1,4 @@
 pkg_resources
+jeepney
+typing_extensions
+urllib3
