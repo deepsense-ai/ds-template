@@ -9,7 +9,6 @@
 project = 'Project Template'
 author = 'deepsense.ai'
 copyright = f'2023, {author}'
-language = 'en'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
