@@ -16,16 +16,14 @@ Useful template to bootstrap new professional data science and python projects.
 Its intended use is to generate basic, most common configuration - however each team and developer is encouraged to modify it for its special needs.
 
 It is a result of our experiences with building data science projects and is a part of our internal best practices, however it is not a silver bullet and should be treated as a starting point for your project.
-Especially some settings might be less/more restrictive than you needs  but we believe it is better to start with a good baseline and modify it later than to start from scratch.
+Especially some settings might be less/more restrictive than you needs but we believe it is better to start with a good baseline and modify it later than to start from scratch.
 
 # What are the benefits?
 
 Generated project consists of:
 
 1. Basic python package structure:
-    * `setup.py` - compatibility for `pip install -e .`.
-    * `setup.cfg` - package metadata and **dependencies**.
-    * `pyproject.toml` - all tools configuration (if support is present)
+    * `pyproject.toml` - central configuration for build system, package metadata, dependencies, and tool configurations (including linters and formatters)
     * a very minimal python code + example test
 1. pre-commit hooks:
     * `black`, `flake8` - enforce code style
