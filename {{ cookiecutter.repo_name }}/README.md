@@ -14,10 +14,9 @@ You need to setup virtual environment, simplest way is to run from project root 
 
 ```bash
 $ . ./setup_dev_env.sh
-$ source venv/bin/activate
 ```
-This will create a new venv and run `pip install -r requirements-dev.txt`.
-Last line shows how to activate the environment.
+
+This will create a new venv, install dependencies and activate the environment.
 
 ## Install pre-commit
 
@@ -31,7 +30,9 @@ All updated files will be reformatted and linted before the commit.
 
 To reformat and lint all files in the project, use:
 
-`pre-commit run --all-files`
+```
+pre-commit run --all-files
+```
 
 The used linters are configured in `.pre-commit-config.yaml`. You can use `pre-commit autoupdate` to bump tools to the latest versions.
 
