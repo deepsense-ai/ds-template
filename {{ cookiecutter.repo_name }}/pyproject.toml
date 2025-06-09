@@ -153,6 +153,9 @@ ignore = [
     "D200",
     "D205",
     "D212",
+    "E203", # spaces before ':'
+    "E501", # line length (handled by ruff)
+    "W503", # line break before binary operator
     "ANN002",
     "ANN003",
     "ANN204", # dynamically typed expressions
