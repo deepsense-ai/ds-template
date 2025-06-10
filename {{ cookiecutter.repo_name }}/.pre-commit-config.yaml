@@ -44,4 +44,4 @@ repos:
         # You can add additional plugins for mypy below
         # such as types-python-dateutil
         additional_dependencies: []
-        exclude: (/test_|setup.py|/tests/|docs/)
+        exclude: (/test_|/tests/|docs/)
