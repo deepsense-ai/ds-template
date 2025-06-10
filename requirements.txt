@@ -7,3 +7,4 @@ sphinx-material # sphinx theme
 myst-parser # adds markdown to sphinx
 sphinxcontrib-mermaid # adds option to have diagrams in sphinx
 snowballstemmer==2.2.0
+uv==0.7.12
