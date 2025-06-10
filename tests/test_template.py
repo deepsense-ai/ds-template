@@ -87,10 +87,10 @@ def test_template_creates_package(cookies):
     assert run_command("./setup.py sdist", rpath) == 0, "Package creation failed!"
 
 
-def test_template_project_no_gitlab(cookies):
+def test_template_project_no_cicd(cookies):
     result = cookies.bake(extra_context={
         "client_name": "no",
-        "project_name": "gitlab",
+        "project_name": "cicd",
         "ci": "None"
         })
     assert result.exit_code == 0
@@ -98,6 +98,7 @@ def test_template_project_no_gitlab(cookies):
 
     rpath: Path = result.project_path
     assert (rpath / ".gitlab-ci.yml").exists() is False
+    assert (rpath / ".github").exists() is False
 
 
 def test_template_project_with_gitlab(cookies):
@@ -111,25 +112,13 @@ def test_template_project_with_gitlab(cookies):
 
     rpath: Path = result.project_path
     assert (rpath / ".gitlab-ci.yml").exists() is True
-
-
-def test_template_project_no_github(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "no",
-        "project_name": "gitlab",
-        "ci": "None"
-        })
-    assert result.exit_code == 0
-    assert result.exception is None
-
-    rpath: Path = result.project_path
     assert (rpath / ".github").exists() is False
 
 
 def test_template_project_with_github(cookies):
     result = cookies.bake(extra_context={
         "client_name": "with",
-        "project_name": "gitlab",
+        "project_name": "github",
         "ci": "Github"
         })
     assert result.exit_code == 0
