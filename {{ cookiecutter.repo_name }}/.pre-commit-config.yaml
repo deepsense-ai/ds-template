@@ -12,7 +12,7 @@ repos:
       - id: check-json
       - id: check-yaml
 
-  { % if cookiecutter.jupytext == "Yes" % }
+  {% if cookiecutter.jupytext == "Yes" %}
   # Save .ipynb to .py:percent format
   - repo: https://github.com/mwouts/jupytext
     rev: v1.15.2
@@ -20,19 +20,19 @@ repos:
       - id: jupytext
         args: [ "--from", ".ipynb", "--to", "py:percent" ]
         files: "\\.ipynb$"
-  { %- endif % }
+  {%- endif %}
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.4.3
     hooks:
       - id: ruff
         name: ruff-lint
-        args: [ --fix ]
+        args: [--fix]
         exclude: (docs/|notebooks/)
 
       - id: ruff-format
         name: ruff-format
-        args: [ --check ]
+        args: [--check]
         exclude: (docs/)
 
     # Used to have proper type annotations for library code.
@@ -43,5 +43,5 @@ repos:
         args: [ ]
         # You can add additional plugins for mypy below
         # such as types-python-dateutil
-        additional_dependencies: [ ]
+        additional_dependencies: []
         exclude: (/test_|setup.py|/tests/|docs/)
