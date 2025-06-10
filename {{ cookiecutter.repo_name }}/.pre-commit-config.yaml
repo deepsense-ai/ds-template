@@ -1,36 +1,47 @@
 repos:
-    - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v4.5.0
-      hooks:
-          - id: check-case-conflict
-          - id: check-merge-conflict
-          - id: trailing-whitespace
-            exclude: .bumpversion.cfg|notebooks/.*\.py
-          - id: check-ast
-          - id: check-added-large-files
-          - id: check-toml
-          - id: check-json
-          - id: check-yaml
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+        exclude: .bumpversion.cfg|notebooks/.*\.py
+      - id: check-ast
+      - id: check-added-large-files
+      - id: check-toml
+      - id: check-json
+      - id: check-yaml
 
-    - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.4.3
-      hooks:
-        - id: ruff
-          name: ruff-lint
-          args: [--fix]
-          exclude: (docs/|notebooks/)
-        - id: ruff-format
-          name: ruff-format
-          args: [--check]
-          exclude: (docs/|notebooks/)
+  { % if cookiecutter.jupytext == "Yes" % }
+  # Save .ipynb to .py:percent format
+  - repo: https://github.com/mwouts/jupytext
+    rev: v1.15.2
+    hooks:
+      - id: jupytext
+        args: [ "--from", ".ipynb", "--to", "py:percent" ]
+        files: "\\.ipynb$"
+  { %- endif % }
 
-      # Used to have proper type annotations for library code.
-    - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.6.1
-      hooks:
-          - id: mypy
-            args: []
-            # You can add additional plugins for mypy below
-            # such as types-python-dateutil
-            additional_dependencies: []
-            exclude: (/test_|setup.py|/tests/|docs/)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.3
+    hooks:
+      - id: ruff
+        name: ruff-lint
+        args: [ --fix ]
+        exclude: (docs/|notebooks/)
+
+      - id: ruff-format
+        name: ruff-format
+        args: [ --check ]
+        exclude: (docs/)
+
+    # Used to have proper type annotations for library code.
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.6.1
+    hooks:
+      - id: mypy
+        args: [ ]
+        # You can add additional plugins for mypy below
+        # such as types-python-dateutil
+        additional_dependencies: [ ]
+        exclude: (/test_|setup.py|/tests/|docs/)
