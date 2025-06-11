@@ -36,6 +36,60 @@ pre-commit run --all-files
 
 The used linters are configured in `.pre-commit-config.yaml`. You can use `pre-commit autoupdate` to bump tools to the latest versions.
 
+# Work with the project
+
+## Manage dependencies
+
+The project uses `uv`, a fast and modern Python package manager that manages dependencies via the `pyproject.toml` file.
+
+### Add dependencies
+
+To add a new package and update the `pyproject.toml` and `uv.lock` files, use:
+
+```bash
+uv add <package-name>
+```
+
+You can also specify versions, extras, or assign to specific groups:
+
+```bash
+uv add requests==2.31.0     # specific version  
+uv add fastapi[all]         # with extras  
+uv add --dev pytest         # dev-only dependencies  
+uv add --group foo uvicorn  # custom group from [dependency-groups]
+```
+
+### Remove dependencies
+
+To remove a package and clean up both `pyproject.toml` and `uv.lock` files, use:
+
+```bash
+uv remove <package-name>
+```
+
+Example:
+
+```bash
+uv remove pandas
+```
+
+### Lock & install dependencies
+
+Dependency metadata can also be updated manually by editing the `pyproject.toml` file directly.
+After making changes, run the following commands to update the `uv.lock` file and install the dependencies:
+
+```bash
+uv lock
+uv sync
+```
+
+You can also sync specific groups:
+
+```bash
+uv sync --dev        # development dependencies  
+uv sync --group foo  # custom dependency group in dependency-groups
+```
+
 ## Autoreload within notebooks
 
 When you install project's package add below code (before imports) in your notebook:
@@ -124,7 +178,7 @@ $ ./bump_version.sh patch
 # to see what is going to change run:
 $ ./bump_version.sh --dry-run major
 ```
-Script updates **VERSION** file and setup.cfg automatically uses that version.
+Script updates the **VERSION** and `pyproject.toml` files to match the new version.
 
 You can configure it to update version string in other files as well - please check out the bump2version configuration file.
 {% endif -%}
