@@ -18,7 +18,7 @@ or
 
         $ source ./setup_dev_env.sh
 
-This will create a single **venv** directory and install project-related packages.
+This will create a single **.venv** directory and install project-related packages.
 
 .. warning:: This script works only in project root directory.
 
@@ -26,7 +26,7 @@ To activate the environment in your terminal just type:
 
     .. code:: bash
 
-        $ source venv/bin/activate
+        $ source .venv/bin/activate
 
 
 Finalize environment
@@ -35,11 +35,10 @@ After completing above steps, you will have a virtual Python environment set up 
 
 .. warning:: Ensure you installed correct version of pytorch, torchvision and cudatoolkit for **your hardware configuration**. Refer to the official Pytorch guide.
 
-To install project dependencies run:
+To install all project dependencies, including development tools, run:
 
 .. code:: bash
 
-    $ pip install -r requirements-dev.txt
+    $ uv sync --dev
 
-It installs current package in edit mode, developer tools and so on.
-
+It installs current package in edit mode, developer tools and so on as defined in the `pyproject.toml` file.
