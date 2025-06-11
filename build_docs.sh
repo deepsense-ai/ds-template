@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Force Sphinx to rebuild documentation - otherwise it generates incosistencies.
+# Force Sphinx to rebuild documentation - otherwise it generates inconsistencies.
 rm -rf public/ docs/_build
 
 # Exit on error for the next commands

@@ -1,10 +1,11 @@
 import os
-from pathlib import Path
-from contextlib import contextmanager
-import subprocess
-import shlex
 import re
+import shlex
+import subprocess
+from contextlib import contextmanager
+from pathlib import Path
 from typing import Sequence
+
 
 class JinjaSolvedValidator:
     """Tests if all jinja templates are matched."""
@@ -79,25 +80,32 @@ def test_template_creates_package(cookies):
         "client_name": "test",
         "project_name": "test",
         "ci": "None"
-        })
-
+    })
     assert result.exit_code == 0
     assert result.exception is None
+
     rpath: Path = result.project_path
-    assert run_command("./setup.py sdist", rpath) == 0, "Package creation failed!"
+    assert run_command("uv build", rpath) == 0, "uv build failed!"
+
+    dist_path = rpath / "dist"
+    assert dist_path.is_dir() is True, "The dist directory was not created"
+
+    dist_files = ["test-0.0.1.dev0.tar.gz", "test-0.0.1.dev0-py3-none-any.whl"]
+    assert all((dist_path / file).exists() for file in dist_files), "Some distribution files were not found"
 
 
-def test_template_project_no_gitlab(cookies):
+def test_template_project_no_cicd(cookies):
     result = cookies.bake(extra_context={
         "client_name": "no",
-        "project_name": "gitlab",
+        "project_name": "cicd",
         "ci": "None"
-        })
+    })
     assert result.exit_code == 0
     assert result.exception is None
 
     rpath: Path = result.project_path
     assert (rpath / ".gitlab-ci.yml").exists() is False
+    assert (rpath / ".github").exists() is False
 
 
 def test_template_project_with_gitlab(cookies):
@@ -105,33 +113,21 @@ def test_template_project_with_gitlab(cookies):
         "client_name": "with",
         "project_name": "gitlab",
         "ci": "GitLab"
-        })
+    })
     assert result.exit_code == 0
     assert result.exception is None
 
     rpath: Path = result.project_path
     assert (rpath / ".gitlab-ci.yml").exists() is True
-
-
-def test_template_project_no_github(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "no",
-        "project_name": "gitlab",
-        "ci": "None"
-        })
-    assert result.exit_code == 0
-    assert result.exception is None
-
-    rpath: Path = result.project_path
     assert (rpath / ".github").exists() is False
 
 
 def test_template_project_with_github(cookies):
     result = cookies.bake(extra_context={
         "client_name": "with",
-        "project_name": "gitlab",
+        "project_name": "github",
         "ci": "Github"
-        })
+    })
     assert result.exit_code == 0
     assert result.exception is None
 

@@ -20,14 +20,16 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Cache pre-commit
+      - name: Setup venv
+        run: . ./setup_dev_env.sh
+
+      - name: Cache uv + pre-commit
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
-
-      - name: Install pre-commit
-        run: pip3 install pre-commit
+          path: |
+            ~/.cache/uv
+            ~/.cache/pre-commit
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock', '.pre-commit-config.yaml') }}
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure --color always
@@ -57,16 +59,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           comment_tag: trivy
 
-      - name: Create venv
-        run: . ./setup_dev_env.sh
-
       - name: Check licenses
         run: ./check_licenses.sh
 
       - name: Generate pip freeze
-        run: |
-          source venv/bin/activate
-          pip freeze > requirements-freeze.txt
+        run: pip freeze > requirements-freeze.txt
 
       - name: Publish Artefacts
         uses: actions/upload-artifact@v3
@@ -91,8 +88,7 @@ jobs:
 
       - name: Validate package build
         run: |
-          source venv/bin/activate
-          python -m pip install -U build
+          uv pip install build
           python -m build
 
       - name: Publish Package
@@ -124,16 +120,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Cache Dependencies
+      - name: Setup venv
+        run: . ./setup_dev_env.sh
+
+      - name: Cache uv
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}-${{ hashFiles('**/setup.cfg') }}-${{ hashFiles('**/pyproject.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install Dependencies
-        run: pip install -r requirements-dev.txt
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
 
       - name: Run Tests With Coverage
         run: |

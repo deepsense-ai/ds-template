@@ -1,11 +1,14 @@
 #!/bin/bash
 
-if [ ! -d venv ]; then
-    python3 -m venv venv
-    . venv/bin/activate
-    pip install --upgrade pip
-    pip install --quiet wheel==0.41.3
-    pip install --quiet -r requirements-dev.txt
+if ! command -v uv &> /dev/null; then
+    echo "Installing uv..."
+    apt-get update && apt-get install -y curl
+    curl -fsSL https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
 fi
 
-. venv/bin/activate
+echo "Syncing venv..."
+uv sync
+
+echo "Activating venv..."
+source .venv/bin/activate
