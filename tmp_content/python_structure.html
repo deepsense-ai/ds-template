@@ -378,7 +378,7 @@ Aside of advantages mentioned under the provided link, this structure is preferr
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code> becomes standard interface for people to look for</p></li>
 <li><p>easier for templating: tools can be easily configured to target <code class="docutils literal notranslate"><span class="pre">src/</span></code> - no need to configure on the fly or hardcode package name</p></li>
-<li><p>later can evolved into multi module project.</p></li>
+<li><p>later can evolve into multi-module project.</p></li>
 </ul>
 <section id="why-python-package">
 <h2 id="why-python-package">Why python package<a class="headerlink" href="#why-python-package" title="Permalink to this heading">¶</a></h2>
@@ -387,16 +387,15 @@ Aside of advantages mentioned under the provided link, this structure is preferr
 <p class="admonition-title">Tip</p>
 <p>In one project we might work on training and inference code together with some frontend.</p>
 <p>Python package can ship with code such that:</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">magic[train]</span></code> installs all dependencies for training.</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">magic</span></code> installs onnx + other inference code.</p>
+<p><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">magic[train]</span></code> installs all dependencies for training.</p>
+<p><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">magic</span></code> installs onnx + other inference code.</p>
 <p>Then if you have FastAPI or Streamlit app you install <em>lean</em> package which reduces docker size.
 It also enables sharing with other users.</p>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> is used to keep track of packages used in development (developer use only).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">[tool.uv.dev-dependencies]</span></code> section in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file is used to keep track of packages used in development (developer use only).</p>
 <p>The structure of python package is:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> - the most interesting file: declares package metadata, install dependencies etc.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> - almost empty, it is used to ensure <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">-e</span> <span class="pre">.</span></code> works due to legacy reasons.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> - central configuration for build system, package metadata, dependencies, and tool configurations (including linters and formatters).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code> directory for all code.</p>
 <ul>
 <li><p><em>any package name</em></p>
@@ -454,8 +453,8 @@ It also enables sharing with other users.</p>
 </li>
 </ul>
 <p>One package should be then a <em>main</em> with the same name as full package containing <code class="docutils literal notranslate"><span class="pre">__version__.py</span></code> file.</p>
-<p>Alternative and recommended way is to move <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> to project root and make <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> to use it (and remember to modify <code class="docutils literal notranslate"><span class="pre">.bumpversion.cfg</span></code> file) - this would be a <em>multi module python package</em>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">foo</span></code>  would then result in valid code:</p>
+<p>Alternative and recommended way is to move <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> to project root (remember to modify <code class="docutils literal notranslate"><span class="pre">.bumpversion.cfg</span></code> file) - this would be a <em>multi module python package</em>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">foo</span></code>  would then result in valid code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">foo</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bar</span>
 </pre></div>
@@ -470,8 +469,6 @@ It also enables sharing with other users.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">foo</span></code></p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code></p></li>
 <li><p>(…) etc.</p></li>
 </ul>
 </li>
@@ -489,8 +486,8 @@ It also enables sharing with other users.</p>
 </ul>
 <p>Then one would call</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">foo</span> <span class="pre">bar</span></code> given packages uploaded to some PIP registry</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">components/foo</span> <span class="pre">-e</span> <span class="pre">components/bar</span></code> for dev local install</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">foo</span> <span class="pre">bar</span></code> given packages uploaded to some PIP registry</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">components/foo</span> <span class="pre">-e</span> <span class="pre">components/bar</span></code> for dev local install</p></li>
 </ul>
 <p>To ensure quality one would also need to use <strong>nox/tox</strong> to test packages in isolation and without python registry it is a little cumbersome to use.</p>
 <p>It is rather useful for a case when project have really independent modules but one have to use only single repository (<em>monorepo</em> case) and/or all packages are to be used together and are tied together in their release cycle.</p>
