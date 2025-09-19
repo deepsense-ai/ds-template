@@ -4,10 +4,10 @@
   "__project_name_slug": "{{cookiecutter.project_name | slugify}}",
   "__client_name_slug": "{{cookiecutter.client_name | slugify}}",
   "repo_name": "{{cookiecutter.__client_name_slug}}-{{cookiecutter.__project_name_slug}}",
+  "python_version": ["3.10", "3.11", "3.12", "3.13"],
   "ci": ["Github", "GitLab", "None"],
   "jupytext": ["No", "Yes"],
-  "docs": ["Sphinx", "No docs"],
-  "versioning": ["Bumpversion", "None"],
+  "docs": ["MkDocs", "Sphinx", "No docs"],
   "python_package_name": "{{ cookiecutter.__project_name_slug.replace('-', '_') }}",
   "__package_name": "{{ cookiecutter.python_package_name }}",
   "_copy_without_render": [".github/workflows/*.yml", ".github/workflows/*.yaml"]

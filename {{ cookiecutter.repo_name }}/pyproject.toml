@@ -1,51 +1,119 @@
 [build-system]
-requires = ["setuptools >= 40.9.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.isort]
-multi_line_output = 3
-line_length = 120
-include_trailing_comma = true
-known_first_party = ['{{ cookiecutter.__package_name }}']
-known_third_party = [ # Most popular libraries. Extend if necessary.
-    'IPython',
-    'PIL',
-    'cv2',
-    'dotenv',
-    'editdistance',
-    'fastapi',
-    'fire',
-    'hydra',
-    'joblib',
-    'loguru',
-    'luigi',
-    'matplotlib',
-    'neptune',
-    'neptune_config',
-    'nltk',
-    'numpy',
-    'omegaconf',
-    'pandas',
-    'pqdm',
-    'pydantic',
-    'pytest',
-    'pytorch_lightning',
-    'requests',
-    'scipy',
-    'setuptools',
-    'shapely',
-    'skimage',
-    'sklearn',
-    'streamlit',
-    'torch',
-    'torchvision',
-    'tqdm',
-    'typer',
+[project]
+name = "{{ cookiecutter.repo_name }}-workspace"
+dynamic = ["version"]
+description = "{{ cookiecutter.project_name }} workspace"
+readme = "README.md"
+requires-python = ">={{ cookiecutter.python_version }}"
+dependencies = []
+
+[tool.uv]
+dev-dependencies = [
+    "pre-commit~=3.8.0",
+    "pytest~=8.3.3",
+    "pytest-cov~=5.0.0",
+    "pytest-asyncio~=0.24.0",
+    "ruff>=0.6.8",
+    "mypy>=1.13.0",
 ]
-skip_gitignore = true
 
-[tool.black]
-line_length = 120
+[tool.uv.workspace]
+members = [
+    "packages/*",
+]
+
+[tool.ruff]
+exclude = [".venv"]
+extend-include = ["*.ipynb"]
+line-length = 120
+
+[tool.ruff.lint]
+preview = true
+explicit-preview-rules = true
+select = [
+    # Default rules
+    "E",    # pycodestyle errors
+    "F",    # Pyflakes
+    "C4",   # flake8-comprehensions
+    "C90",  # mccabe complex structure
+    "D",    # pydocstyle
+    "I",    # isort
+    "PT",   # flake8-pytest-style
+    "PL",   # Pylint
+    "SIM",  # flake8-simplify
+    "UP",   # pyupgrade
+    "W",    # pycodestyle warnings
+    "S",    # flake8-bandit
+    "ANN",  # flake8-annotations
+    "B",    # flake8-bugbear
+    "NPY",  # NumPy-specific rules
+]
+extend-select = [
+    "RUF022",   # unsorted-dunder-all
+    "PLR6301",  # no-self-use
+]
+ignore = [
+    "B024",
+    "B028",     # no-explicit-stacklevel
+    "C901",     # complex-structure
+    "D100",
+    "D104",
+    "D105",
+    "D107",
+    "D415",
+    "D200",
+    "D205",
+    "D212",
+    "ANN002",
+    "ANN003",
+    "ANN101",
+    "ANN102",
+    "ANN204",
+    "PLR0913",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true
+
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = [
+    "PLR2004",
+    "W293",
+    "D101",  # D*** - we should not require docs in every Jupyter notebook
+    "D102",
+    "D103",
+    "D107"
+]
+"**/tests/**/*.py" = [
+    "S101", # asserts allowed in tests...
+    "ARG", # Unused function args
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "PT011", # we prefer assert at the end of the test instead of using "match" parameter in pytest.raises
+    "ANN201", # Missing return type annotation
+    "PLR2004", # Magic numbers are ok in tests
+]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 120
+
+[tool.ruff.lint.isort]
+known-first-party = ["{{ cookiecutter.__package_name }}"]
+known-third-party = [
+    "IPython", "PIL", "cv2", "dotenv", "editdistance", "fastapi", "fire", "hydra",
+    "joblib", "loguru", "luigi", "matplotlib", "neptune", "neptune_config", "nltk",
+    "numpy", "omegaconf", "pandas", "pqdm", "pydantic", "pytest", "pytorch_lightning",
+    "requests", "scipy", "setuptools", "shapely", "skimage", "sklearn", "streamlit",
+    "torch", "torchvision", "tqdm", "typer"
+]
 
 [tool.pytest]
 norecursedirs = [
@@ -76,6 +144,17 @@ addopts = [
 
 testpaths = ['tests']
 
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.coverage.run]
+omit = [
+    "config.py",
+    "config-3.py",
+]
+
 [tool.mypy]
 warn_unused_configs = true
 ignore_missing_imports = true
@@ -83,58 +162,10 @@ warn_unused_ignores = false
 show_error_codes = true
 check_untyped_defs = true
 no_implicit_optional = true
-mypy_path = ['src']
+explicit_package_bases = true
+mypy_path = ["packages/*/src"]
+exclude = ["scripts", "examples"]
 
 [[tool.mypy.overrides]]
 module = "{{ cookiecutter.__package_name }}.*"
-ignore_missing_imports = false
 disallow_untyped_defs = true
-
-[tool.pylint.basic]
-good-names = "i,j,x,y,z,x1,y1,z1,x2,y2,z2,cv,df,dx,dy,dz,w,h,c,b,g,qa,q,a"
-max-args = 8
-
-[tool.pylint.main]
-load-plugins = ["pylint.extensions.docparams"]
-
-[tool.pylint.messages_control]
-disable = [
-    "suppressed-message",
-    # therefore we wouldn't have to install full dependency set in order to lint
-    "import-error",
-    # sometimes we create a dataclass or Pydantic module and just don't need public methods
-    "too-few-public-methods",
-    # below is handled by pycln
-    "unused-import",
-    # below is handled by isort
-    "wrong-import-order",
-    # too restrictive
-    "too-many-instance-attributes",
-    # not necessary nor useful in our projects
-    "missing-module-docstring",
-]
-
-[tool.pylint.format]
-max-line-length = 120
-
-[tool.pylint.miscellaneous]
-notes = ["XXX"]
-
-[tool.pylint.parameter_documentation]
-accept-no-param-doc = false
-accept-no-raise-doc = false
-accept-no-return-doc = false
-accept-no-yields-doc = false
-default-docstring-type = "google"
-
-[tool.pylint.design]
-max-locals = 20
-
-[tool.pylint.similarities]
-min-similarity-lines = 10
-
-[tool.bandit]
-exclude_dirs = ["venv"]
-# B101 disables errors for asserts in the code
-# remember to not use asserts for security and control flows
-skips = ["B101"]

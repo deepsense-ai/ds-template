@@ -3,27 +3,48 @@
 Repository is created with deepsense.ai project template boilerplate. Adapt to your needs.
 Documentation is available at [https://deepsense-ai.github.io/ds-template/](https://deepsense-ai.github.io/ds-template/).
 
+This is a uv workspace project containing multiple packages.
 
 # Setup developer environment
 
 To start, you need to setup your local machine.
 
-## Setup venv
+## Setup with uv
 
-You need to setup virtual environment, simplest way is to run from project root directory:
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management. Install it first:
 
 ```bash
-$ . ./setup_dev_env.sh
-$ source venv/bin/activate
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
-This will create a new venv and run `pip install -r requirements-dev.txt`.
-Last line shows how to activate the environment.
+
+Then setup the project:
+
+```bash
+uv sync
+```
+
+This will create a virtual environment and install all dependencies.
+
+## Activate environment
+
+```bash
+source .venv/bin/activate
+```
+
+Or use uv to run commands directly:
+
+```bash
+uv run python -m {{ cookiecutter.__package_name }}
+uv run pytest
+uv run ruff check
+uv run ruff format
+```
 
 ## Install pre-commit
 
 To ensure code quality we use pre-commit hook with several checks. Setup it by:
 
-```
+```bash
 pre-commit install
 ```
 
