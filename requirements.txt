@@ -1,9 +1,10 @@
-cookiecutter>=2.1.1
-pytest
-pytest-cookies
+cookiecutter>=2.6.0
+pytest>=8.0.0
+pytest-cookies>=0.7.0
 # for building docs
-sphinx>=5.3.0,<6.0.0
+sphinx>=7.1.0,<8.0.0
 sphinx-material # sphinx theme
-myst-parser # adds markdown to sphinx
-sphinxcontrib-mermaid # adds option to have diagrams in sphinx
+myst-parser>=3.0.0 # adds markdown to sphinx
+sphinxcontrib-mermaid>=0.9.0 # adds option to have diagrams in sphinx
 snowballstemmer==2.2.0
+uv>=0.5.0

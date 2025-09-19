@@ -14,26 +14,73 @@ You need to setup virtual environment, simplest way is to run from project root 
 
 ```bash
 $ . ./setup_dev_env.sh
-$ source venv/bin/activate
-```
-This will create a new venv and run `pip install -r requirements-dev.txt`.
-Last line shows how to activate the environment.
-
-## Install pre-commit
-
-To ensure code quality we use pre-commit hook with several checks. Setup it by:
-
-```
-pre-commit install
 ```
 
-All updated files will be reformatted and linted before the commit.
+This will create a new venv, install dependencies and activate the environment.
+
+## Run pre-commit
 
 To reformat and lint all files in the project, use:
 
-`pre-commit run --all-files`
+```
+uv run pre-commit run --all-files
+```
 
-The used linters are configured in `.pre-commit-config.yaml`. You can use `pre-commit autoupdate` to bump tools to the latest versions.
+The used linters are configured in `.pre-commit-config.yaml`.
+
+# Work with the project
+
+## Manage dependencies
+
+The project uses `uv`, a fast and modern Python package manager that manages dependencies via the `pyproject.toml` file.
+
+### Add dependencies
+
+To add a new package and update the `pyproject.toml` and `uv.lock` files, use:
+
+```bash
+uv add <package-name>
+```
+
+You can also specify versions, extras, or assign to specific groups:
+
+```bash
+uv add requests==2.31.0     # specific version  
+uv add fastapi[all]         # with extras  
+uv add --dev pytest         # dev-only dependencies  
+uv add --group foo uvicorn  # custom group from [dependency-groups]
+```
+
+### Remove dependencies
+
+To remove a package and clean up both `pyproject.toml` and `uv.lock` files, use:
+
+```bash
+uv remove <package-name>
+```
+
+Example:
+
+```bash
+uv remove pandas
+```
+
+### Lock & install dependencies
+
+Dependency metadata can also be updated manually by editing the `pyproject.toml` file directly.
+After making changes, run the following commands to update the `uv.lock` file and install the dependencies:
+
+```bash
+uv lock
+uv sync
+```
+
+You can also sync specific groups:
+
+```bash
+uv sync --dev        # development dependencies  
+uv sync --group foo  # custom dependency group in dependency-groups
+```
 
 ## Autoreload within notebooks
 
@@ -123,7 +170,7 @@ $ ./bump_version.sh patch
 # to see what is going to change run:
 $ ./bump_version.sh --dry-run major
 ```
-Script updates **VERSION** file and setup.cfg automatically uses that version.
+Script updates the **VERSION** and `pyproject.toml` files to match the new version.
 
 You can configure it to update version string in other files as well - please check out the bump2version configuration file.
 {% endif -%}

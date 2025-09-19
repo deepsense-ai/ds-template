@@ -15,4 +15,6 @@
 # %autoreload 2
 
 # %%
-import {{ cookiecutter.__package_name }}
+from {{ cookiecutter.__package_name }}.hello import hello_world
+
+print(hello_world())
