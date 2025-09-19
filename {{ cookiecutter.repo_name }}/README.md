@@ -18,23 +18,15 @@ $ . ./setup_dev_env.sh
 
 This will create a new venv, install dependencies and activate the environment.
 
-## Install pre-commit
-
-To ensure code quality we use pre-commit hook with several checks. Setup it by:
-
-```
-pre-commit install
-```
-
-All updated files will be reformatted and linted before the commit.
+## Run pre-commit
 
 To reformat and lint all files in the project, use:
 
 ```
-pre-commit run --all-files
+uv run pre-commit run --all-files
 ```
 
-The used linters are configured in `.pre-commit-config.yaml`. You can use `pre-commit autoupdate` to bump tools to the latest versions.
+The used linters are configured in `.pre-commit-config.yaml`.
 
 # Work with the project
 
