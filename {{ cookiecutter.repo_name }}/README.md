@@ -127,27 +127,9 @@ Treat them as read-only files and edit only notebooks.
 
 {%- endif -%}
 
-{%- if cookiecutter.versioning == "Bumpversion" %}
-# Semantic version bump
+# Versioning
 
-To bump version of the library please use `bump2version` which will update all version strings.
-
-NOTE: Configuration is in `.bumpversion.cfg` and **this is a main file defining version which should be updated only with bump2version**.
-
-For convenience there is bash script which will create commit, to use it call:
-
-```bash
-# to create a new commit by increasing one semvar:
-$ ./bump_version.sh minor
-$ ./bump_version.sh major
-$ ./bump_version.sh patch
-# to see what is going to change run:
-$ ./bump_version.sh --dry-run major
-```
-Script updates **VERSION** file and setup.cfg automatically uses that version.
-
-You can configure it to update version string in other files as well - please check out the bump2version configuration file.
-{% endif -%}
+This project uses uv's dynamic versioning. Version numbers are automatically managed based on git tags and commits.
 
 {% if cookiecutter.ci == "GitLab" %}
 

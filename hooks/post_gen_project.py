@@ -21,10 +21,6 @@ DOCS_FILES = [
     ".github/workflows/documentation.yml"
 ]
 
-BUMPVERSION_FILES = [
-    ".bumpversion.cfg",
-    "bump_version.sh"
-]
 
 {% if cookiecutter.ci != "GitLab" %}
 files_to_be_removed.extend(GITLAB_FILES)
@@ -40,10 +36,6 @@ files_to_be_removed.append("notebooks/example.py")
 
 {% if cookiecutter.docs == "No docs" %}
 files_to_be_removed.extend(DOCS_FILES)
-{% endif %}
-
-{% if cookiecutter.versioning != "Bumpversion" %}
-files_to_be_removed.extend(BUMPVERSION_FILES)
 {% endif %}
 
 print("Cleaning files... 🌀")
