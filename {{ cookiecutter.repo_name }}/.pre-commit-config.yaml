@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: check-case-conflict
       - id: check-merge-conflict
@@ -15,7 +15,7 @@ repos:
   {% if cookiecutter.jupytext == "Yes" %}
   # Save .ipynb to .py:percent format
   - repo: https://github.com/mwouts/jupytext
-    rev: v1.15.2
+    rev: v1.16.4
     hooks:
       - id: jupytext
         args: [ "--from", ".ipynb", "--to", "py:percent" ]
@@ -23,7 +23,7 @@ repos:
   {%- endif %}
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.3
+    rev: v0.8.4
     hooks:
       - id: ruff
         name: ruff-lint
@@ -37,7 +37,7 @@ repos:
 
     # Used to have proper type annotations for library code.
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.6.1
+    rev: v1.13.0
     hooks:
       - id: mypy
         args: [ ]

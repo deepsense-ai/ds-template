@@ -4,7 +4,7 @@ name = "{{ cookiecutter.__package_name }}"
 version = "0.0.1-dev"
 description = "deepsense.ai project"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = "LicenseRef-Proprietary"
 license-files = ["LICENSE.md"]
 authors = [
@@ -17,7 +17,6 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
     "Operating System :: Independent",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -36,14 +35,14 @@ dependencies = [
 [tool.uv]
 dev-dependencies = [
     "pre-commit",
-    "ruff>=0.11.0",
-    "pytest>=6.2.5",
+    "ruff>=0.8.4",
+    "pytest>=8.0.0",
     "pytest-cov",
     "pip-licenses>=4.0.0,<5.0.0", # for getting dependency licenses and docs
-    "sphinx>=5.3.0,<6.0.0", # for building docs
-    "sphinx-rtd-theme>=1.1.1,<2.0.0",
-    "myst-parser", # adds markdown to sphinx
-    "sphinxcontrib-mermaid", # adds option to have diagrams in sphinx
+    "sphinx>=7.1.0,<8.0.0", # for building docs
+    "sphinx-rtd-theme>=2.0.0,<3.0.0",
+    "myst-parser>=3.0.0", # adds markdown to sphinx
+    "sphinxcontrib-mermaid>=0.9.0", # adds option to have diagrams in sphinx
     "snowballstemmer==2.2.0",
     "bump2version>=1.0.1,<2.0.0" # for bumping version strings
 ]
