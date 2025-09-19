@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -48,14 +47,11 @@
   
   
     <title>Cookiecutter template structure &#8212; Project Template  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/material.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=75810a84" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css?v=79c92029" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Overall design" href="overall_design.html" />
@@ -346,7 +342,7 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <section id="cookiecutter-template-structure">
-<h1 id="template-structure--page-root"><strong>Cookiecutter template structure</strong><a class="headerlink" href="#template-structure--page-root" title="Permalink to this heading">¶</a></h1>
+<h1 id="template-structure--page-root"><strong>Cookiecutter template structure</strong><a class="headerlink" href="#template-structure--page-root" title="Link to this heading">¶</a></h1>
 <p>This is our specific template structure overview. It is highly recommended to learn about cookiecutter first from it’s <a class="reference external" href="https://cookiecutter.readthedocs.io/en/stable/">original documentation</a>.</p>
 <p>To use template you need <code class="docutils literal notranslate"><span class="pre">cookiecutter</span></code> to be installed (at least &gt;= 2.1.1) and for local development/documentation generation you need to install <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
@@ -355,7 +351,7 @@
 <p>Overall list of files can be seen below:</p>
 <p><img alt="Presentation of cookiecutter template files" src="_images/template_files.png"/></p>
 <section id="cookiecutter-json-file">
-<h2 id="cookiecutter-json-file">cookiecutter.json file<a class="headerlink" href="#cookiecutter-json-file" title="Permalink to this heading">¶</a></h2>
+<h2 id="cookiecutter-json-file">cookiecutter.json file<a class="headerlink" href="#cookiecutter-json-file" title="Link to this heading">¶</a></h2>
 <p>This file is crucial, as it defines questions and key-value substitutions which are applied to template files.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cookiecutter</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
@@ -363,7 +359,7 @@
 <p>Internally it uses Jinja template system and allows to use python or some extensions (like <code class="docutils literal notranslate"><span class="pre">slugify</span></code>).</p>
 </section>
 <section id="hooks">
-<h2 id="hooks">Hooks<a class="headerlink" href="#hooks" title="Permalink to this heading">¶</a></h2>
+<h2 id="hooks">Hooks<a class="headerlink" href="#hooks" title="Link to this heading">¶</a></h2>
 <p>There are two cookiecutter hooks that can be implemented: pre and post project generation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hooks</span><span class="o">/</span><span class="n">pre_gen_project</span><span class="o">.</span><span class="n">py</span>
 <span class="n">hooks</span><span class="o">/</span><span class="n">post_gen_project</span><span class="o">.</span><span class="n">py</span>
@@ -383,7 +379,7 @@
 </ul>
 </section>
 <section id="project-template-directory">
-<h2 id="project-template-directory">Project template directory<a class="headerlink" href="#project-template-directory" title="Permalink to this heading">¶</a></h2>
+<h2 id="project-template-directory">Project template directory<a class="headerlink" href="#project-template-directory" title="Link to this heading">¶</a></h2>
 <p><strong>All files that can be created by the template</strong> are put there:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{{</span><span class="w"> </span>cookiecutter.repo_name<span class="w"> </span><span class="o">}}</span>
 </pre></div>
@@ -391,12 +387,12 @@
 <p>Cookiecutter asks user for information, copies this directory, applies Jinja substitution and calls hooks defined as python code.</p>
 </section>
 <section id="tests">
-<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permalink to this heading">¶</a></h2>
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Link to this heading">¶</a></h2>
 <p>We also have a few basic tests to ensure that cookiecutter project can be generated just fine.</p>
 <p>In the future we will like to introduce some automating testing of generated project and maybe some example preview.</p>
 </section>
 <section id="documentation">
-<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
+<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
 <p>Actually what are you reading just now :)</p>
 <p>We use Sphinx documentation and content is in <code class="docutils literal notranslate"><span class="pre">docs/</span></code> directory and it is hosted <a class="reference external" href="https://deepsense-ai.github.io/ds-template//">on GitHub Pages</a>.</p>
 <p>To build locally:</p>
@@ -457,7 +453,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

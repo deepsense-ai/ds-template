@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -48,14 +47,11 @@
   
   
     <title>GitHub Actions CI &#8212; Project Template  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=75810a84" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css?v=79c92029" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Packaging &amp; semantic version" href="semver_package.html" />
@@ -391,11 +387,11 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <section id="github-actions-ci">
-<h1 id="tmp-content-github-ci--page-root">GitHub Actions CI<a class="headerlink" href="#tmp-content-github-ci--page-root" title="Permalink to this heading">¶</a></h1>
+<h1 id="tmp-content-github-ci--page-root">GitHub Actions CI<a class="headerlink" href="#tmp-content-github-ci--page-root" title="Link to this heading">¶</a></h1>
 <p>This is <strong>optional</strong> cookiecutter template option, which result in <code class="docutils literal notranslate"><span class="pre">.github</span></code> directory creation which contains workflows.</p>
 <p>It generates two workflows: one standard CI and second only for building documentation.</p>
 <section id="ci-workflow">
-<h2 id="ci-workflow">CI Workflow<a class="headerlink" href="#ci-workflow" title="Permalink to this heading">¶</a></h2>
+<h2 id="ci-workflow">CI Workflow<a class="headerlink" href="#ci-workflow" title="Link to this heading">¶</a></h2>
 <p>By default each base branch and pull request will trigger CI workflow.</p>
 <p>The workflow is defined in <code class="docutils literal notranslate"><span class="pre">.github/workflows/ci.yml</span></code> file.</p>
 <p>It consists of two major jobs:</p>
@@ -419,12 +415,12 @@
 </ul>
 <p><img alt="Main CI workflow" src="../_images/gh.png"/></p>
 <section id="code-coverage">
-<h3 id="code-coverage">Code coverage<a class="headerlink" href="#code-coverage" title="Permalink to this heading">¶</a></h3>
+<h3 id="code-coverage">Code coverage<a class="headerlink" href="#code-coverage" title="Link to this heading">¶</a></h3>
 <p>Default code coverage recommended setup is one which uses additional branch to track coverage changes and comment on PRs.</p>
 <p><img alt="Code coverage comment preview" src="../_images/gh_coverage.png"/></p>
 </section>
 <section id="artifacts">
-<h3 id="artifacts">Artifacts<a class="headerlink" href="#artifacts" title="Permalink to this heading">¶</a></h3>
+<h3 id="artifacts">Artifacts<a class="headerlink" href="#artifacts" title="Link to this heading">¶</a></h3>
 <p>There are generated artifacts which can be downloaded from GitHub UI.</p>
 <p><img alt="Github artifacts" src="../_images/gh_artifacts.png"/></p>
 <ol class="arabic simple">
@@ -448,7 +444,7 @@
 </ol>
 </section>
 <section id="license-validation">
-<h3 id="license-validation">License validation<a class="headerlink" href="#license-validation" title="Permalink to this heading">¶</a></h3>
+<h3 id="license-validation">License validation<a class="headerlink" href="#license-validation" title="Link to this heading">¶</a></h3>
 <p>We use <code class="docutils literal notranslate"><span class="pre">pip-licenses</span></code> to extract installed packages and obtain license information.</p>
 <p>By default, we accept only those selected licenses from <code class="docutils literal notranslate"><span class="pre">.license-whitelist.txt</span></code>.
 Each short license must be in new line and it is matched by checking if string exists in line.</p>
@@ -463,7 +459,7 @@ All libraries must be put in single line.</p>
 </section>
 </section>
 <section id="github-actions-hints">
-<h2 id="github-actions-hints">GitHub Actions hints<a class="headerlink" href="#github-actions-hints" title="Permalink to this heading">¶</a></h2>
+<h2 id="github-actions-hints">GitHub Actions hints<a class="headerlink" href="#github-actions-hints" title="Link to this heading">¶</a></h2>
 <p>Please get familiar with official documentation before you modify the yaml configuration.</p>
 <p>Changing YAML is error-prone so here are protips:</p>
 <ol class="arabic simple">
@@ -474,9 +470,9 @@ All libraries must be put in single line.</p>
 </ol>
 </section>
 <section id="documentation-workflow">
-<h2 id="documentation-workflow">Documentation workflow<a class="headerlink" href="#documentation-workflow" title="Permalink to this heading">¶</a></h2>
+<h2 id="documentation-workflow">Documentation workflow<a class="headerlink" href="#documentation-workflow" title="Link to this heading">¶</a></h2>
 <section id="github-pages">
-<h3 id="github-pages">GitHub Pages<a class="headerlink" href="#github-pages" title="Permalink to this heading">¶</a></h3>
+<h3 id="github-pages">GitHub Pages<a class="headerlink" href="#github-pages" title="Link to this heading">¶</a></h3>
 <p>By default <strong>Github Actions</strong> pipelines have <code class="docutils literal notranslate"><span class="pre">documentation</span></code> workflow which will build sphinx documentation automatically on main branch - and it will push it to a branch - it can be hosted on <strong>Github Pages</strong> if you enable it.</p>
 <p>To access it, you need to enable it, on <strong>Github repository -&gt; Settings -&gt; Pages</strong> page select <strong>Deploy from a branch</strong> and select <strong>gh-pages</strong>. Link will appear here after deployment.</p>
 <div class="admonition warning">
@@ -536,7 +532,7 @@ All libraries must be put in single line.</p>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

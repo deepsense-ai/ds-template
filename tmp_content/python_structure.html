@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -48,14 +47,11 @@
   
   
     <title>Python code structure &#8212; Project Template  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=75810a84" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css?v=79c92029" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pre-commit hooks and code quality" href="precommit.html" />
@@ -372,7 +368,7 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <section id="python-code-structure">
-<h1 id="tmp-content-python-structure--page-root">Python code structure<a class="headerlink" href="#tmp-content-python-structure--page-root" title="Permalink to this heading">¶</a></h1>
+<h1 id="tmp-content-python-structure--page-root">Python code structure<a class="headerlink" href="#tmp-content-python-structure--page-root" title="Link to this heading">¶</a></h1>
 <p>It is really very basic python package based on <a class="reference external" href="https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/">src-based approach</a>.
 Aside of advantages mentioned under the provided link, this structure is preferred due to the following internal reasons:</p>
 <ul class="simple">
@@ -381,7 +377,7 @@ Aside of advantages mentioned under the provided link, this structure is preferr
 <li><p>later can evolve into multi-module project.</p></li>
 </ul>
 <section id="why-python-package">
-<h2 id="why-python-package">Why python package<a class="headerlink" href="#why-python-package" title="Permalink to this heading">¶</a></h2>
+<h2 id="why-python-package">Why python package<a class="headerlink" href="#why-python-package" title="Link to this heading">¶</a></h2>
 <p>Having python package allows to much easier sharing and reusing code. It also reduces headache with hardcoding paths and with proper testing it can capture issues with missing or incompatible dependencies (as PIP does not solve versions with already installed packages.)</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -418,7 +414,7 @@ It also enables sharing with other users.</p>
 <p>Version in <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> file is recommended to be used together with <code class="docutils literal notranslate"><span class="pre">bump_version.sh</span></code> script - see <a class="reference internal" href="semver_package.html#packaging-semver"><span class="std std-ref">packaging page</span></a>. This file is read by <code class="docutils literal notranslate"><span class="pre">__version__.py</span></code>.</p>
 </section>
 <section id="python-multi-project">
-<h2 id="python-multi-project">Python multi project<a class="headerlink" href="#python-multi-project" title="Permalink to this heading">¶</a></h2>
+<h2 id="python-multi-project">Python multi project<a class="headerlink" href="#python-multi-project" title="Link to this heading">¶</a></h2>
 <p>Usually, the above structure is enough. However, project might grow and require something more complex and the template does not support this case.</p>
 <p>For example one can imagine a project with:</p>
 <ul class="simple">
@@ -426,7 +422,7 @@ It also enables sharing with other users.</p>
 <li><p>text_processing</p></li>
 </ul>
 <section id="install-one-package-multiple-modules">
-<h3 id="install-one-package-multiple-modules">Install one package, multiple modules<a class="headerlink" href="#install-one-package-multiple-modules" title="Permalink to this heading">¶</a></h3>
+<h3 id="install-one-package-multiple-modules">Install one package, multiple modules<a class="headerlink" href="#install-one-package-multiple-modules" title="Link to this heading">¶</a></h3>
 <p>The first easiest approach is to add new python modules to <code class="docutils literal notranslate"><span class="pre">src/</span></code> package like this:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p>
@@ -461,7 +457,7 @@ It also enables sharing with other users.</p>
 </div>
 </section>
 <section id="install-many-packages-single-module">
-<h3 id="install-many-packages-single-module">Install many packages, single module<a class="headerlink" href="#install-many-packages-single-module" title="Permalink to this heading">¶</a></h3>
+<h3 id="install-many-packages-single-module">Install many packages, single module<a class="headerlink" href="#install-many-packages-single-module" title="Link to this heading">¶</a></h3>
 <p>If packages can be isolated then the best way is to move to structure:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">components/</span></code></p>
@@ -493,7 +489,7 @@ It also enables sharing with other users.</p>
 <p>It is rather useful for a case when project have really independent modules but one have to use only single repository (<em>monorepo</em> case) and/or all packages are to be used together and are tied together in their release cycle.</p>
 </section>
 <section id="use-multiple-repositories">
-<h3 id="use-multiple-repositories">Use multiple repositories<a class="headerlink" href="#use-multiple-repositories" title="Permalink to this heading">¶</a></h3>
+<h3 id="use-multiple-repositories">Use multiple repositories<a class="headerlink" href="#use-multiple-repositories" title="Link to this heading">¶</a></h3>
 <p>The last approach is best for really independent projects - is to basically have each package in its own repository.</p>
 <p>This is the best clean approach, but then one have to ensure that release cycle and CI/CD is correctly setup. One can also used git submodule but this can lead to other problems but is easiest in short term especially if code is very stable.</p>
 </section>
@@ -547,7 +543,7 @@ It also enables sharing with other users.</p>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

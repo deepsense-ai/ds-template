@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -48,14 +47,11 @@
   
   
     <title>Overall design &#8212; Project Template  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/material.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=75810a84" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css?v=79c92029" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Cookiecutter template structure" href="template_structure.html" />
@@ -345,11 +341,11 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <section id="overall-design">
-<h1 id="overall-design--page-root"><strong>Overall design</strong><a class="headerlink" href="#overall-design--page-root" title="Permalink to this heading">¶</a></h1>
+<h1 id="overall-design--page-root"><strong>Overall design</strong><a class="headerlink" href="#overall-design--page-root" title="Link to this heading">¶</a></h1>
 <p>Here is a short introduction to default project template to give you better understanding of <em>why</em> and <em>what</em>.</p>
 <p>It was created to propagate some good practices and provide sensible and flexible defaults and to quickly bootstrap new projects.</p>
 <section id="considerations">
-<h2 id="considerations">Considerations<a class="headerlink" href="#considerations" title="Permalink to this heading">¶</a></h2>
+<h2 id="considerations">Considerations<a class="headerlink" href="#considerations" title="Link to this heading">¶</a></h2>
 <p>Let’s start with understanding a design considerations. <strong>There is not really a one, universally good way</strong> and there are trade-offs involved. Below is a list of things we want to focus on.</p>
 <ol class="arabic simple">
 <li><p><strong>Harnessing experiences from different projects</strong> (both DS and SE) - so they can propagate as sensible defaults.</p></li>
@@ -371,7 +367,7 @@
 On the other hand team has a possibility to do that on their own if client do not have nothing against it.</p>
 </section>
 <section id="inspiration">
-<h2 id="inspiration">Inspiration<a class="headerlink" href="#inspiration" title="Permalink to this heading">¶</a></h2>
+<h2 id="inspiration">Inspiration<a class="headerlink" href="#inspiration" title="Link to this heading">¶</a></h2>
 <p>The inspiration for configuration is based on:</p>
 <ul class="simple">
 <li><p>lessons learned from interviews about different projects that happened during 2020-2022 in deepsense.ai,</p></li>
@@ -381,7 +377,7 @@ On the other hand team has a possibility to do that on their own if client do no
 </ul>
 </section>
 <section id="assumptions">
-<h2 id="assumptions">Assumptions<a class="headerlink" href="#assumptions" title="Permalink to this heading">¶</a></h2>
+<h2 id="assumptions">Assumptions<a class="headerlink" href="#assumptions" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Python 3.9 is default on CI, 3.8 as minimum installable for package - due to recent projects (as of 01.2023), hopefully to update soon.</p></li>
 <li><p>GitLab is used in almost all projects so it’s selected as the default CI / CD provider.</p></li>
@@ -395,7 +391,7 @@ On the other hand team has a possibility to do that on their own if client do no
 </ul>
 </section>
 <section id="stability-python-system-and-package-versions">
-<h2 id="stability-python-system-and-package-versions">Stability - python, system and package versions<a class="headerlink" href="#stability-python-system-and-package-versions" title="Permalink to this heading">¶</a></h2>
+<h2 id="stability-python-system-and-package-versions">Stability - python, system and package versions<a class="headerlink" href="#stability-python-system-and-package-versions" title="Link to this heading">¶</a></h2>
 <p>For all projects that follow semantic versions, we should update patch to incorporate all bug and security fixes.
 Major and minor release are more troublesome due to additional risks and trade-offs.</p>
 <p>Why older, stable versions as default are preferred:</p>
@@ -440,7 +436,7 @@ That said, for internal project it is generally safer to use newer versions, esp
 It is also true for tools that are not critical e.g. linters.</p>
 </section>
 <section id="future-plans-and-ideas">
-<h2 id="future-plans-and-ideas">Future plans and ideas<a class="headerlink" href="#future-plans-and-ideas" title="Permalink to this heading">¶</a></h2>
+<h2 id="future-plans-and-ideas">Future plans and ideas<a class="headerlink" href="#future-plans-and-ideas" title="Link to this heading">¶</a></h2>
 <p>Project is far from finished and it is planned to evolve over time. Below are <em>some</em> ideas we can work on:</p>
 <ol class="arabic simple">
 <li><p>Multi-project monorepo - e.g. multiple packages in single repository</p></li>
@@ -485,7 +481,7 @@ It is also true for tools that are not critical e.g. linters.</p>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

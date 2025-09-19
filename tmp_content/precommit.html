@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -48,14 +47,11 @@
   
   
     <title>Pre-commit hooks and code quality &#8212; Project Template  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=75810a84" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css?v=79c92029" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="GitLab CI configuration" href="gitlab_ci.html" />
@@ -378,7 +374,7 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <section id="pre-commit-hooks-and-code-quality">
-<span id="precommit"></span><h1 id="tmp-content-precommit--page-root">Pre-commit hooks and code quality<a class="headerlink" href="#tmp-content-precommit--page-root" title="Permalink to this heading">¶</a></h1>
+<span id="precommit"></span><h1 id="tmp-content-precommit--page-root">Pre-commit hooks and code quality<a class="headerlink" href="#tmp-content-precommit--page-root" title="Link to this heading">¶</a></h1>
 <p>To ensure code consistency, good practices and remove any code smells we use pre-commit hook along with several linters and other tools.</p>
 <p><strong>pre-commit</strong> is a tool which allows to quickly scan on commit/push code <strong>tracked by git</strong> in the repository, enforcing checks in minimum viable scope - only changed files.</p>
 <p>Configuration is in <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code>, where you can find all tools installed in isolated environment and some of their configuration.
@@ -396,7 +392,7 @@ Most of the tools have detailed configuration in <code class="docutils literal n
 linter with or without pre-commit due to side effects of some installed locally packages!</p>
 </div>
 <section id="pre-commit-config-yaml">
-<h2 id="pre-commit-config-yaml"><code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code><a class="headerlink" href="#pre-commit-config-yaml" title="Permalink to this heading">¶</a></h2>
+<h2 id="pre-commit-config-yaml"><code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code><a class="headerlink" href="#pre-commit-config-yaml" title="Link to this heading">¶</a></h2>
 <p><strong>Use scroll on the text inside the below panel</strong>. It contains overview of some tools with an example configuration - it is not exactly the same as in the template.</p>
 <div id="kodemo-content" style="width:100%;height:525px;display:block;top:0;left:0;padding:0;margin:0"></div>
 <script src="../_static/precommit-tut.js"></script>
@@ -411,12 +407,12 @@ other linters it tries to replace. However, if your project allows it - please c
 </div>
 </section>
 <section id="docker-image">
-<h2 id="docker-image">Docker image<a class="headerlink" href="#docker-image" title="Permalink to this heading">¶</a></h2>
+<h2 id="docker-image">Docker image<a class="headerlink" href="#docker-image" title="Link to this heading">¶</a></h2>
 <p>To reduce CI stage time we use image created with <code class="docutils literal notranslate"><span class="pre">docker/precommit/Dockerfile</span></code>.</p>
 <p>If project is created with GitLab pipelines then automatically it should build &amp; use this image. If you are on different platform you need to configure it yourself.</p>
 </section>
 <section id="mypy-additional-information">
-<h2 id="mypy-additional-information">mypy - additional information<a class="headerlink" href="#mypy-additional-information" title="Permalink to this heading">¶</a></h2>
+<h2 id="mypy-additional-information">mypy - additional information<a class="headerlink" href="#mypy-additional-information" title="Link to this heading">¶</a></h2>
 <p><strong>mypy</strong> needs special care. Default settings only checks for project issues and works out of box with correctly typed projects.
 More strict options are not turned on by default as many data science libraries are not high quality and in practice it leads to
 frustration and minuscule gains in practice.</p>
@@ -445,7 +441,7 @@ marking an exact library to be ignored as mentioned before.</p>
 <p>Please refer to <a class="reference external" href="https://mypy.readthedocs.io/en/stable/index.html">official mypy documentation</a> for more information.</p>
 </section>
 <section id="jupytext-additional-information">
-<h2 id="jupytext-additional-information">jupytext - additional information<a class="headerlink" href="#jupytext-additional-information" title="Permalink to this heading">¶</a></h2>
+<h2 id="jupytext-additional-information">jupytext - additional information<a class="headerlink" href="#jupytext-additional-information" title="Link to this heading">¶</a></h2>
 <p>Jupyter notebooks are hard to review - to make it easier it is possible to use <code class="docutils literal notranslate"><span class="pre">jupytext</span></code> to convert them to <code class="docutils literal notranslate"><span class="pre">.py</span></code> files (py:percent format) automatically on commit.</p>
 <p>If you have not used it before, please read <a class="reference external" href="https://jupytext.readthedocs.io/en/latest/">jupytext documentation</a>.</p>
 <div class="admonition warning">
@@ -503,7 +499,7 @@ marking an exact library to be ignored as mentioned before.</p>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

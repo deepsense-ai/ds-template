@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -48,14 +47,11 @@
   
   
     <title>Quickstart &#8212; Project Template  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/material.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=75810a84" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css?v=79c92029" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Template content" href="template_content.html" />
@@ -339,9 +335,9 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <section id="quickstart">
-<h1 id="quickstart--page-root"><strong>Quickstart</strong><a class="headerlink" href="#quickstart--page-root" title="Permalink to this heading">¶</a></h1>
+<h1 id="quickstart--page-root"><strong>Quickstart</strong><a class="headerlink" href="#quickstart--page-root" title="Link to this heading">¶</a></h1>
 <section id="generate-project-template-locally">
-<h2 id="generate-project-template-locally">Generate project template locally<a class="headerlink" href="#generate-project-template-locally" title="Permalink to this heading">¶</a></h2>
+<h2 id="generate-project-template-locally">Generate project template locally<a class="headerlink" href="#generate-project-template-locally" title="Link to this heading">¶</a></h2>
 <p>Install <strong>cookiecutter&gt;=2.1.1</strong> first and then point it to git repository / local directory / zip file containing the template data.</p>
 <p><strong>Cookiecutter</strong> will ask you set of questions so it can generate customized project.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>$<span class="w"> </span>cookiecutter<span class="w"> </span>ds-template/
@@ -354,14 +350,14 @@
 <p><img alt="Presentation of cookiecutter generator" src="_images/make_template.gif"/></p>
 </section>
 <section id="how-to-initialize-new-repository-with-the-template">
-<h2 id="how-to-initialize-new-repository-with-the-template">How to initialize new repository with the template<a class="headerlink" href="#how-to-initialize-new-repository-with-the-template" title="Permalink to this heading">¶</a></h2>
+<h2 id="how-to-initialize-new-repository-with-the-template">How to initialize new repository with the template<a class="headerlink" href="#how-to-initialize-new-repository-with-the-template" title="Link to this heading">¶</a></h2>
 <p>Firstly, you need to create a git project. The suggested name convention is:</p>
 <p><code class="docutils literal notranslate"><span class="pre">&lt;client_name&gt;-&lt;project_name&gt;</span></code></p>
 <p>Where <code class="docutils literal notranslate"><span class="pre">client_name</span></code> is the name of the client can also be your own name or name of the company you work for. <code class="docutils literal notranslate"><span class="pre">project_name</span></code> is the name of the project.</p>
 <p>GIT-SSH is the SSH link to the repository you want to initialize.</p>
 <p>Execute the following steps then:</p>
 <section id="approach-1-clone-empty">
-<h3 id="approach-1-clone-empty">Approach 1 (clone empty):<a class="headerlink" href="#approach-1-clone-empty" title="Permalink to this heading">¶</a></h3>
+<h3 id="approach-1-clone-empty">Approach 1 (clone empty):<a class="headerlink" href="#approach-1-clone-empty" title="Link to this heading">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># clone empty repository to repo_name</span>
 $<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>&lt;GIT-SSH&gt;
 <span class="c1"># install cookiecutter if not yet installed</span>
@@ -376,7 +372,7 @@ $<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>
 </div>
 </section>
 <section id="approach-2-initialize-git-locally-and-push-to-remote">
-<h3 id="approach-2-initialize-git-locally-and-push-to-remote">Approach 2 (initialize git locally and push to remote):<a class="headerlink" href="#approach-2-initialize-git-locally-and-push-to-remote" title="Permalink to this heading">¶</a></h3>
+<h3 id="approach-2-initialize-git-locally-and-push-to-remote">Approach 2 (initialize git locally and push to remote):<a class="headerlink" href="#approach-2-initialize-git-locally-and-push-to-remote" title="Link to this heading">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># install cookiecutter if not yet installed</span>
 $<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>cookiecutter
 <span class="c1"># generate project</span>
@@ -446,7 +442,7 @@ $<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

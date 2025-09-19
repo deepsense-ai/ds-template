@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -48,14 +47,11 @@
   
   
     <title>GitLab CI configuration &#8212; Project Template  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=75810a84" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css?v=79c92029" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="GitHub Actions CI" href="github_ci.html" />
@@ -425,7 +421,7 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <section id="gitlab-ci-configuration">
-<h1 id="tmp-content-gitlab-ci--page-root">GitLab CI configuration<a class="headerlink" href="#tmp-content-gitlab-ci--page-root" title="Permalink to this heading">¶</a></h1>
+<h1 id="tmp-content-gitlab-ci--page-root">GitLab CI configuration<a class="headerlink" href="#tmp-content-gitlab-ci--page-root" title="Link to this heading">¶</a></h1>
 <p>This is <strong>optional</strong> cookiecutter template option, which result in <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> file creation.</p>
 <p>File has comments for jobs so it should be relatively easy to understand and adapt.</p>
 <p>It generates automated pipeline to ensure code quality, tests and other goodies.</p>
@@ -437,20 +433,20 @@ Moreover, almost all unfinished jobs can be interrupted by more recent code chan
 It is controlled by <code class="docutils literal notranslate"><span class="pre">interruptible:</span> <span class="pre">true</span></code> <a class="reference external" href="https://docs.gitlab.com/ee/ci/yaml/">flag</a>.</p>
 </div>
 <section id="context-sensitive-stages">
-<h2 id="context-sensitive-stages">Context-sensitive stages<a class="headerlink" href="#context-sensitive-stages" title="Permalink to this heading">¶</a></h2>
+<h2 id="context-sensitive-stages">Context-sensitive stages<a class="headerlink" href="#context-sensitive-stages" title="Link to this heading">¶</a></h2>
 <section id="merge-request">
-<h3 id="merge-request">Merge Request<a class="headerlink" href="#merge-request" title="Permalink to this heading">¶</a></h3>
+<h3 id="merge-request">Merge Request<a class="headerlink" href="#merge-request" title="Link to this heading">¶</a></h3>
 <p>When a developer opens a Merge Request we run linters and tests stages.</p>
 <p>Optionally a development package can be released to PIP registry with a manual trigger.</p>
 <p><img alt="Merge Request stages" src="../_images/stages_mr.png"/></p>
 </section>
 <section id="main-branch">
-<h3 id="main-branch">Main branch<a class="headerlink" href="#main-branch" title="Permalink to this heading">¶</a></h3>
+<h3 id="main-branch">Main branch<a class="headerlink" href="#main-branch" title="Link to this heading">¶</a></h3>
 <p>After merge is concluded, we execute more stages - documentation build &amp; upload to GitLab Pages and option to release non-development package with manual trigger.</p>
 <p><img alt="Main branch stage" src="../_images/stages_main.png"/></p>
 </section>
 <section id="on-pre-commit-changes">
-<h3 id="on-pre-commit-changes">On pre-commit changes<a class="headerlink" href="#on-pre-commit-changes" title="Permalink to this heading">¶</a></h3>
+<h3 id="on-pre-commit-changes">On pre-commit changes<a class="headerlink" href="#on-pre-commit-changes" title="Link to this heading">¶</a></h3>
 <p>When a <code class="docutils literal notranslate"><span class="pre">pre-commit</span></code> configuration file is changed or <code class="docutils literal notranslate"><span class="pre">docker/precommit/Dockerfile</span></code> additional stage appears - its role is to build and
 upload the docker image to GitLab Container Registry.</p>
 <p>This is quite complex due to the need to work with new repository or existing branch and it has to provide bootstrapping for image.</p>
@@ -471,7 +467,7 @@ use <code class="docutils literal notranslate"><span class="pre">git</span> <spa
 </section>
 </section>
 <section id="stages-summary">
-<h2 id="stages-summary">Stages summary<a class="headerlink" href="#stages-summary" title="Permalink to this heading">¶</a></h2>
+<h2 id="stages-summary">Stages summary<a class="headerlink" href="#stages-summary" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>preparation</strong> stage:</p>
 <ul>
@@ -542,7 +538,7 @@ use <code class="docutils literal notranslate"><span class="pre">git</span> <spa
 </ul>
 </section>
 <section id="artifacts">
-<h2 id="artifacts">Artifacts<a class="headerlink" href="#artifacts" title="Permalink to this heading">¶</a></h2>
+<h2 id="artifacts">Artifacts<a class="headerlink" href="#artifacts" title="Link to this heading">¶</a></h2>
 <p><img alt="Artifacts" src="../_images/artifacts.png"/></p>
 <p>Pipelines and jobs provide a set of artifacts. Aside of required ones for tests/coverage especially interesting are:</p>
 <ol class="arabic simple">
@@ -566,7 +562,7 @@ use <code class="docutils literal notranslate"><span class="pre">git</span> <spa
 </ol>
 </section>
 <section id="license-check">
-<h2 id="license-check">License check<a class="headerlink" href="#license-check" title="Permalink to this heading">¶</a></h2>
+<h2 id="license-check">License check<a class="headerlink" href="#license-check" title="Link to this heading">¶</a></h2>
 <p>We use <code class="docutils literal notranslate"><span class="pre">pip-licenses</span></code> to extract installed packages and obtain license information.</p>
 <p>By default, we accept only those selected licenses from <code class="docutils literal notranslate"><span class="pre">.license-whitelist.txt</span></code>.
 Each short license must be in new line and it is matched by checking if string exists in line.</p>
@@ -580,7 +576,7 @@ All libraries must be put in single line.</p>
 </div>
 </section>
 <section id="gitlab-details">
-<h2 id="gitlab-details">GitLab details<a class="headerlink" href="#gitlab-details" title="Permalink to this heading">¶</a></h2>
+<h2 id="gitlab-details">GitLab details<a class="headerlink" href="#gitlab-details" title="Link to this heading">¶</a></h2>
 <p>Please get familiar with official documentation before you modify the yaml configuration.</p>
 <p>Changing YAML is error-prone so here are protips:</p>
 <ol class="arabic simple">
@@ -590,7 +586,7 @@ All libraries must be put in single line.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">if</span></code> and similar conditions should be added last, after testing a job.</p></li>
 </ol>
 <section id="gitlab-pages">
-<h3 id="gitlab-pages">GitLab Pages<a class="headerlink" href="#gitlab-pages" title="Permalink to this heading">¶</a></h3>
+<h3 id="gitlab-pages">GitLab Pages<a class="headerlink" href="#gitlab-pages" title="Link to this heading">¶</a></h3>
 <p>GitLab Pages is static hosting solution which is used to host documentation.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -603,7 +599,7 @@ All libraries must be put in single line.</p>
 </div>
 </section>
 <section id="gitlab-package-registry">
-<h3 id="gitlab-package-registry">GitLab Package Registry<a class="headerlink" href="#gitlab-package-registry" title="Permalink to this heading">¶</a></h3>
+<h3 id="gitlab-package-registry">GitLab Package Registry<a class="headerlink" href="#gitlab-package-registry" title="Link to this heading">¶</a></h3>
 <p>All master and merge requests are set to manual trigger to build and upload python pip package to the related private repository.</p>
 <p>Essential read is <a class="reference external" href="https://docs.gitlab.com/ee/user/packages/package_registry/">GitLab documentation</a>.</p>
 <div class="admonition tip">
@@ -614,12 +610,12 @@ Check also <a class="reference internal" href="semver_package.html#packaging-sem
 </div>
 </section>
 <section id="gitlab-docker-registry">
-<h3 id="gitlab-docker-registry">GitLab Docker Registry<a class="headerlink" href="#gitlab-docker-registry" title="Permalink to this heading">¶</a></h3>
+<h3 id="gitlab-docker-registry">GitLab Docker Registry<a class="headerlink" href="#gitlab-docker-registry" title="Link to this heading">¶</a></h3>
 <p>By default we use it for <code class="docutils literal notranslate"><span class="pre">pre-commit</span></code> docker image - so each project can have it’s own.</p>
 <p>There is also a <strong>company-wide <a class="reference external" href="http://docker.intra.deepsense.ai/">docker registry</a></strong>. Ask IT about it.</p>
 </section>
 <section id="other-gitlab-featurs">
-<h3 id="other-gitlab-featurs">Other GitLab featurs<a class="headerlink" href="#other-gitlab-featurs" title="Permalink to this heading">¶</a></h3>
+<h3 id="other-gitlab-featurs">Other GitLab featurs<a class="headerlink" href="#other-gitlab-featurs" title="Link to this heading">¶</a></h3>
 <p>The template targets only GitLab <strong>free</strong> mode which is limiting many functionalities.</p>
 </section>
 </section>
@@ -672,7 +668,7 @@ Check also <a class="reference internal" href="semver_package.html#packaging-sem
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>
