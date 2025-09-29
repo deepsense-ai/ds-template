@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import stat
 import shutil
@@ -44,6 +45,14 @@ files_to_be_removed.extend(DOCS_FILES)
 
 {% if cookiecutter.versioning != "Bumpversion" %}
 files_to_be_removed.extend(BUMPVERSION_FILES)
+{% endif %}
+
+{% if cookiecutter.client_name != "ds" %}
+with open("branding/branding.json", "r") as f:
+    branding = json.load(f)
+    branding["name"] = '{{ cookiecutter.client_name }}'
+    with open("branding/branding.json", "w") as f:
+        json.dump(branding, f, indent=4)
 {% endif %}
 
 print("Cleaning files... 🌀")
