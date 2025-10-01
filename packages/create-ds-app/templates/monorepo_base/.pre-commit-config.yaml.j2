@@ -1,0 +1,40 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-toml
+      - id: check-json
+      - id: check-yaml
+
+  - repo: local
+    hooks:
+        - id: format
+          name: format
+          types_or: [python, jupyter]
+          entry: uv run ruff format
+          language: system
+          always_run: false
+
+  - repo: local
+    hooks:
+        - id: lint
+          name: lint
+          types_or: [python, jupyter]
+          entry: uv run ruff check --fix
+          language: system
+          always_run: false
+
+  - repo: local
+    hooks:
+        - id: check-types
+          name: check types
+          types_or: [python, jupyter]
+          entry: uv run mypy .
+          language: system
+          always_run: false
+          pass_filenames: false

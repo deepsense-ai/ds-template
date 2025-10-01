@@ -1,7 +1,0 @@
-**/venv/
-docs/
-tests/
-ci/
-.vscode/
-.idea/
-.pytest_cache/

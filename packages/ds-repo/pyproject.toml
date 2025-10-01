@@ -1,0 +1,24 @@
+[project]
+name = "ds-repo"
+version = "0.1.0"
+description = "CLI tool for data science repository management"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "typer>=0.9.0",
+    "rich>=13.9.4",
+    "pydantic>=2.10.6",
+]
+
+[project.scripts]
+ds-repo = "ds_repo.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ds_repo"]

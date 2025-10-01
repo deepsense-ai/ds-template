@@ -6,36 +6,39 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "Project Template"
-author = "deepsense.ai"
-copyright = f"2023, {author}"
+project = '{{ project_name }}'
+copyright = '2025, {{ client_name }}'
+author = 'deepsense.ai'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "sphinx.ext.napoleon",  # support for google style docstrings
-    "sphinx.ext.autosummary",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.autosectionlabel",
-    "myst_parser",
-    "sphinxcontrib.mermaid",
+    "sphinx.ext.napoleon",# support for google style docstrings
+    "sphinx.ext.autodoc", # auto* are for automatic code docs generation
+    "sphinx.ext.autosummary", # as above
+    "sphinx.ext.intersphinx", # allows to cross reference other sphinx documentations
+    "sphinx.ext.autosectionlabel", # each doc section gets automatic reference generated
+    "myst_parser", # adds support for Markdown
+    "sphinxcontrib.mermaid", # allows to use Mermaid diagrams
 ]
 
-templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+templates_path = ['_templates']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_material"
+html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 autosectionlabel_prefix_document = True
 
 # Mapping to link other documentations
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
+    'python': ('https://docs.python.org/3', None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
 }
 
 
@@ -56,30 +59,17 @@ napoleon_type_aliases = None
 napoleon_attr_annotations = True
 
 add_module_names = False
-autodoc_typehints = "both"
+autodoc_typehints = 'both'
 
-html_theme_options = {
-    #'nav_title': project,
-    # Set the color and the accent color
-    "color_primary": "blue",
-    "color_accent": "light-blue",
-    # Set the repo location to get a badge with stats
-    "repo_url": "https://github.com/deepsense-ai/ds-template/",
-    "repo_name": project,
-    # Visible levels of the global TOC; -1 means unlimited
-    "globaltoc_depth": 3,
-    # If False, expand all TOC entries
-    "globaltoc_collapse": True,
-    # If True, show hidden TOC entries
-    "globaltoc_includehidden": False,
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
 }
 
 # workaround for sphinx material issue with empty left sidebar
 # See: https://github.com/bashtage/sphinx-material/issues/30
-html_sidebars = {"**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]}
-
-source_suffix = {
-    ".rst": "restructuredtext",
-    ".txt": "markdown",
-    ".md": "markdown",
-}
+# uncomment below lines if you use: html_theme = "sphinx_material"
+# html_sidebars = {
+#    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+# }

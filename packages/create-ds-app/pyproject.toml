@@ -1,0 +1,35 @@
+[project]
+name = "create-ds-app"
+version = "0.1.0"
+description = "Set up a modern data science project by running one command"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ds-templater",
+    "typer>=0.9.0",
+    "rich>=13.9.4",
+    "questionary>=2.1.0",
+    "loguru>=0.7.3",
+]
+
+[project.scripts]
+create-ds-app = "create_ds_app.main:entrypoint"
+
+[tool.uv.sources]
+ds-templater = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/create_ds_app"]
+
+[tool.hatch.build]
+include = ['src/**/*', 'templates/**/*']
+
+[scripts]
+create-ds-app = "create_ds_app.main:entrypoint"
