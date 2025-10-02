@@ -1,0 +1,18 @@
+/* Additional styling for MkDocs Material theme */
+.md-typeset h1 {
+    color: #2196f3;
+}
+
+.md-typeset h2 {
+    color: #1976d2;
+}
+
+/* Code blocks styling */
+.md-typeset pre {
+    border-radius: 4px;
+}
+
+/* Navigation improvements */
+.md-nav__title {
+    font-weight: 600;
+}

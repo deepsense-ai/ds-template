@@ -82,10 +82,9 @@ class TemplateRenderer:
             rel_path = path.relative_to(base_path)
 
             # Check conditional directories
-            for dir_name, context_var in conditional_directories.items():
-                if (str(rel_path).startswith(dir_name) or str(rel_path) == dir_name) and not context.get(
-                    context_var, False
-                ):
+            for dir_name, (context_var, expected_value) in conditional_directories.items():
+                if ((str(rel_path).startswith(dir_name) or str(rel_path) == dir_name) and
+                        context.get(context_var) != expected_value):
                     return False
 
             # Check template config's custom file inclusion logic

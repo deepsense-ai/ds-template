@@ -1,6 +1,6 @@
 # GitLab CI configuration
 
-This is **optional** cookiecutter template option, which result in `.gitlab-ci.yml` file creation.
+This is **optional** template option, which results in `.gitlab-ci.yml` file creation.
 
 File has comments for jobs so it should be relatively easy to understand and adapt.
 

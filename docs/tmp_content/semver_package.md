@@ -1,4 +1,3 @@
-(_packaging_semver)=
 # Packaging & semantic version
 
 ```{note}

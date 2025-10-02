@@ -1,3 +1,4 @@
+import pathlib
 from typing import Any
 
 from ds_templater import ConfirmQuestion, ListQuestion, TemplateConfig
@@ -37,6 +38,31 @@ class StandardTemplateConfig(TemplateConfig):
         """Get the project directory name based on the context."""
         return context["project_name"].replace("-", "_")
 
+    def should_include_file(self, file_path: pathlib.Path, context: dict[str, Any]) -> bool:
+        """
+        Determine whether a file should be included in the generated project.
+        Override this method in template configs to add custom file filtering logic.
+        """
+        # Handle CI/CD file inclusion based on user choice
+        print(file_path, context)
+        ci_provider = context["ci"]
+
+        # Include GitHub Actions files only if GitHub is selected
+        if str(file_path).startswith(".github/") and ci_provider != "GitHub":
+            return False
+            
+        # Include GitLab CI file only if GitLab is selected
+        if str(file_path).startswith(".gitlab-ci.yml") and ci_provider != "GitLab":
+            return False
+            
+        # Include license files only if CI is not "None"
+        if str(file_path) in [".license-whitelist.txt", ".libraries-whitelist.txt"] and ci_provider == "None":
+            return False
+            
+        return True
+
+    def get_conditional_directories(self):
+        return {".github": ("ci", "GitHub")}
 
 # Create instance of the config to be imported
 config = StandardTemplateConfig()

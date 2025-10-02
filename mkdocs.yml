@@ -1,0 +1,77 @@
+site_name: "Project Template"
+site_description: "A basic template to bootstrap new data science or python application project"
+site_author: "deepsense.ai"
+copyright: "2023, deepsense.ai"
+
+repo_url: https://github.com/deepsense-ai/ds-template/
+repo_name: ds-template
+
+# Theme configuration - using Material theme for modern appearance
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: light blue
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - toc.follow
+    - toc.integrate
+
+# Navigation structure
+nav:
+  - Home: index.md
+  - Quick Start: quickstart.md
+  - Template Content:
+    - template_content.md
+    - Template Overview: tmp_content/overview.md
+    - Python Structure: tmp_content/python_structure.md
+    - Pre-commit: tmp_content/precommit.md
+    - GitLab CI: tmp_content/gitlab_ci.md
+    - GitHub CI: tmp_content/github_ci.md
+    - Semantic Versioning: tmp_content/semver_package.md
+  - Template Structure: template_structure.md
+  - Overall Design: overall_design.md
+
+# Plugins
+plugins:
+  - search
+  - mermaid2
+
+# Markdown extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+      baselevel: 1
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+
+# Additional CSS
+extra_css:
+  - assets/extra.css
+
+# Static files directory
+docs_dir: docs
+site_dir: site
+
+# Build settings
+strict: true

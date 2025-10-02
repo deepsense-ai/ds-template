@@ -6,6 +6,7 @@ import inspect
 import pathlib
 from abc import ABC, abstractmethod
 from datetime import datetime
+from typing import Any
 
 import questionary
 import typer
@@ -275,14 +276,14 @@ class TemplateConfig:
         """
         return True
 
-    def get_conditional_directories(self) -> dict[str, str]:
+    def get_conditional_directories(self) -> dict[str, tuple[str, Any]]:
         """
         Define directories that should be conditionally included based on context variables.
 
         Returns:
             Dictionary mapping directory paths to context variable names that control inclusion.
-            For example: {"observability": "observability"} means the observability/ directory
-            will only be included if context["observability"] is truthy.
+            For example: {"observability": ("variable", 23)} means the observability/ directory
+            will only be included if context["variable"] is equal 23.
         """
         return {}
 

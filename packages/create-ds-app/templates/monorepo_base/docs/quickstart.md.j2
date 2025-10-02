@@ -1,0 +1,39 @@
+# Quick Start
+
+Get up and running with {{ project_name }} in just a few minutes.
+
+## Installation
+
+```bash
+# Clone and install
+git clone {{ repo_url }}
+cd {{ project_name | lower | replace('_', '-') }}
+uv sync --dev
+```
+
+## Basic Usage
+
+```bash
+# Show help
+{{ pkg_name }} --help
+
+# Run the application
+{{ pkg_name }} process --input data.txt --output results.json
+```
+
+## Python API
+
+```python
+from {{ pkg_name }} import process_data
+
+# Process your data
+data = ["item1", "item2", "item3"]
+result = process_data(data)
+print(result)
+```
+
+## Next Steps
+
+- [Development Setup](development/setup.md) - Detailed development environment setup
+- [Project Structure](development/project_structure.md) - Understand the codebase
+{% if ci != "None" %}- [CI/CD](development/ci_cd.md) - Learn about {% if ci == "GitHub" %}GitHub Actions{% elif ci == "GitLab" %}GitLab CI{% endif %} workflows{% endif %}
