@@ -1,0 +1,47 @@
+# {{ project_name }}
+
+{{ project_name }} is a modern data science project built with best practices for quality, security, and maintainability.
+
+## Overview
+
+This project provides a solid foundation for data science applications with:
+
+- **Modern Python tooling** - uv, pytest, ruff, mypy
+- **Comprehensive testing** - Unit, integration, and end-to-end tests
+{% if ci != "None" %}- **CI/CD pipeline** - Automated testing, building, and deployment{% endif %}
+- **Code quality** - Pre-commit hooks, linting, and type checking
+- **Documentation** - Comprehensive guides and API documentation
+
+## Quick Start
+
+Get started with {{ project_name }} in minutes:
+
+```bash
+# Install the package
+pip install {{ project_name | lower | replace('_', '-') }}
+
+# Or install in development mode
+git clone {{ repo_url }}
+cd {{ project_name | lower | replace('_', '-') }}
+uv sync --dev
+```
+
+## Features
+
+- 🚀 **Fast and reliable** - Built with modern Python tooling
+- 🔒 **Secure** - Regular security scanning and dependency updates
+- 🧪 **Well tested** - Comprehensive test coverage{% if ci != "None" %} with automated CI{% endif %}
+- 📚 **Well documented** - Clear guides and API documentation
+- 🔧 **Developer friendly** - Pre-configured development environment
+
+## Getting Started
+
+- [Quick Start Guide](quickstart.md) - Get up and running quickly
+- [Development Setup](development/setup.md) - Set up your development environment
+- [Project Structure](development/project_structure.md) - Understand the codebase
+
+## Development
+
+- [Setup](development/setup.md) - Development environment setup
+- [Project Structure](development/project_structure.md) - Code organization
+{% if ci != "None" %}- [CI/CD](development/ci_cd.md) - Continuous integration and deployment{% endif %}

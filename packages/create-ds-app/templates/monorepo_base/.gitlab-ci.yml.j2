@@ -1,0 +1,165 @@
+# GitLab CI configuration for {{ project_name }}
+
+stages:
+  - preparation
+  - lint
+  - test
+  - package
+  - pages
+  - security
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+  PRECOMMIT_IMAGE: $CI_REGISTRY_IMAGE/precommit
+
+# Preparation stage - builds pre-commit docker image
+build_precommit:
+  stage: preparation
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $PRECOMMIT_IMAGE:dev-$CI_COMMIT_SHA docker/precommit/
+    - docker tag $PRECOMMIT_IMAGE:dev-$CI_COMMIT_SHA $PRECOMMIT_IMAGE:latest
+    - docker push $PRECOMMIT_IMAGE:dev-$CI_COMMIT_SHA
+    - docker push $PRECOMMIT_IMAGE:latest
+  only:
+    changes:
+      - docker/precommit/Dockerfile
+      - .pre-commit-config.yaml
+  interruptible: true
+
+# Lint stage - code quality checks
+lint:
+  stage: lint
+  image: $PRECOMMIT_IMAGE:latest
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install uv
+  script:
+    - uv sync --dev
+    - uv run ruff check .
+    - uv run mypy .
+    - uv run bandit -r src/
+    - uv run python check_licenses.sh
+  artifacts:
+    reports:
+      junit: test-results.xml
+    paths:
+      - dist/
+    expire_in: 1 week
+  only:
+    - merge_requests
+    - main
+    - develop
+  interruptible: true
+
+# Test stage - run test suite
+test:
+  stage: test
+  image: python:{{ python_version }}-slim
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install uv
+  script:
+    - uv sync --dev
+    - uv run pytest --cov={{ pkg_name }} --cov-report=xml --cov-report=html --junitxml=test-results.xml
+  artifacts:
+    reports:
+      junit: test-results.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - htmlcov/
+      - dist/
+      - licenses.txt
+      - requirements-freeze.txt
+    expire_in: 1 week
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  only:
+    - merge_requests
+    - main
+    - develop
+  interruptible: true
+
+# Package stage - build Python packages
+package:
+  stage: package
+  image: python:{{ python_version }}-slim
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install uv
+  script:
+    - uv sync --dev
+    - uv build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+  only:
+    - merge_requests
+    - main
+    - develop
+  interruptible: true
+
+# Pages stage - build documentation
+pages:
+  stage: pages
+  image: python:{{ python_version }}-slim
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install uv
+  script:
+    - uv sync --dev
+    - uv run mkdocs build
+    - mv site public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+  interruptible: true
+
+# Security stage - vulnerability scanning
+security:
+  stage: security
+  image: aquasec/trivy:latest
+  script:
+    - trivy fs --format json --output trivy-report.json .
+    - trivy fs --format table --output trivy-report.txt .
+  artifacts:
+    reports:
+      dependency_scanning: trivy-report.json
+    paths:
+      - trivy-report.json
+      - trivy-report.txt
+    expire_in: 1 week
+  only:
+    - merge_requests
+    - main
+    - develop
+  interruptible: true
+
+# Deploy stage - deploy to GitLab Pages and Package Registry
+deploy:
+  stage: deploy
+  image: python:{{ python_version }}-slim
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install uv
+  script:
+    - uv sync --dev
+    - uv build
+    - echo "Package built successfully"
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - main
+  when: manual
+  interruptible: true

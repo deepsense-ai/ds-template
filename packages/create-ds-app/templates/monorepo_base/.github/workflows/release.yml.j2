@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Publish Release for {{ project_name }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python {{ python_version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: '{{ python_version }}'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Run tests
+        run: uv run pytest
+
+      - name: Build package
+        run: uv build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          {% raw %}
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          {% endraw %}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          {% raw %}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          {% endraw %}
+        with:
+          {% raw %}
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          {% endraw %}

@@ -1,5 +1,5 @@
 [project]
-name = "{{ project_name }}-workspace"
+name = "{{ project_name }}"
 version = "0.0.1"
 description = "{{ project_name }} workspace"
 readme = "README.md"
@@ -14,12 +14,13 @@ dev-dependencies = [
     "pytest-asyncio~=0.24.0",
     "ruff>=0.6.8",
     "mypy>=1.13.0",
+    "mkdocs>=1.4.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocs-mermaid2-plugin>=1.1.0",
 ]
 
 [tool.uv.workspace]
-members = [
-    "packages/*",
-]
+members = []
 
 [tool.ruff]
 exclude = [".venv"]

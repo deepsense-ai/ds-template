@@ -1,0 +1,105 @@
+# CI/CD
+
+{% if ci != "None" %}
+## Overview
+
+The project uses {% if ci == "GitHub" %}GitHub Actions{% elif ci == "GitLab" %}GitLab CI{% endif %} for automated testing, building, and deployment.
+
+## Workflows
+
+{% if ci == "GitHub" %}
+### CI Pipeline (`.github/workflows/ci.yml`)
+- Runs on every push and pull request
+- Tests code quality (ruff, mypy, bandit)
+- Runs test suite with pytest
+- Generates coverage reports
+- Supports Python {{ python_version }}, 3.12, 3.11
+
+### Release Pipeline (`.github/workflows/release.yml`)
+- Triggered by version tags (e.g., `v1.0.0`)
+- Builds and tests the package
+- Publishes to PyPI
+- Creates GitHub releases
+
+### Security Pipeline (`.github/workflows/security.yml`)
+- Daily security scanning
+- Dependency vulnerability checks
+- Code security analysis
+
+{% elif ci == "GitLab" %}
+### CI Pipeline (`.gitlab-ci.yml`)
+- Runs on every push and merge request
+- Tests code quality (ruff, mypy, bandit)
+- Runs test suite with pytest
+- Generates coverage reports
+- Supports Python {{ python_version }}, 3.12, 3.11
+
+### Release Pipeline (`.gitlab-ci.yml`)
+- Triggered by version tags (e.g., `v1.0.0`)
+- Builds and tests the package
+- Publishes to PyPI
+- Creates GitLab releases
+
+### Security Pipeline (`.gitlab-ci.yml`)
+- Daily security scanning
+- Dependency vulnerability checks
+- Code security analysis
+
+{% endif %}
+## Local Development
+
+```bash
+# Run CI checks locally
+uv run ruff check .
+uv run mypy .
+uv run pytest --cov={{ pkg_name }}
+```
+
+## Deployment
+
+```bash
+# Create release
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+{% else %}
+## Overview
+
+This project does not use a CI/CD pipeline. All testing and quality checks should be run locally.
+
+## Local Development
+
+```bash
+# Run quality checks locally
+uv run ruff check .
+uv run mypy .
+uv run pytest --cov={{ pkg_name }}
+
+# Run pre-commit hooks
+uv run pre-commit run --all-files
+```
+
+## Manual Deployment
+
+```bash
+# Build the package
+uv build
+
+# Install locally for testing
+pip install dist/*.whl
+
+# Create release manually
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+## Setting up CI/CD
+
+If you want to add CI/CD later, you can:
+
+1. **GitHub Actions**: Create `.github/workflows/` directory and add workflow files
+2. **GitLab CI**: Create `.gitlab-ci.yml` file in the root directory
+3. **Other providers**: Add appropriate configuration files for your chosen CI/CD platform
+
+{% endif %}

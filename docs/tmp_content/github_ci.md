@@ -1,6 +1,6 @@
 # GitHub Actions CI
 
-This is **optional** cookiecutter template option, which result in `.github` directory creation which contains workflows.
+This is **optional** template option, which results in `.github` directory creation which contains workflows.
 
 It generates two workflows: one standard CI and second only for building documentation.
 

@@ -1,0 +1,31 @@
+# Development Setup
+
+## Prerequisites
+
+- Python {{ python_version }} or higher
+- uv package manager
+- Git
+
+## Setup
+
+```bash
+# Clone and install
+git clone {{ repo_url }}
+cd {{ project_name | lower | replace('_', '-') }}
+uv sync --dev
+pre-commit install
+```
+
+## Running the App
+
+```bash
+# Run the application
+uv run python -m {{ pkg_name }}.cli --help
+
+# Run tests
+uv run pytest
+
+# Code quality checks
+uv run ruff check .
+uv run ruff format .
+```
