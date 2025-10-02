@@ -6,9 +6,10 @@ import json
 import os
 import pathlib
 import subprocess
+import shutil
 import sys
 import tempfile
-from typing import Any, Callable
+from typing import Any, Optional
 
 import questionary
 import typer
@@ -286,6 +287,20 @@ class CLICommands:
         # Run post-creation hooks (like uv sync)
         self._run_post_creation_hooks(project_path)
 
+        if context.get("claude-code", "No") == "Yes":
+            console.print("\n[bold cyan]Running Claude-code generation:[/bold cyan]")
+            instructions = self.open_file_in_editor_and_read(
+                "# Enter your instructions below. Lines starting with # will be ignored.\n"
+            )
+            if instructions is None:
+                console.print("\n[bold cyan]Next steps:[/bold cyan]")
+                console.print(f"  cd {project_name}")
+                console.print("  # Review the generated project structure")
+                console.print("  # Start developing!")
+
+            print("Provided instructions: ", instructions)
+            # TODO: Add claude-code integration
+
         # Show next steps
         console.print("\n[bold cyan]Next steps:[/bold cyan]")
         console.print(f"  cd {project_name}")
@@ -360,6 +375,49 @@ class CLICommands:
         except FileNotFoundError:
             console.print("[yellow]Warning: uv is not installed. Please install uv and run 'uv sync' manually.[/yellow]")
 
+    def open_file_in_editor_and_read(self, text: str) -> Optional[str]:
+        """
+        Open temporary text file to edit and read it.
+
+        Args:
+            text: Text displayed in the editor
+        """
+        editor = os.environ.get("EDITOR")
+        if not editor:
+            raise EnvironmentError("The $EDITOR environment variable is not set. Please set it (e.g., export EDITOR=nano)")
+
+        if not shutil.which(editor.split()[0]):
+            raise FileNotFoundError(f"Editor '{editor}' not found in PATH.")
+
+        # Create a temporary file
+        with tempfile.NamedTemporaryFile(suffix=".tmp", mode="r+", delete=False) as tf:
+            temp_file_path = tf.name
+            tf.write(text)
+            tf.flush()
+
+        try:
+            # Open the editor and wait
+            subprocess.run([*editor.split(), temp_file_path], check=True)
+
+            # After editor closes, read contents
+            with open(temp_file_path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+
+            # Filter out comments and empty lines
+            instructions = [line.strip() for line in lines if line.strip() and not line.strip().startswith("#")]
+
+            if not instructions:
+                console.print("[red]The file was not edited. Exiting.[/red]")
+                return None
+
+            return "\n".join(instructions)
+
+        except subprocess.CalledProcessError:
+            console.print("[red]Editor exited with non-zero status. Aborting.[/red]")
+            return None
+
+        finally:
+            os.unlink(temp_file_path)
 
 def create_app(templates_dir: pathlib.Path) -> typer.Typer:
     """

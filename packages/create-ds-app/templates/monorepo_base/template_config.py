@@ -32,6 +32,12 @@ class StandardTemplateConfig(TemplateConfig):
         CommonQuestions.project_name,
         CommonQuestions.python_version,
         ListQuestion(name="ci", message="Select CI provider", choices=["GitHub", "GitLab", "None"], default="GitHub"),
+        ListQuestion(
+            name="claude-code",
+            message="Do you want to use Claude-code integration for faster project initialization?",
+            choices=["Yes", "No"],
+            default="No"
+        ),
     ]
 
     def get_project_directory_name(self, context: dict[str, Any]) -> str:

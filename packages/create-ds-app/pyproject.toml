@@ -10,6 +10,7 @@ dependencies = [
     "rich>=13.9.4",
     "questionary>=2.1.0",
     "loguru>=0.7.3",
+    "tomlkit>=0.13.3",
 ]
 
 [project.scripts]

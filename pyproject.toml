@@ -3,7 +3,7 @@ name = "create-ds-app-monorepo"
 version = "0.1.0"
 description = "Monorepo containing data science project creation tools"
 requires-python = ">=3.13"
-dependencies = ["ds-templater", "ds-repo", "create-ds-app"]
+dependencies = ["ds-templater", "ds-repo", "create-ds-app", "ds-code-generator"]
 
 [tool.uv]
 dev-dependencies = [
@@ -15,18 +15,20 @@ dev-dependencies = [
     "mypy==1.15.0",
     "types-pyyaml>=6.0.12.20250516",
     "textual-dev>=1.7.0",
+    "tomli-w>=1.0.0",
     "mkdocs>=1.4.0",
     "mkdocs-material>=9.0.0",
     "mkdocs-mermaid2-plugin>=1.1.0",
 ]
 
 [tool.uv.workspace]
-members = ["packages/ds-templater", "packages/ds-repo", "packages/create-ds-app"]
+members = ["packages/ds-templater", "packages/ds-repo", "packages/create-ds-app", "packages/ds-code-generator"]
 
 [tool.uv.sources]
 ds-templater = { workspace = true }
 ds-repo = { workspace = true }
 create-ds-app = { workspace = true }
+ds-code-generator = { workspace = true }
 
 [tool.pytest]
 norecursedirs = [
@@ -70,7 +72,7 @@ mypy_path = ["src"]
 exclude = ["src/create_ds_app/templates/*/src/{{pkg_name}}/__init__.py"]
 
 [[tool.mypy.overrides]]
-module = ["create-ds-app.*", "ds-templater.*", "ds-repo.*"]
+module = ["create-ds-app.*", "ds-templater.*", "ds-repo.*", "ds-code-generator.*"]
 ignore_missing_imports = false
 disallow_untyped_defs = true
 
@@ -153,7 +155,7 @@ docstring-code-format = true
 docstring-code-line-length = 120
 
 [tool.ruff.lint.isort]
-known-first-party = ["create-ds-app", "ds-templater", "ds-repo"]
+known-first-party = ["create-ds-app", "ds-templater", "ds-repo", "ds-code-generator"]
 known-third-party = [
     "IPython",
     "PIL",
