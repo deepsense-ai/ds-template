@@ -102,18 +102,21 @@ def claude_code_setup_hook(project_path: pathlib.Path, context: dict[str, Any], 
 
     # Run the async workflow
     try:
-        _run_claude_workflow(instructions, project_path, console)
+        _run_claude_workflow(instructions, project_path, context, console)
     except Exception as e:
         console.print(f"[red]Error running Claude workflow: {e}[/red]")
 
 
-def _run_claude_workflow(instructions: str, project_path: pathlib.Path, console: Console) -> None:
+def _run_claude_workflow(
+    instructions: str, project_path: pathlib.Path, context: dict[str, Any], console: Console
+) -> None:
     """
     Run the complete Claude Code workflow asynchronously.
 
     Args:
         instructions: User's project instructions
         project_path: Path to create the project at
+        context: Template context with user answers
         console: Rich console for output
     """
     from loguru import logger
@@ -124,7 +127,7 @@ def _run_claude_workflow(instructions: str, project_path: pathlib.Path, console:
     console.print("\n[bold]Step 1:[/bold] Generating follow-up questions...")
 
     try:
-        questions = asyncio.run(coding_agent.get_follow_up_questions(instructions))
+        questions = asyncio.run(coding_agent.get_follow_up_questions(instructions, context))
 
         # Step 2: Present questionnaire to user
         console.print("\n[bold]Step 2:[/bold] Please answer the following questions about your project:")
@@ -133,7 +136,7 @@ def _run_claude_workflow(instructions: str, project_path: pathlib.Path, console:
         logger.exception(e)
         questionnaire_answers = {}
     # Step 3: Continue with the workflow
-    asyncio.run(coding_agent.continue_workflow_with_answers(instructions, questionnaire_answers, project_path, console))
+    asyncio.run(coding_agent.continue_workflow_with_answers(instructions, questionnaire_answers, project_path, context, console))
 
 
 def _present_questionnaire(questions: list[dict], console: Console) -> dict[str, Any] | None:

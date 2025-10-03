@@ -150,18 +150,18 @@ def clean_and_parse_json(response_text: str) -> dict:
         json.JSONDecodeError: If JSON parsing fails after all cleaning attempts
     """
     # Remove markdown code blocks (```json, ```JSON, or just ```)
-    cleaned_text = re.sub(r'```(?:json|JSON)?\s*\n?', '', response_text)
-    cleaned_text = re.sub(r'```\s*$', '', cleaned_text)
+    cleaned_text = re.sub(r"```(?:json|JSON)?\s*\n?", "", response_text)
+    cleaned_text = re.sub(r"```\s*$", "", cleaned_text)
 
     # Remove single-line comments (// comment)
-    cleaned_text = re.sub(r'//[^\n]*', '', cleaned_text)
+    cleaned_text = re.sub(r"//[^\n]*", "", cleaned_text)
 
     # Remove multi-line comments (/* comment */)
-    cleaned_text = re.sub(r'/\*.*?\*/', '', cleaned_text, flags=re.DOTALL)
+    cleaned_text = re.sub(r"/\*.*?\*/", "", cleaned_text, flags=re.DOTALL)
 
     # Remove any text before the first { or [
-    json_start = cleaned_text.find('{')
-    array_start = cleaned_text.find('[')
+    json_start = cleaned_text.find("{")
+    array_start = cleaned_text.find("[")
 
     if json_start == -1 and array_start == -1:
         raise json.JSONDecodeError("No JSON object or array found", cleaned_text, 0)
@@ -187,7 +187,7 @@ def clean_and_parse_json(response_text: str) -> dict:
             escape_next = False
             continue
 
-        if char == '\\' and in_string:
+        if char == "\\" and in_string:
             escape_next = True
             continue
 
@@ -196,12 +196,12 @@ def clean_and_parse_json(response_text: str) -> dict:
         elif char == '"' and in_string:
             in_string = False
         elif not in_string:
-            if char in '{[':
+            if char in "{[":
                 stack.append(char)
-            elif char in '}]':
+            elif char in "}]":
                 if stack:
                     opening = stack.pop()
-                    if (char == '}' and opening != '{') or (char == ']' and opening != '['):
+                    if (char == "}" and opening != "{") or (char == "]" and opening != "["):
                         # Mismatched brackets
                         break
                 if not stack:
@@ -223,7 +223,7 @@ def clean_and_parse_json(response_text: str) -> dict:
         raise e
 
 
-async def get_follow_up_questions(user_provided_instructions: str) -> list[dict]:
+async def get_follow_up_questions(user_provided_instructions: str, context: dict[str, Any]) -> list[dict]:
     """
     Get follow-up questions from the user provided instructions using Claude.
 
@@ -237,6 +237,7 @@ async def get_follow_up_questions(user_provided_instructions: str) -> list[dict]
         # Build prompt with dynamic component types
         component_types = build_component_types_text()
         prompt = QUESTIONNAIRE_PROMPT_TEMPLATE.format(component_types=component_types)
+        prompt += f"\n\nBasic project configuration context:\n{json.dumps(context, indent=2)}"
         prompt += f"\n\nUser's project description:\n{user_provided_instructions}"
         await client.query(prompt)
 
@@ -261,7 +262,7 @@ async def get_follow_up_questions(user_provided_instructions: str) -> list[dict]
 
 
 async def generate_project_structure(
-    user_provided_instructions: str, questionnaire_answers: dict[str, Any]
+    user_provided_instructions: str, questionnaire_answers: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     Generate project structure based on user instructions and questionnaire answers.
@@ -269,7 +270,7 @@ async def generate_project_structure(
     Args:
         user_provided_instructions: Initial project description
         questionnaire_answers: User's answers to follow-up questions
-
+        context: Template context with user answers
     Returns:
         Project structure dictionary
     """
@@ -278,9 +279,9 @@ async def generate_project_structure(
         component_types = build_component_types_text()
         prompt = PROJECT_STRUCTURE_PROMPT_TEMPLATE.format(component_types=component_types)
         prompt += "\n\n"
+        prompt += f"Basic project configuration context:\n{json.dumps(context, indent=2)}"
         prompt += f"User's project description:\n{user_provided_instructions}\n\n"
         prompt += f"User's answers to follow-up questions:\n{json.dumps(questionnaire_answers, indent=2)}"
-
         await client.query(prompt)
 
         response_text = ""
@@ -312,8 +313,8 @@ async def generate_project_structure(
                 "project_name": "my-project",
                 "packages": [
                     {"name": "my-project", "type": "pkg_core", "functions": ["common configuration", "logging"]},
-                    {"name": "my-project-api", "type": "pkg_api", "functions": ["REST endpoints"]}
-                ]
+                    {"name": "my-project-api", "type": "pkg_api", "functions": ["REST endpoints"]},
+                ],
             }
         except Exception as e:
             logger.exception(f"Could not generate project structure: {e}")
@@ -468,7 +469,7 @@ def edit_project_structure(project_structure: dict[str, Any], console: Console) 
 
 async def generate_packages(project_structure: dict[str, Any], project_path: pathlib.Path, console: Console) -> bool:
     """
-    Generate packages using create-ds-app.
+    Generate packages using PackageGenerator.
 
     Args:
         project_structure: Project structure dictionary
@@ -478,26 +479,65 @@ async def generate_packages(project_structure: dict[str, Any], project_path: pat
     Returns:
         True if generation succeeded
     """
-    console.print("\n[bold cyan]Generating packages with create-ds-app...[/bold cyan]")
+    import io
 
-    # Build create-ds-app command
-    # This assumes create-ds-app CLI is available
-    cmd = ["create-ds-app", "create", str(project_path)]
+    from rich.console import Console as RichConsole
+    from rich.progress import Progress, SpinnerColumn, TextColumn
 
-    # Add packages as arguments (handle both 'packages' and 'components' for compatibility)
+    project_name = project_structure.get("project_name", "my-ds-project")
     packages = project_structure.get("packages", project_structure.get("components", []))
-    for package in packages:
-        cmd.extend(["--component", f"{package['type']}:{package['name']}"])
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        # Create a null console that doesn't output anything
+        null_console = RichConsole(file=io.StringIO(), force_terminal=False)
+
+        generator = PackageGenerator(TEMPLATES_DIR)
+        # Replace the generator's console with null console
+        generator.renderer.console = null_console
+
+        packages_dir = project_path / "packages"
+
+        # Disable logger output during package generation
+        logger.disable("create_ds_app.package_generator")
+
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console,
+        ) as progress:
+            for i, package in enumerate(packages, 1):
+                pkg_type = package["type"]
+                pkg_name = package["name"]
+
+                task = progress.add_task(
+                    f"[cyan]Generating package {i}/{len(packages)}: {pkg_name} ({pkg_type})[/cyan]",
+                    total=None,
+                )
+
+                # Generate the package
+                output_dir = packages_dir / pkg_name
+                generator.generate_package(
+                    template_name=pkg_type,
+                    package_name=pkg_name,
+                    output_dir=output_dir,
+                    project_name=project_name,
+                )
+
+                # Register package in workspace
+                generator.register_package_in_workspace(project_path, pkg_name)
+
+                progress.remove_task(task)
+
+        # Re-enable logger
+        logger.enable("create_ds_app.package_generator")
+
         console.print("[green]✓ Packages generated successfully![/green]")
         return True
-    except subprocess.CalledProcessError as e:
-        console.print(f"[red]Error generating packages: {e.stderr}[/red]")
-        return False
-    except FileNotFoundError:
-        console.print("[red]Error: create-ds-app command not found.[/red]")
+    except Exception as e:
+        # Re-enable logger in case of error
+        logger.enable("create_ds_app.package_generator")
+        console.print(f"[red]Error generating packages: {e}[/red]")
+        logger.exception(e)
         return False
 
 
@@ -514,25 +554,14 @@ async def adapt_with_claude(
         console: Rich console for output
     """
     console.print("\n[bold cyan]Starting Claude Code interactive session...[/bold cyan]")
-    console.print("[dim]Claude will now help you adapt the generated project.[/dim]")
+    console.print("[dim]Claude will help you adapt the generated project.[/dim]")
 
-    # Create options for Claude with the project directory as working directory
-    options = ClaudeAgentOptions(
-        system_prompt=(
-            "You are helping the user adapt their newly generated data science project. "
-            "The project structure has been created using create-ds-app. "
-            "Help them customize and implement their specific requirements. "
-            "Be helpful and proactive in suggesting improvements."
-        ),
-        permission_mode="acceptEdits",
-        cwd=str(project_path),
-    )
+    # Get editor
+    editor = os.environ.get("EDITOR", "vim")
 
-    async with ClaudeSDKClient(options=options) as client:
-        # Provide context about the project
-        packages = project_structure.get("packages", project_structure.get("components", []))
-        context_message = f"""
-I've just generated a new data science project with the following structure:
+    # Prepare context message
+    packages = project_structure.get("packages", project_structure.get("components", []))
+    context_message = f"""I've just generated a new data science project with the following structure:
 
 Project: {project_structure["project_name"]}
 Packages:
@@ -545,46 +574,61 @@ The project has been created at: {project_path}
 
 Please help me adapt and customize this project according to my requirements.
 You can edit files, add new functionality, and help me implement the specific features I need.
-        """
+"""
 
-        await client.query(context_message)
+    # Create temporary file with context
+    import time
 
-        # Process initial response
-        console.print("\n[bold]Claude:[/bold]")
-        async for message in client.receive_response():
-            if isinstance(message, AssistantMessage):
-                for block in message.content:
-                    if isinstance(block, TextBlock):
-                        console.print(block.text)
+    temp_file = f"/tmp/claude-create-ds-app-{int(time.time())}.md"
 
-        # Interactive loop
-        console.print("\n[dim]You can now interact with Claude. Type 'exit' to finish.[/dim]\n")
+    try:
+        # Write context to temp file
+        with open(temp_file, "w") as f:
+            f.write(context_message)
 
-        while True:
-            try:
-                user_input = input("[bold cyan]You:[/bold cyan] ")
-                if user_input.lower() in ["exit", "quit", "done"]:
-                    break
+        console.print(f"\n[dim]Opening {editor} for you to review/edit the initial prompt...[/dim]")
 
-                await client.query(user_input)
+        # Open editor for user to review/edit
+        subprocess.run([editor, temp_file], check=True)
 
-                console.print("\n[bold]Claude:[/bold]")
-                async for message in client.receive_response():
-                    if isinstance(message, AssistantMessage):
-                        for block in message.content:
-                            if isinstance(block, TextBlock):
-                                console.print(block.text)
-                console.print()
+        # Read the (possibly edited) content
+        with open(temp_file) as f:
+            final_content = f.read()
 
-            except KeyboardInterrupt:
-                console.print("\n[yellow]Interrupted. Exiting Claude session.[/yellow]")
-                break
-            except Exception as e:
-                console.print(f"[red]Error: {e}[/red]")
-                continue
+        # Check if file has content
+        if not final_content.strip():
+            console.print("[yellow]Empty prompt. Skipping Claude adaptation.[/yellow]")
+            return
+
+        console.print("\n[bold cyan]Starting Claude with your prompt...[/bold cyan]")
+
+        # Change to project directory and run claude
+        original_cwd = os.getcwd()
+        os.chdir(project_path)
+
+        try:
+            subprocess.run(["claude", final_content], check=True)
+        finally:
+            os.chdir(original_cwd)
+
+    except subprocess.CalledProcessError:
+        console.print("[yellow]Editor or Claude session was interrupted.[/yellow]")
+    except FileNotFoundError as e:
+        if "claude" in str(e):
+            console.print("[red]Error: 'claude' command not found. Please install Claude CLI.[/red]")
+        else:
+            console.print(f"[red]Error: {e}[/red]")
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+    finally:
+        # Clean up temp file
+        if os.path.exists(temp_file):
+            os.unlink(temp_file)
 
 
-async def run_claude_code_workflow(user_instructions: str, project_path: pathlib.Path, console: Console) -> None:
+async def run_claude_code_workflow(
+    user_instructions: str, project_path: pathlib.Path, context: dict[str, Any], console: Console
+) -> None:
     """
     Run the complete Claude Code workflow for project generation.
 
@@ -599,6 +643,7 @@ async def run_claude_code_workflow(user_instructions: str, project_path: pathlib
     Args:
         user_instructions: Initial project description from user
         project_path: Path where to create the project
+        context: Template context with user answers
         console: Rich console for output
     """
     console.print("[bold cyan]Starting Claude Code project generation workflow...[/bold cyan]\n")
@@ -606,7 +651,7 @@ async def run_claude_code_workflow(user_instructions: str, project_path: pathlib
     try:
         # Step 1: Generate follow-up questions
         console.print("[bold]Step 1:[/bold] Generating follow-up questions...")
-        questions = await get_follow_up_questions(user_instructions)
+        questions = await get_follow_up_questions(user_instructions, context)
 
         # Note: The actual questionnaire presentation will be handled by hooks.py
         # which will call the next steps with the answers
@@ -619,7 +664,11 @@ async def run_claude_code_workflow(user_instructions: str, project_path: pathlib
 
 
 async def continue_workflow_with_answers(
-    user_instructions: str, questionnaire_answers: dict[str, Any], project_path: pathlib.Path, console: Console
+    user_instructions: str,
+    questionnaire_answers: dict[str, Any],
+    project_path: pathlib.Path,
+    context: dict[str, Any],
+    console: Console,
 ) -> None:
     """
     Continue the workflow after getting questionnaire answers.
@@ -630,12 +679,13 @@ async def continue_workflow_with_answers(
         user_instructions: Initial project description
         questionnaire_answers: User's answers to the questionnaire
         project_path: Path where to create the project
+        context: Template context with user answers
         console: Rich console for output
     """
     try:
         # Step 2: Generate project structure
         console.print("\n[bold]Step 2:[/bold] Generating project structure...")
-        project_structure = await generate_project_structure(user_instructions, questionnaire_answers)
+        project_structure = await generate_project_structure(user_instructions, questionnaire_answers, context)
 
         # Step 3: Display and allow editing of structure
         console.print("\n[bold]Step 3:[/bold] Review project structure")

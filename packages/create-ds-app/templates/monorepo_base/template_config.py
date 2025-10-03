@@ -37,7 +37,6 @@ class StandardTemplateConfig(TemplateConfig):
         Override this method in template configs to add custom file filtering logic.
         """
         # Handle CI/CD file inclusion based on user choice
-        print(file_path, context)
         ci_provider = context["ci"]
 
         # Include GitHub Actions files only if GitHub is selected
