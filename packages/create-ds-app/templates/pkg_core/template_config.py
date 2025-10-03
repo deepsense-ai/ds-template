@@ -26,15 +26,15 @@ def get_pyproject_data() -> dict:
     return data
 
 
-class PkgLibTemplateConfig(TemplateConfig):
-    """Python package / Library code template configuration"""
+class PkgCoreTemplateConfig(TemplateConfig):
+    """Core package template configuration"""
 
-    name: str = "Library"
-    description: str = "Shared library that may be used between one or more components, packaged as a Python module"
+    name: str = "Core package"
+    description: str = "Core logic, configuration and utilities used by every component in the project"
     template_group: str = "package"
 
     questions: list = [
-        TextQuestion(name="pkg_name", message="Package name (will be used as module name)", default="my-lib-package"),
+        TextQuestion(name="pkg_name", message="Package name (will be used as module name)", default="core"),
     ]
 
     def __init__(self):
@@ -54,4 +54,4 @@ class PkgLibTemplateConfig(TemplateConfig):
 
 
 # Create instance of the config to be imported
-config = PkgLibTemplateConfig()
+config = PkgCoreTemplateConfig()

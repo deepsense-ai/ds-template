@@ -1,24 +1,8 @@
 import pathlib
 from typing import Any
 
-from ds_templater import ConfirmQuestion, ListQuestion, TemplateConfig
-
-# Import CommonQuestions using a try-except for flexibility
-try:
-    from create_ds_app.questions import CommonQuestions
-except ImportError:
-    # Fallback if running standalone
-    from ds_templater import ListQuestion as ListQ
-    from ds_templater import TextQuestion
-
-    class CommonQuestions:
-        project_name = TextQuestion(name="project_name", message="Project name", default="my-ds-project")
-        python_version = ListQ(
-            name="python_version",
-            message="Select Python version",
-            choices=["3.13", "3.12", "3.11", "3.10"],
-            default="3.13",
-        )
+from create_ds_app.questions import CommonQuestions
+from ds_templater import ListQuestion, TemplateConfig
 
 
 class StandardTemplateConfig(TemplateConfig):
@@ -34,9 +18,12 @@ class StandardTemplateConfig(TemplateConfig):
         ListQuestion(name="ci", message="Select CI provider", choices=["GitHub", "GitLab", "None"], default="GitHub"),
         ListQuestion(
             name="claude-code",
-            message="Do you want to use Claude-code integration for faster project initialization?",
-            choices=["Yes", "No"],
-            default="No"
+            message="How would you like to initialize your project?",
+            choices=[
+                "Just generate packages (core by default, more to choose)",
+                "Run Claude-based workflow to create the app",
+            ],
+            default="Just generate packages (core by default, more to choose)",
         ),
     ]
 
@@ -56,19 +43,20 @@ class StandardTemplateConfig(TemplateConfig):
         # Include GitHub Actions files only if GitHub is selected
         if str(file_path).startswith(".github/") and ci_provider != "GitHub":
             return False
-            
+
         # Include GitLab CI file only if GitLab is selected
         if str(file_path).startswith(".gitlab-ci.yml") and ci_provider != "GitLab":
             return False
-            
+
         # Include license files only if CI is not "None"
         if str(file_path) in [".license-whitelist.txt", ".libraries-whitelist.txt"] and ci_provider == "None":
             return False
-            
+
         return True
 
     def get_conditional_directories(self):
         return {".github": ("ci", "GitHub")}
+
 
 # Create instance of the config to be imported
 config = StandardTemplateConfig()

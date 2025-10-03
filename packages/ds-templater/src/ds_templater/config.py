@@ -170,17 +170,11 @@ class MultiSelectQuestion(Question[list[str]]):
                     questionary.Choice(
                         title=choice["display_name"],
                         value=choice["value"],
-                        checked=choice["value"] in (self.default or [])
+                        checked=choice["value"] in (self.default or []),
                     )
                 )
             else:
-                qchoices.append(
-                    questionary.Choice(
-                        title=choice,
-                        value=choice,
-                        checked=choice in (self.default or [])
-                    )
-                )
+                qchoices.append(questionary.Choice(title=choice, value=choice, checked=choice in (self.default or [])))
 
         return questionary.checkbox(self.message, choices=qchoices).ask()
 

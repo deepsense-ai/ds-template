@@ -26,15 +26,17 @@ def get_pyproject_data() -> dict:
     return data
 
 
-class PkgLibTemplateConfig(TemplateConfig):
-    """Python package / Library code template configuration"""
+class PkgApiTemplateConfig(TemplateConfig):
+    """API package template configuration"""
 
-    name: str = "Library"
-    description: str = "Shared library that may be used between one or more components, packaged as a Python module"
+    name: str = "API package"
+    description: str = "RESTful API service that will be dockerized and deployed to servers"
     template_group: str = "package"
 
     questions: list = [
-        TextQuestion(name="pkg_name", message="Package name (will be used as module name)", default="my-lib-package"),
+        TextQuestion(name="pkg_name", message="Package name (will be used as module name)", default="api-service"),
+        TextQuestion(name="api_title", message="API title", default="My API Service"),
+        TextQuestion(name="api_port", message="API port", default="8000"),
     ]
 
     def __init__(self):
@@ -54,4 +56,4 @@ class PkgLibTemplateConfig(TemplateConfig):
 
 
 # Create instance of the config to be imported
-config = PkgLibTemplateConfig()
+config = PkgApiTemplateConfig()

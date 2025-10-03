@@ -15,12 +15,14 @@ from .config import (
     TextQuestion,
     WrappedOption,
 )
+from .hooks import HookConfig
 from .registry import TemplateRegistry
 from .renderer import TemplateRenderer
 
 __all__ = [
     "CLICommands",
     "ConfirmQuestion",
+    "HookConfig",
     "ListQuestion",
     "MultiSelectQuestion",
     "ParameterHandler",

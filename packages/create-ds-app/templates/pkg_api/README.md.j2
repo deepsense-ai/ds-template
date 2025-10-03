@@ -1,0 +1,59 @@
+# {{ pkg_name }}
+
+{{ api_title }} - A RESTful API service built with FastAPI.
+
+## Features
+
+- **FastAPI Framework**: Modern, fast web framework for building APIs
+- **Automatic Documentation**: Interactive API docs (Swagger UI and ReDoc)
+- **Type Safety**: Full type hints and Pydantic validation
+- **Async Support**: Built-in async/await support for high performance
+- **Docker Ready**: Includes Dockerfile for containerization
+
+## Installation
+
+For development:
+
+```bash
+pip install -e "packages/{{ pkg_name }}[dev]"
+```
+
+## Running the API
+
+### Development
+
+```bash
+cd packages/{{ pkg_name }}
+uvicorn {{ pkg_name }}.main:app --reload --port {{ api_port }}
+```
+
+### Production with Docker
+
+```bash
+cd packages/{{ pkg_name }}
+docker build -t {{ pkg_name }} .
+docker run -p {{ api_port }}:{{ api_port }} {{ pkg_name }}
+```
+
+## API Documentation
+
+Once running, access the interactive API documentation at:
+
+- Swagger UI: http://localhost:{{ api_port }}/docs
+- ReDoc: http://localhost:{{ api_port }}/redoc
+
+## Testing
+
+```bash
+pytest packages/{{ pkg_name }}/tests
+```
+
+## Configuration
+
+The API uses environment variables for configuration. Create a `.env` file:
+
+```env
+API_PORT={{ api_port }}
+API_HOST=0.0.0.0
+LOG_LEVEL=INFO
+```

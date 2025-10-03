@@ -39,6 +39,8 @@ class TemplateRenderer:
         Returns:
             Dictionary of answers to the template questions.
         """
+        import sys
+
         if cli_args is None:
             cli_args = {}
 
@@ -52,7 +54,12 @@ class TemplateRenderer:
                 print(f"Using CLI value for {question.name}: {cli_args[question.name]}")
             else:
                 # Prompt user for value
-                answers[question.name] = question.prompt()
+                answer = question.prompt()
+                # Check if user cancelled with Ctrl-C
+                if answer is None:
+                    # Exit immediately without further messages
+                    sys.exit(1)
+                answers[question.name] = answer
 
         return answers
 
@@ -83,8 +90,9 @@ class TemplateRenderer:
 
             # Check conditional directories
             for dir_name, (context_var, expected_value) in conditional_directories.items():
-                if ((str(rel_path).startswith(dir_name) or str(rel_path) == dir_name) and
-                        context.get(context_var) != expected_value):
+                if (str(rel_path).startswith(dir_name) or str(rel_path) == dir_name) and context.get(
+                    context_var
+                ) != expected_value:
                     return False
 
             # Check template config's custom file inclusion logic

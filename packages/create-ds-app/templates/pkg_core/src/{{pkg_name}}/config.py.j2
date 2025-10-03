@@ -1,0 +1,62 @@
+"""Configuration management for the project."""
+
+from typing import Literal
+from pathlib import Path
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    """Application settings loaded from environment variables."""
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    # Environment
+    environment: Literal["development", "staging", "production"] = Field(
+        default="development",
+        description="Application environment"
+    )
+
+    # API Configuration
+    api_key: str | None = Field(
+        default=None,
+        description="API key for external services"
+    )
+
+    # Database
+    database_url: str = Field(
+        default="sqlite:///./app.db",
+        description="Database connection URL"
+    )
+
+    # Paths
+    data_dir: Path = Field(
+        default=Path("data"),
+        description="Directory for data files"
+    )
+
+    # Logging
+    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = Field(
+        default="INFO",
+        description="Logging level"
+    )
+
+    # Feature flags
+    debug_mode: bool = Field(
+        default=False,
+        description="Enable debug mode"
+    )
+
+    def __init__(self, **values):
+        super().__init__(**values)
+        # Ensure data directory exists
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+
+
+# Global settings instance
+settings = Settings()

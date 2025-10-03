@@ -29,8 +29,8 @@ def get_pyproject_data() -> dict:
 class PkgCliTemplateConfig(TemplateConfig):
     """Python CLI package template configuration"""
 
-    name: str = "Python CLI package"
-    description: str = "CLI application using typer and rich"
+    name: str = "CLI"
+    description: str = "Developer tools, evaluation pipelines and similar utilities packaged as executable commands"
     template_group: str = "package"
 
     questions: list = [

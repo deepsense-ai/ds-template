@@ -5,19 +5,17 @@ CLI utilities and command handlers for template operations.
 import json
 import os
 import pathlib
-import subprocess
 import shutil
+import subprocess
 import sys
 import tempfile
-from typing import Any, Optional
+from typing import Any
 
 import questionary
 import typer
 import yaml
-from loguru import logger
 from rich.console import Console
 from rich.panel import Panel
-from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from .config import TemplateConfig
 from .registry import TemplateRegistry
@@ -176,13 +174,20 @@ class TemplateSelector:
 class CLICommands:
     """Generic CLI commands for template operations."""
 
-    def __init__(self, templates_dir: pathlib.Path):
-        """Initialize CLI commands with templates directory."""
+    def __init__(self, templates_dir: pathlib.Path, post_creation_hooks: list | None = None):
+        """
+        Initialize CLI commands with templates directory.
+
+        Args:
+            templates_dir: Path to the templates directory
+            post_creation_hooks: Optional list of hook configurations to run after project creation
+        """
         self.templates_dir = templates_dir
         self.registry = self._setup_registry()
         self.renderer = TemplateRenderer()
         self.param_handler = ParameterHandler()
         self.selector = TemplateSelector()
+        self.post_creation_hooks = post_creation_hooks or []
 
     def _setup_registry(self) -> TemplateRegistry:
         """Set up the template registry with available templates."""
@@ -284,22 +289,8 @@ class CLICommands:
 
         self.renderer.create_project(template_config, template_path, str(project_path), context)
 
-        # Run post-creation hooks (like uv sync)
-        self._run_post_creation_hooks(project_path)
-
-        if context.get("claude-code", "No") == "Yes":
-            console.print("\n[bold cyan]Running Claude-code generation:[/bold cyan]")
-            instructions = self.open_file_in_editor_and_read(
-                "# Enter your instructions below. Lines starting with # will be ignored.\n"
-            )
-            if instructions is None:
-                console.print("\n[bold cyan]Next steps:[/bold cyan]")
-                console.print(f"  cd {project_name}")
-                console.print("  # Review the generated project structure")
-                console.print("  # Start developing!")
-
-            print("Provided instructions: ", instructions)
-            # TODO: Add claude-code integration
+        # Run post-creation hooks
+        self._run_post_creation_hooks(project_path, context, template_config)
 
         # Show next steps
         console.print("\n[bold cyan]Next steps:[/bold cyan]")
@@ -361,21 +352,36 @@ class CLICommands:
             # Print to stdout (not using console.print to avoid formatting)
             print(yaml_output)
 
-    def _run_post_creation_hooks(self, project_path: pathlib.Path) -> None:
-        """Run post-creation hooks like installing dependencies."""
-        # Run uv sync in the new project directory
-        console.print("\n[bold cyan]Running uv sync to install dependencies...[/bold cyan]")
-        try:
-            result = subprocess.run(["uv", "sync"], cwd=project_path, capture_output=True, text=True, check=True)
-            console.print("[green]✓ Dependencies installed successfully![/green]")
-        except subprocess.CalledProcessError as e:
-            console.print("[yellow]Warning: uv sync failed with error:[/yellow]")
-            console.print(f"[yellow]{e.stderr}[/yellow]")
-            console.print("[yellow]You may need to run 'uv sync' manually.[/yellow]")
-        except FileNotFoundError:
-            console.print("[yellow]Warning: uv is not installed. Please install uv and run 'uv sync' manually.[/yellow]")
+    def _run_post_creation_hooks(
+        self, project_path: pathlib.Path, context: dict[str, Any], template_config: TemplateConfig
+    ) -> None:
+        """
+        Run post-creation hooks.
 
-    def open_file_in_editor_and_read(self, text: str) -> Optional[str]:
+        Args:
+            project_path: Path to the created project
+            context: Template context with user answers
+            template_config: The template configuration being used
+        """
+        for hook_config in self.post_creation_hooks:
+            # Check if it's a HookConfig object or plain function (for backward compatibility)
+            if hasattr(hook_config, "should_run"):
+                # HookConfig object
+                if hook_config.should_run(template_config.location, template_config.template_group):
+                    try:
+                        console.print(f"[cyan]Running hook: {hook_config.name}[/cyan]")
+                        hook_config.hook(project_path, context, console)
+                    except Exception as e:
+                        console.print(f"[yellow]Warning: Hook {hook_config.name} failed with error: {e}[/yellow]")
+            else:
+                # Plain function (backward compatibility)
+                try:
+                    hook_config(project_path, context, console)
+                except Exception as e:
+                    hook_name = getattr(hook_config, "__name__", "unknown")
+                    console.print(f"[yellow]Warning: Hook {hook_name} failed with error: {e}[/yellow]")
+
+    def open_file_in_editor_and_read(self, text: str) -> str | None:
         """
         Open temporary text file to edit and read it.
 
@@ -384,7 +390,7 @@ class CLICommands:
         """
         editor = os.environ.get("EDITOR")
         if not editor:
-            raise EnvironmentError("The $EDITOR environment variable is not set. Please set it (e.g., export EDITOR=nano)")
+            raise OSError("The $EDITOR environment variable is not set. Please set it (e.g., export EDITOR=nano)")
 
         if not shutil.which(editor.split()[0]):
             raise FileNotFoundError(f"Editor '{editor}' not found in PATH.")
@@ -400,7 +406,7 @@ class CLICommands:
             subprocess.run([*editor.split(), temp_file_path], check=True)
 
             # After editor closes, read contents
-            with open(temp_file_path, "r", encoding="utf-8") as f:
+            with open(temp_file_path, encoding="utf-8") as f:
                 lines = f.readlines()
 
             # Filter out comments and empty lines
@@ -419,13 +425,17 @@ class CLICommands:
         finally:
             os.unlink(temp_file_path)
 
-def create_app(templates_dir: pathlib.Path) -> typer.Typer:
+
+def create_app(
+    templates_dir: pathlib.Path, post_creation_hooks: list | None = None, template_group: str | None = None
+) -> typer.Typer:
     """
     Create a Typer app with all template commands registered.
 
     Args:
         templates_dir: Path to the templates directory
-
+        post_creation_hooks: Optional list of hook functions to run after project creation
+        template_group: Optional template group to filter templates
     Returns:
         Configured Typer app
     """
@@ -434,7 +444,7 @@ def create_app(templates_dir: pathlib.Path) -> typer.Typer:
         help="Set up a modern data science project by running one command",
     )
 
-    cli = CLICommands(templates_dir)
+    cli = CLICommands(templates_dir, post_creation_hooks=post_creation_hooks)
 
     # Register the main callback for empty command (interactive mode)
     @app.callback(invoke_without_command=True)
@@ -461,7 +471,7 @@ def create_app(templates_dir: pathlib.Path) -> typer.Typer:
                 params=params,
                 params_file=params_file,
                 edit=edit,
-                template_group="monorepo",  # Default to monorepo for backward compatibility
+                template_group=template_group,
             )
 
     @app.command("list")

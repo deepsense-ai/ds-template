@@ -1,0 +1,90 @@
+"""Sidebar component."""
+
+import streamlit as st
+from datetime import datetime, timedelta
+
+
+def render_sidebar():
+    """Render the application sidebar."""
+    with st.sidebar:
+        st.header("🎛️ Controls")
+
+        # Date range filter
+        st.subheader("📅 Date Range")
+        col1, col2 = st.columns(2)
+        with col1:
+            start_date = st.date_input(
+                "Start Date",
+                value=datetime.now() - timedelta(days=30),
+            )
+        with col2:
+            end_date = st.date_input(
+                "End Date",
+                value=datetime.now(),
+            )
+
+        # Category filter
+        st.subheader("📂 Categories")
+        categories = st.multiselect(
+            "Select Categories",
+            ["Category A", "Category B", "Category C", "Category D"],
+            default=["Category A", "Category B"],
+        )
+
+        # Numeric filters
+        st.subheader("🔢 Numeric Filters")
+        min_value = st.slider(
+            "Minimum Value",
+            min_value=0,
+            max_value=100,
+            value=20,
+        )
+        max_value = st.slider(
+            "Maximum Value",
+            min_value=0,
+            max_value=100,
+            value=80,
+        )
+
+        # Advanced options
+        with st.expander("⚙️ Advanced Options"):
+            show_outliers = st.checkbox("Show Outliers", value=False)
+            aggregation = st.radio(
+                "Aggregation",
+                ["Daily", "Weekly", "Monthly"],
+                index=0,
+            )
+            chart_type = st.selectbox(
+                "Chart Type",
+                ["Line", "Bar", "Scatter", "Area"],
+            )
+
+        # Action buttons
+        st.markdown("---")
+        col1, col2 = st.columns(2)
+        with col1:
+            apply_button = st.button("Apply Filters", type="primary", use_container_width=True)
+        with col2:
+            reset_button = st.button("Reset", use_container_width=True)
+
+        if reset_button:
+            st.rerun()
+
+        # Info section
+        st.markdown("---")
+        st.info(
+            "Use the filters above to customize your view. "
+            "Click 'Apply Filters' to update the dashboard."
+        )
+
+    return {
+        "start_date": start_date,
+        "end_date": end_date,
+        "categories": categories,
+        "min_value": min_value,
+        "max_value": max_value,
+        "show_outliers": show_outliers,
+        "aggregation": aggregation,
+        "chart_type": chart_type,
+        "apply": apply_button,
+    }

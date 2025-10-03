@@ -1,0 +1,28 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY pyproject.toml ./
+COPY src/ ./src/
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -e .
+
+# Expose port
+EXPOSE {{ app_port }}
+
+# Streamlit configuration
+RUN mkdir -p ~/.streamlit && \
+    echo "[server]" > ~/.streamlit/config.toml && \
+    echo "port = {{ app_port }}" >> ~/.streamlit/config.toml && \
+    echo "address = '0.0.0.0'" >> ~/.streamlit/config.toml && \
+    echo "headless = true" >> ~/.streamlit/config.toml
+
+# Run the application
+CMD ["streamlit", "run", "src/{{ pkg_name }}/app.py"]

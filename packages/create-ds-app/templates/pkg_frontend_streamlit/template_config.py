@@ -26,15 +26,17 @@ def get_pyproject_data() -> dict:
     return data
 
 
-class PkgLibTemplateConfig(TemplateConfig):
-    """Python package / Library code template configuration"""
+class PkgFrontendStreamlitTemplateConfig(TemplateConfig):
+    """Streamlit frontend package template configuration"""
 
-    name: str = "Library"
-    description: str = "Shared library that may be used between one or more components, packaged as a Python module"
+    name: str = "Streamlit Frontend"
+    description: str = "Interactive web application using Streamlit framework for rapid prototyping"
     template_group: str = "package"
 
     questions: list = [
-        TextQuestion(name="pkg_name", message="Package name (will be used as module name)", default="my-lib-package"),
+        TextQuestion(name="pkg_name", message="Package name (will be used as module name)", default="frontend-streamlit"),
+        TextQuestion(name="app_title", message="Application title", default="My Streamlit App"),
+        TextQuestion(name="app_port", message="Application port", default="8501"),
     ]
 
     def __init__(self):
@@ -54,4 +56,4 @@ class PkgLibTemplateConfig(TemplateConfig):
 
 
 # Create instance of the config to be imported
-config = PkgLibTemplateConfig()
+config = PkgFrontendStreamlitTemplateConfig()
