@@ -295,6 +295,7 @@ name = "create-ds-app"
 version = "0.1.0"
 source = { editable = "packages/create-ds-app" }
 dependencies = [
+    { name = "claude-agent-sdk" },
     { name = "ds-templater" },
     { name = "loguru" },
     { name = "questionary" },
@@ -305,6 +306,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "claude-agent-sdk", specifier = ">=0.1.0" },
     { name = "ds-templater", editable = "packages/ds-templater" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "questionary", specifier = ">=2.1.0" },

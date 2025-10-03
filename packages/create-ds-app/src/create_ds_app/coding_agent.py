@@ -692,7 +692,8 @@ async def continue_workflow_with_answers(
         display_project_tree(project_structure, console)
 
         # Ask if user wants to edit
-        edit_response = input("\n[bold cyan]Would you like to edit the structure? (y/N):[/bold cyan] ")
+        console.print("\n[bold cyan]Would you like to edit the structure? (y/N):[/bold cyan]", end=" ")
+        edit_response = input()
         if edit_response.lower() == "y":
             edited_structure = edit_project_structure(project_structure, console)
             if edited_structure:
@@ -701,7 +702,8 @@ async def continue_workflow_with_answers(
                 display_project_tree(project_structure, console)
 
         # Step 4: Ask if we should generate packages
-        generate_response = input("\n[bold cyan]Generate the project packages? (Y/n):[/bold cyan] ")
+        console.print("\n[bold cyan]Generate the project packages? (Y/n):[/bold cyan]", end=" ")
+        generate_response = input()
         if generate_response.lower() != "n":
             # Step 5: Generate packages
             console.print("\n[bold]Step 4:[/bold] Generating packages...")
