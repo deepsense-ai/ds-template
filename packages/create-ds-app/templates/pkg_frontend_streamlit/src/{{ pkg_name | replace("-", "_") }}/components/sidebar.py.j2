@@ -2,12 +2,22 @@
 
 import streamlit as st
 from datetime import datetime, timedelta
-
+from pathlib import Path
+from {{ pkg_name }}.utils.branding import load_branding_config
 
 def render_sidebar():
     """Render the application sidebar."""
+    # Load branding configuration
+    branding = load_branding_config()
+    
     with st.sidebar:
-        st.header("🎛️ Controls")
+        # Add branding header with logo
+        if branding.get("logo_path", None):
+            logo_path = Path(__file__).parent.parent.parent.parent.parent / "branding" / branding["logo_path"]
+            if logo_path.exists():
+                st.image(str(logo_path), width=100)
+        
+        st.header(f"🎛️ {branding.get('name', 'My App')}")
 
         # Date range filter
         st.subheader("📅 Date Range")

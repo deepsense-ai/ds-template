@@ -1,6 +1,6 @@
 [project]
 name = "{{ pkg_name }}"
-version = "{{ version }}"
+version = "0.1.0"
 description = "A Python library package"
 readme = "README.md"
 requires-python = ">={{ python_version }}"
@@ -34,7 +34,7 @@ build-backend = "hatchling.build"
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/{{ pkg_name }}"]
+packages = ["src/{{ pkg_name | replace("-", "_") }}"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

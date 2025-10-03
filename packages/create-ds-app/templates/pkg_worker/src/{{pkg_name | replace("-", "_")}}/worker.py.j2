@@ -4,7 +4,7 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 
-from {{ pkg_name }}.config import settings
+from {{ pkg_name | replace("-", "_") }}.config import settings
 
 # Create Celery instance
 celery_app = Celery(

@@ -1,21 +1,63 @@
 """Main Streamlit application."""
 
+import base64
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 from pathlib import Path
 
-from {{ pkg_name }}.config import settings
-from {{ pkg_name }}.components.sidebar import render_sidebar
-from {{ pkg_name }}.utils.data_loader import load_sample_data
+from {{ pkg_name | replace("-", "_") }}.config import settings
+from {{ pkg_name | replace("-", "_") }}.components.sidebar import render_sidebar
+from {{ pkg_name | replace("-", "_") }}.utils.data_loader import load_sample_data
+from {{ pkg_name | replace("-", "_") }}.utils.branding import load_branding_config
+
+branding = load_branding_config()
 
 # Page configuration
 st.set_page_config(
-    page_title="{{ app_title }}",
+    page_title=branding["name"],
     page_icon="🚀",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# Apply branding CSS
+{% raw %}
+def apply_branding_css():
+    """Apply branding colors and styles."""
+    primary_color = branding.get("primaryColor", "#1B54FF")
+    secondary_color = branding.get("secondColor", "#1A1A1A")
+    third_color = branding.get("thirdColor", "#FFFFFF")
+
+    css = f"""
+    <style>
+    .main-header {{
+        color: {primary_color};
+        text-align: center;
+        padding: 1rem 0;
+    }}
+    .branding-container {{
+        background-color: {third_color};
+        border: 2px solid {primary_color};
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }}
+    .stButton > button {{
+        background-color: {primary_color};
+        color: {third_color};
+    }}
+    .stButton > button:hover {{
+        background-color: {secondary_color};
+        color: {third_color};
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
+{% endraw %}
+
+# Apply branding styles
+apply_branding_css()
 
 # Initialize session state
 if "data" not in st.session_state:
@@ -29,9 +71,41 @@ def main():
 
     # Render sidebar
     filters = render_sidebar()
+    # Header with logo
+    app_name = branding.get("name", "My App")
+    logo_path = branding.get("logo_path", None)
+    logo_html = ""
+    # Check if logo exists and encode it to Base64
+    if logo_path and Path(logo_path).exists():
+        with open(logo_path, "rb") as img_file:
+            encoded = base64.b64encode(img_file.read()).decode("utf-8")
+            logo_html = f"<img src='data:image/png;base64,{encoded}' style='height:40px; vertical-align: middle; margin-right: 10px;'>"
 
-    # Main content
-    st.title("🚀 {{ app_title }}")
+    # Render the header with logo and app name
+    st.markdown(
+        f"""
+        <div style='
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+        '>
+            {logo_html}
+            <span style='font-size: 1.4rem; font-weight: 600;'>{app_name}</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+{#    # Main content with branding#}
+{#    st.markdown(f'<h1 class="main-header">🚀 {branding.get("name", "{{ app_title }}")}</h1>', unsafe_allow_html=True)#}
+{#    #}
+{#    # Add logo if available#}
+{#    logo_path = branding.get("logo_path", None)#}
+{#    if logo_path.exists():#}
+{#        col1, col2, col3 = st.columns([1, 2, 1])#}
+{#        with col2:#}
+{#            st.image(str(logo_path), width=200)#}
+{#    #}
     st.markdown("---")
 
     # Create tabs

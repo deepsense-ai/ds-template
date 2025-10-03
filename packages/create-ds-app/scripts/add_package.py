@@ -51,7 +51,10 @@ def add_package(
             return False
 
         # Map type to template name
-        template_map = {"cli": "pkg_cli", "lib": "pkg_lib"}
+        template_map = {
+            "cli": "pkg_frontend_streamlit",
+            # "lib": "pkg_lib"
+        }
 
         if package_type not in template_map:
             print(f"Error: Invalid package type '{package_type}'. Must be 'cli' or 'lib'")

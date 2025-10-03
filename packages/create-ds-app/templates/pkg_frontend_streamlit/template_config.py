@@ -1,13 +1,13 @@
 import tomllib
 from pathlib import Path
+from typing import Any
 
 from ds_templater import TemplateConfig, TextQuestion
 
 
 def validate_monorepo() -> bool:
     """Check if we're inside a monorepo by looking for pyproject.toml at root."""
-    current_dir = Path.cwd()
-    pyproject_path = current_dir / "pyproject.toml"
+    pyproject_path = Path.cwd() / "pyproject.toml"
 
     if not pyproject_path.exists():
         raise ValueError("pyproject.toml not found in current directory. Make sure you're in a monorepo root.")
@@ -45,14 +45,14 @@ class PkgFrontendStreamlitTemplateConfig(TemplateConfig):
         self.pyproject_data = get_pyproject_data()
 
         # Extract Python version from pyproject.toml
-        requires_python = self.pyproject_data.get("project", {}).get("requires-python", ">=3.10")
-        self.python_version = requires_python
+        requires_python = self.pyproject_data.get("project", {}).get("requires-python", "3.13")
+        self.python_version = requires_python.replace(">=", "")
 
-    def get_template_vars(self) -> dict:
-        """Get template variables including pyproject data."""
-        base_vars = super().get_template_vars()
-        base_vars.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
-        return base_vars
+    def build_context(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Build additional context including pyproject data."""
+        additional_context = super().build_context(context)
+        additional_context.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
+        return additional_context
 
 
 # Create instance of the config to be imported

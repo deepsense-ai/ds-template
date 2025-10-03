@@ -1,5 +1,6 @@
 import tomllib
 from pathlib import Path
+from typing import Any
 
 from ds_templater import TemplateConfig, TextQuestion
 
@@ -44,13 +45,14 @@ class PkgLibTemplateConfig(TemplateConfig):
 
         # Extract Python version from pyproject.toml
         requires_python = self.pyproject_data.get("project", {}).get("requires-python", ">=3.10")
-        self.python_version = requires_python
+        # Extract just the version number without the >= prefix
+        self.python_version = requires_python.replace(">=", "")
 
-    def get_template_vars(self) -> dict:
-        """Get template variables including pyproject data."""
-        base_vars = super().get_template_vars()
-        base_vars.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
-        return base_vars
+    def build_context(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Build additional context including pyproject data."""
+        additional_context = super().build_context(context)
+        additional_context.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
+        return additional_context
 
 
 # Create instance of the config to be imported

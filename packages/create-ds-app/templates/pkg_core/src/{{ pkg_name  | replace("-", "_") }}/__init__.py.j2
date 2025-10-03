@@ -1,0 +1,8 @@
+"""{{ pkg_name }} - Core package for the project."""
+
+__version__ = "0.1.0"
+
+from {{ pkg_name | replace("-", "_") }}.config import settings
+from {{ pkg_name | replace("-", "_") }}.logging import get_logger
+
+__all__ = ["settings", "get_logger"]

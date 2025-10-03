@@ -93,13 +93,6 @@ def claude_code_setup_hook(project_path: pathlib.Path, context: dict[str, Any], 
     if instructions is None:
         return
 
-    # Import the coding agent module
-    try:
-        from create_ds_app import coding_agent
-    except ImportError:
-        console.print("[red]Error: Could not import coding_agent module.[/red]")
-        return
-
     # Run the async workflow
     try:
         _run_claude_workflow(instructions, project_path, context, console)
@@ -120,7 +113,6 @@ def _run_claude_workflow(
         console: Rich console for output
     """
     from loguru import logger
-
     from create_ds_app import coding_agent
 
     # Step 1: Generate follow-up questions
@@ -327,7 +319,7 @@ def generate_packages_hook(project_path: pathlib.Path, context: dict[str, Any], 
             else:
                 # Other packages use project-name-suffix format
                 suffix = pkg_type.replace("pkg_", "")
-                pkg_name = f"{project_name}-{suffix}"
+                pkg_name = f"{project_name.replace("-", "_")}_{suffix}"
 
             console.print(f"  [cyan]•[/cyan] Generating {pkg_type}: {pkg_name}")
 

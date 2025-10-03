@@ -2,6 +2,6 @@
 
 __version__ = "{{ version }}"
 
-from .core import hello_world
+from {{ pkg_name | replace("-", "_") }}.core import hello_world
 
 __all__ = ["hello_world"]
