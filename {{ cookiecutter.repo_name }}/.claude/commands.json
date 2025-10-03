@@ -1,0 +1,9 @@
+{
+  "commands": [
+    {
+      "name": "create-chatbot",
+      "description": "Create a Streamlit chatbot UI with Pydantic AI backend",
+      "prompt_file": ".claude/prompts/chatbot-ui.md"
+    }
+  ]
+}
