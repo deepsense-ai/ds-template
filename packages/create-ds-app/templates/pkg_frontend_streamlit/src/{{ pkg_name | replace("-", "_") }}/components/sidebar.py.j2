@@ -3,7 +3,7 @@
 import streamlit as st
 from datetime import datetime, timedelta
 from pathlib import Path
-from {{ pkg_name | refactor("-", "_") }}.utils.branding import load_branding_config
+from {{ pkg_name | replace("-", "_") }}.utils.branding import load_branding_config
 
 def render_sidebar():
     """Render the application sidebar."""

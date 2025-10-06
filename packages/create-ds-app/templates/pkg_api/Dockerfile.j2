@@ -18,4 +18,4 @@ RUN pip install --no-cache-dir -e .
 EXPOSE {{ api_port }}
 
 # Run the application
-CMD ["uvicorn", "{{ pkg_name }}.main:app", "--host", "0.0.0.0", "--port", "{{ api_port }}"]
+CMD ["uvicorn", "{{ pkg_name | replace('-', '_') }}.main:app", "--host", "0.0.0.0", "--port", "{{ api_port }}"]
