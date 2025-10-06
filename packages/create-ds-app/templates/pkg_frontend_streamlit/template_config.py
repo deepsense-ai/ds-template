@@ -51,7 +51,14 @@ class PkgFrontendStreamlitTemplateConfig(TemplateConfig):
     def build_context(self, context: dict[str, Any]) -> dict[str, Any]:
         """Build additional context including pyproject data."""
         additional_context = super().build_context(context)
-        additional_context.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
+        additional_context.update(
+            {
+                "python_version": self.python_version, 
+                "pyproject_data": self.pyproject_data,
+                "app_port": context.get("app_port", "8501"),
+                "app_title": context.get("app_title", "My Streamlit App"),
+            }
+        )
         return additional_context
 
 
