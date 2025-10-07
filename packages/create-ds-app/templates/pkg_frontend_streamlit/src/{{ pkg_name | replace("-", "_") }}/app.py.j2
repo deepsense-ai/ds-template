@@ -1,258 +1,331 @@
-"""Main Streamlit application."""
+"""Main Streamlit application - Chatbot Interface."""
 
 import base64
 import streamlit as st
-import pandas as pd
-import plotly.express as px
 from pathlib import Path
+from datetime import datetime
 
 from {{ pkg_name | replace("-", "_") }}.config import settings
-from {{ pkg_name | replace("-", "_") }}.components.sidebar import render_sidebar
-from {{ pkg_name | replace("-", "_") }}.utils.data_loader import load_sample_data
 from {{ pkg_name | replace("-", "_") }}.utils.branding import load_branding_config
+from {{ pkg_name | replace("-", "_") }}.utils.styles import get_chatbot_styles
 
 branding = load_branding_config()
 
 # Page configuration
 st.set_page_config(
     page_title=branding["name"],
-    page_icon="🚀",
+    page_icon="💬",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
-# Apply branding CSS
-{% raw %}
-def apply_branding_css():
-    """Apply branding colors and styles."""
-    primary_color = branding.get("primaryColor", "#1B54FF")
-    secondary_color = branding.get("secondColor", "#1A1A1A")
-    third_color = branding.get("thirdColor", "#FFFFFF")
-
-    css = f"""
-    <style>
-    .main-header {{
-        color: {primary_color};
-        text-align: center;
-        padding: 1rem 0;
-    }}
-    .branding-container {{
-        background-color: {third_color};
-        border: 2px solid {primary_color};
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 1rem 0;
-    }}
-    .stButton > button {{
-        background-color: {primary_color};
-        color: {third_color};
-    }}
-    .stButton > button:hover {{
-        background-color: {secondary_color};
-        color: {third_color};
-    }}
-    </style>
-    """
-    st.markdown(css, unsafe_allow_html=True)
-{% endraw %}
-
-# Apply branding styles
-apply_branding_css()
-
 # Initialize session state
-if "data" not in st.session_state:
-    st.session_state.data = None
-if "counter" not in st.session_state:
-    st.session_state.counter = 0
+if "conversations" not in st.session_state:
+    st.session_state.conversations = {}
+if "current_conversation_id" not in st.session_state:
+    st.session_state.current_conversation_id = None
+if "conversation_counter" not in st.session_state:
+    st.session_state.conversation_counter = 0
+if "dark_mode" not in st.session_state:
+    st.session_state.dark_mode = False
+if "show_timestamps" not in st.session_state:
+    st.session_state.show_timestamps = True
+
+# Apply custom CSS for chatbot interface
+def apply_chatbot_css():
+    """Apply custom CSS for a clean chatbot interface."""
+    css = get_chatbot_styles(
+        primary_color=branding.get("primaryColor", "#1B54FF"),
+        secondary_color=branding.get("secondColor", "#1A1A1A"),
+        third_color=branding.get("thirdColor", "#FFFFFF"),
+        dark_mode=st.session_state.dark_mode
+    )
+    st.markdown(css, unsafe_allow_html=True)
+
+apply_chatbot_css()
+
+
+def get_current_messages():
+    """Get messages from current conversation."""
+    if st.session_state.current_conversation_id is None:
+        return []
+    return st.session_state.conversations.get(st.session_state.current_conversation_id, {}).get("messages", [])
+
+
+def set_current_messages(messages):
+    """Set messages for current conversation."""
+    if st.session_state.current_conversation_id is not None:
+        if st.session_state.current_conversation_id not in st.session_state.conversations:
+            st.session_state.conversations[st.session_state.current_conversation_id] = {}
+        st.session_state.conversations[st.session_state.current_conversation_id]["messages"] = messages
+
+
+def create_new_conversation():
+    """Create a new conversation."""
+    st.session_state.conversation_counter += 1
+    conv_id = f"conv_{st.session_state.conversation_counter}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    st.session_state.conversations[conv_id] = {
+        "messages": [],
+        "created_at": datetime.now(),
+        "title": f"Chat {st.session_state.conversation_counter}"
+    }
+    st.session_state.current_conversation_id = conv_id
+    return conv_id
+
+
+def render_header():
+    """Render the branded header."""
+    app_name = branding.get("name", "My Chatbot")
+    logo_path = branding.get("logo_path", None)
+    logo_html = ""
+
+    if logo_path and Path(logo_path).exists():
+        with open(logo_path, "rb") as img_file:
+            encoded = base64.b64encode(img_file.read()).decode("utf-8")
+            logo_html = f"<img src='data:image/png;base64,{encoded}' class='header-logo'>"
+
+    # Action buttons in header
+    col1, col2, col3, col4, col5 = st.columns([5, 1, 1, 1, 1])
+
+    with col1:
+        header_html = f"""
+        <div class='header-left'>
+            {logo_html}
+            <div>
+                <div class='header-title'>{app_name}</div>
+                <div class='header-subtitle'>AI-Powered Assistant</div>
+            </div>
+        </div>
+        """
+        st.markdown(header_html, unsafe_allow_html=True)
+
+    with col2:
+        if st.button("➕ New", use_container_width=True, help="Start new conversation"):
+            create_new_conversation()
+            st.rerun()
+
+    with col3:
+        messages = get_current_messages()
+        if messages and st.button("🗑️ Clear", use_container_width=True, help="Clear current conversation"):
+            set_current_messages([])
+            st.rerun()
+
+    with col4:
+        messages = get_current_messages()
+        if messages:
+            export_text = "\n\n".join([
+                f"{msg['role'].upper()}: {msg['content']}"
+                for msg in messages
+            ])
+            st.download_button(
+                "💾 Export",
+                export_text,
+                file_name=f"chat_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+                mime="text/plain",
+                use_container_width=True,
+                help="Export conversation"
+            )
+
+    with col5:
+        mode_icon = "🌙" if not st.session_state.dark_mode else "☀️"
+        if st.button(mode_icon, use_container_width=True, help="Toggle dark/light mode"):
+            st.session_state.dark_mode = not st.session_state.dark_mode
+            st.rerun()
+
+
+def render_sidebar():
+    """Render the sidebar with conversation history."""
+    with st.sidebar:
+        # Logo and title
+        logo_path = branding.get("logo_path", None)
+        if logo_path and Path(logo_path).exists():
+            st.image(str(logo_path), width=80)
+
+        st.title("💬 Conversations")
+
+        if st.button("➕ New Chat", use_container_width=True, type="primary"):
+            create_new_conversation()
+            st.rerun()
+
+        st.markdown("---")
+
+        # List conversations
+        if st.session_state.conversations:
+            st.subheader("History")
+
+            # Sort conversations by creation time (newest first)
+            sorted_convs = sorted(
+                st.session_state.conversations.items(),
+                key=lambda x: x[1].get("created_at", datetime.now()),
+                reverse=True
+            )
+
+            for conv_id, conv_data in sorted_convs:
+                messages = conv_data.get("messages", [])
+                title = conv_data.get("title", "Untitled")
+                created_at = conv_data.get("created_at", datetime.now())
+
+                # Show conversation preview
+                preview = f"📝 {title}"
+                if messages:
+                    preview += f" ({len(messages)} msgs)"
+
+                is_active = conv_id == st.session_state.current_conversation_id
+
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    if st.button(
+                        preview,
+                        key=f"conv_{conv_id}",
+                        use_container_width=True,
+                        type="primary" if is_active else "secondary"
+                    ):
+                        st.session_state.current_conversation_id = conv_id
+                        st.rerun()
+
+                with col2:
+                    if st.button("🗑️", key=f"del_{conv_id}", help="Delete conversation"):
+                        del st.session_state.conversations[conv_id]
+                        if st.session_state.current_conversation_id == conv_id:
+                            st.session_state.current_conversation_id = None
+                        st.rerun()
+        else:
+            st.info("No conversations yet. Click 'New Chat' to start!")
+
+        st.markdown("---")
+
+        # Settings
+        with st.expander("⚙️ Settings"):
+            if st.checkbox("Show timestamps", value=st.session_state.show_timestamps, key="show_timestamps_check"):
+                st.session_state.show_timestamps = True
+            else:
+                st.session_state.show_timestamps = False
+
+
+
+
+def render_message(message: dict):
+    """Render a single message in the chat."""
+    role = message["role"]
+    content = message["content"]
+    timestamp = message.get("timestamp", "")
+
+    is_user = role == "user"
+    avatar = "👤" if is_user else "🤖"
+
+    # Use Streamlit's chat message component for better streaming support
+    with st.chat_message(name=role, avatar=avatar):
+        st.markdown(content)
+        if st.session_state.show_timestamps and timestamp:
+            st.caption(timestamp)
+
+
+def handle_user_input(user_input: str):
+    """Handle user input and generate response."""
+    if not user_input or not user_input.strip():
+        return
+
+    # Create new conversation if none exists
+    if st.session_state.current_conversation_id is None:
+        create_new_conversation()
+
+    # Get current messages
+    messages = get_current_messages()
+
+    # Add user message
+    timestamp = datetime.now().strftime("%H:%M")
+    messages.append({
+        "role": "user",
+        "content": user_input,
+        "timestamp": timestamp
+    })
+
+    # Save messages with user input
+    set_current_messages(messages)
+
+    # TODO: Integrate your AI/API logic here to generate assistant response
+    # For streaming responses, use this pattern:
+    # with st.chat_message("assistant", avatar="🤖"):
+    #     message_placeholder = st.empty()
+    #     full_response = ""
+    #     for chunk in your_streaming_api(user_input):
+    #         full_response += chunk
+    #         message_placeholder.markdown(full_response + "▌")
+    #     message_placeholder.markdown(full_response)
+    #     if st.session_state.show_timestamps:
+    #         st.caption(datetime.now().strftime("%H:%M"))
+
+    # Placeholder response (replace with your streaming logic)
+    assistant_response = "This is a placeholder response. Please integrate your AI/API logic here."
+
+    # Add assistant message
+    messages.append({
+        "role": "assistant",
+        "content": assistant_response,
+        "timestamp": datetime.now().strftime("%H:%M")
+    })
+
+    # Update conversation title based on first message
+    if len(messages) == 2:  # First exchange
+        title = user_input[:30] + "..." if len(user_input) > 30 else user_input
+        st.session_state.conversations[st.session_state.current_conversation_id]["title"] = title
+
+    # Save messages
+    set_current_messages(messages)
 
 
 def main():
     """Main application function."""
 
+    # Render header with controls
+    render_header()
+
     # Render sidebar
-    filters = render_sidebar()
-    # Header with logo
-    app_name = branding.get("name", "My App")
-    logo_path = branding.get("logo_path", None)
-    logo_html = ""
-    # Check if logo exists and encode it to Base64
-    if logo_path and Path(logo_path).exists():
-        with open(logo_path, "rb") as img_file:
-            encoded = base64.b64encode(img_file.read()).decode("utf-8")
-            logo_html = f"<img src='data:image/png;base64,{encoded}' style='height:40px; vertical-align: middle; margin-right: 10px;'>"
-
-    # Render the header with logo and app name
-    st.markdown(
-        f"""
-        <div style='
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            margin-bottom: 0.5rem;
-        '>
-            {logo_html}
-            <span style='font-size: 1.4rem; font-weight: 600;'>{app_name}</span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-{#    # Main content with branding#}
-{#    st.markdown(f'<h1 class="main-header">🚀 {branding.get("name", "{{ app_title }}")}</h1>', unsafe_allow_html=True)#}
-{#    #}
-{#    # Add logo if available#}
-{#    logo_path = branding.get("logo_path", None)#}
-{#    if logo_path.exists():#}
-{#        col1, col2, col3 = st.columns([1, 2, 1])#}
-{#        with col2:#}
-{#            st.image(str(logo_path), width=200)#}
-{#    #}
-    st.markdown("---")
-
-    # Create tabs
-    tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "📈 Analytics", "⚙️ Settings"])
-
-    with tab1:
-        render_dashboard(filters)
-
-    with tab2:
-        render_analytics()
-
-    with tab3:
-        render_settings()
-
-
-def render_dashboard(filters):
-    """Render the dashboard tab."""
-    col1, col2, col3 = st.columns(3)
-
-    # Metrics
-    with col1:
-        st.metric(
-            label="Total Records",
-            value="1,234",
-            delta="123 (10%)",
-        )
-
-    with col2:
-        st.metric(
-            label="Active Users",
-            value="456",
-            delta="-12 (-2.5%)",
-            delta_color="inverse",
-        )
-
-    with col3:
-        st.metric(
-            label="Revenue",
-            value="$12,345",
-            delta="$1,234 (10%)",
-        )
+    render_sidebar()
 
     st.markdown("---")
 
-    # Sample chart
-    col1, col2 = st.columns(2)
+    # Get current messages
+    messages = get_current_messages()
 
-    with col1:
-        st.subheader("📊 Sample Line Chart")
-        df = load_sample_data()
-        fig = px.line(df, x="date", y="value", title="Time Series Data")
-        st.plotly_chart(fig, use_container_width=True)
-
-    with col2:
-        st.subheader("📈 Sample Bar Chart")
-        df_bar = pd.DataFrame({
-            "category": ["A", "B", "C", "D"],
-            "values": [23, 45, 56, 78]
-        })
-        fig = px.bar(df_bar, x="category", y="values", title="Category Distribution")
-        st.plotly_chart(fig, use_container_width=True)
-
-    # Data table
-    st.subheader("📋 Data Table")
-    if st.checkbox("Show raw data"):
-        st.dataframe(df, use_container_width=True)
-
-
-def render_analytics():
-    """Render the analytics tab."""
-    st.header("📈 Analytics")
-
-    # File uploader
-    uploaded_file = st.file_uploader(
-        "Choose a CSV file",
-        type=["csv"],
-        help="Upload a CSV file for analysis"
-    )
-
-    if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
-        st.success(f"Loaded {len(df)} rows and {len(df.columns)} columns")
-
-        # Display basic statistics
-        st.subheader("Data Overview")
-        st.write(df.describe())
-
-        # Column selector for visualization
-        numeric_cols = df.select_dtypes(include=["float64", "int64"]).columns.tolist()
-        if numeric_cols:
-            selected_col = st.selectbox("Select column to visualize", numeric_cols)
-
-            col1, col2 = st.columns(2)
-            with col1:
-                fig = px.histogram(df, x=selected_col, title=f"Distribution of {selected_col}")
-                st.plotly_chart(fig, use_container_width=True)
-
-            with col2:
-                fig = px.box(df, y=selected_col, title=f"Box Plot of {selected_col}")
-                st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.info("Upload a CSV file to start analyzing")
-
-
-def render_settings():
-    """Render the settings tab."""
-    st.header("⚙️ Settings")
-
-    # Configuration form
-    with st.form("settings_form"):
-        st.subheader("Application Settings")
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            api_url = st.text_input("API URL", value=settings.api_url)
-            refresh_rate = st.number_input("Refresh Rate (seconds)", min_value=1, value=60)
-            theme = st.selectbox("Theme", ["Light", "Dark", "Auto"])
-
+    # Main chat area
+    if not messages:
+        # Welcome screen
+        col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            debug_mode = st.checkbox("Debug Mode", value=settings.debug_mode)
-            cache_enabled = st.checkbox("Enable Cache", value=True)
-            notifications = st.checkbox("Enable Notifications", value=True)
+            st.markdown("""
+            <div class='welcome-box'>
+                <h2>👋 Welcome</h2>
+                <p>Start a conversation by typing a message below.</p>
+            </div>
+            """, unsafe_allow_html=True)
 
-        submitted = st.form_submit_button("Save Settings")
-        if submitted:
-            st.success("Settings saved successfully!")
+            # Sample conversation starters
+            st.markdown("### Try asking:")
+            starter_cols = st.columns(2)
+            starters = [
+                "👋 Hello",
+                "❓ Help",
+                "💬 What can you do?",
+                "🎯 Get started"
+            ]
+            for idx, starter in enumerate(starters):
+                with starter_cols[idx % 2]:
+                    if st.button(starter, key=f"starter_{idx}", use_container_width=True):
+                        handle_user_input(starter.split(" ", 1)[1])
+                        st.rerun()
+    else:
+        # Display chat messages
+        for message in messages:
+            render_message(message)
 
-    # Session state viewer
-    st.subheader("Session State")
-    if st.checkbox("Show session state"):
-        st.json(dict(st.session_state))
+    # Chat input (always at bottom)
+    st.markdown("---")
+    user_input = st.chat_input("Type your message here...", key="chat_input")
 
-    # Counter example
-    st.subheader("Interactive Counter")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("Increment"):
-            st.session_state.counter += 1
-    with col2:
-        if st.button("Decrement"):
-            st.session_state.counter -= 1
-    with col3:
-        if st.button("Reset"):
-            st.session_state.counter = 0
-
-    st.info(f"Counter value: {st.session_state.counter}")
+    if user_input:
+        handle_user_input(user_input)
+        st.rerun()
 
 
 if __name__ == "__main__":
