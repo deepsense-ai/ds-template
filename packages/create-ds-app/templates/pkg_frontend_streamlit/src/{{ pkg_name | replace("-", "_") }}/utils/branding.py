@@ -1,8 +1,16 @@
+import base64
 import json
 import streamlit as st
 
 from pathlib import Path
 from typing import Optional
+
+
+def image_to_base64(path: Path) -> str:
+    with open(path, "rb") as img_file:
+        encoded = base64.b64encode(img_file.read()).decode()
+        return f"data:image/png;base64,{encoded}"
+
 
 def load_branding_config() -> dict[str, Optional[str]]:
     """Load branding configuration from branding.json file."""
@@ -22,9 +30,9 @@ def load_branding_config() -> dict[str, Optional[str]]:
     # Return default branding if file not found
     return {
         "name": "My App",
-        "primaryColor": "#1B54FF",
-        "secondColor": "#1A1A1A",
-        "thirdColor": "#FFFFFF",
+        "primary_color": "#1B54FF",
+        "second_color": "#1A1A1A",
+        "third_color": "#FFFFFF",
         "logo_path": None
     }
 

@@ -14,10 +14,10 @@ import pathlib
 import re
 import subprocess
 import tempfile
-from typing import Any
+from typing import Any, Optional
 
 import yaml
-from claude_agent_sdk import AssistantMessage, ClaudeAgentOptions, ClaudeSDKClient, TextBlock
+from claude_agent_sdk import AssistantMessage, ClaudeSDKClient, TextBlock
 from loguru import logger
 from rich.console import Console
 from rich.tree import Tree
@@ -375,7 +375,6 @@ def display_project_tree(project_structure: dict[str, Any], console: Console) ->
 
     # Group packages by type for better visualization
     packages_by_type = {}
-    from typing import Optional
     packages: Optional[dict] = project_structure.get("packages", project_structure.get("components", None))
 
     if packages is not None:
@@ -478,7 +477,6 @@ async def generate_packages(project_structure: dict[str, Any], project_path: pat
     from rich.console import Console as RichConsole
     from rich.progress import Progress, SpinnerColumn, TextColumn
 
-    project_name = project_structure.get("project_name", "my-ds-project")
     packages = project_structure.get("packages", project_structure.get("components", []))
 
     try:
@@ -514,7 +512,6 @@ async def generate_packages(project_structure: dict[str, Any], project_path: pat
                     template_name=pkg_type,
                     package_name=pkg_name,
                     output_dir=output_dir,
-                    project_name=project_name,
                 )
 
                 # Register package in workspace
@@ -707,7 +704,9 @@ async def continue_workflow_with_answers(
             success = await generate_packages(project_structure, project_path, console)
 
             if success:
-                # Step 6: Adapt with Claude in interactive mode
+                # TODO: Step 6: Prepare a milestone list from generated structure
+
+                # Step 7: Adapt with Claude in interactive mode
                 console.print("\n[bold]Step 5:[/bold] Adapting project with Claude...")
                 await adapt_with_claude(project_path, user_instructions, project_structure, console)
             else:

@@ -1,13 +1,10 @@
 """Main Streamlit application - Chatbot Interface."""
 
-import base64
 import streamlit as st
-from pathlib import Path
 from datetime import datetime
 
-from {{ pkg_name | replace("-", "_") }}.config import settings
-from {{ pkg_name | replace("-", "_") }}.utils.branding import load_branding_config
-from {{ pkg_name | replace("-", "_") }}.utils.styles import get_chatbot_styles
+from {{ pkg_name | replace("-", "_") }}.utils.branding import load_branding_config, image_to_base64
+from {{ pkg_name | replace("-", "_") }}.components.sidebar import render_sidebar
 
 branding = load_branding_config()
 
@@ -16,7 +13,7 @@ st.set_page_config(
     page_title=branding["name"],
     page_icon="💬",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="collapsed",  # Set to "expanded" to show sidebar by default
 )
 
 # Initialize session state
@@ -26,306 +23,79 @@ if "current_conversation_id" not in st.session_state:
     st.session_state.current_conversation_id = None
 if "conversation_counter" not in st.session_state:
     st.session_state.conversation_counter = 0
-if "dark_mode" not in st.session_state:
-    st.session_state.dark_mode = False
-if "show_timestamps" not in st.session_state:
-    st.session_state.show_timestamps = True
-
-# Apply custom CSS for chatbot interface
-def apply_chatbot_css():
-    """Apply custom CSS for a clean chatbot interface."""
-    css = get_chatbot_styles(
-        primary_color=branding.get("primaryColor", "#1B54FF"),
-        secondary_color=branding.get("secondColor", "#1A1A1A"),
-        third_color=branding.get("thirdColor", "#FFFFFF"),
-        dark_mode=st.session_state.dark_mode
-    )
-    st.markdown(css, unsafe_allow_html=True)
-
-apply_chatbot_css()
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 
-def get_current_messages():
-    """Get messages from current conversation."""
-    if st.session_state.current_conversation_id is None:
-        return []
-    return st.session_state.conversations.get(st.session_state.current_conversation_id, {}).get("messages", [])
-
-
-def set_current_messages(messages):
-    """Set messages for current conversation."""
-    if st.session_state.current_conversation_id is not None:
-        if st.session_state.current_conversation_id not in st.session_state.conversations:
-            st.session_state.conversations[st.session_state.current_conversation_id] = {}
-        st.session_state.conversations[st.session_state.current_conversation_id]["messages"] = messages
-
-
-def create_new_conversation():
-    """Create a new conversation."""
-    st.session_state.conversation_counter += 1
-    conv_id = f"conv_{st.session_state.conversation_counter}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    st.session_state.conversations[conv_id] = {
-        "messages": [],
-        "created_at": datetime.now(),
-        "title": f"Chat {st.session_state.conversation_counter}"
-    }
-    st.session_state.current_conversation_id = conv_id
-    return conv_id
-
-
-def render_header():
-    """Render the branded header."""
-    app_name = branding.get("name", "My Chatbot")
-    logo_path = branding.get("logo_path", None)
-    logo_html = ""
-
-    if logo_path and Path(logo_path).exists():
-        with open(logo_path, "rb") as img_file:
-            encoded = base64.b64encode(img_file.read()).decode("utf-8")
-            logo_html = f"<img src='data:image/png;base64,{encoded}' class='header-logo'>"
-
-    # Action buttons in header
-    col1, col2, col3, col4, col5 = st.columns([5, 1, 1, 1, 1])
-
-    with col1:
-        header_html = f"""
-        <div class='header-left'>
-            {logo_html}
-            <div>
-                <div class='header-title'>{app_name}</div>
-                <div class='header-subtitle'>AI-Powered Assistant</div>
-            </div>
-        </div>
-        """
-        st.markdown(header_html, unsafe_allow_html=True)
-
-    with col2:
-        if st.button("➕ New", use_container_width=True, help="Start new conversation"):
-            create_new_conversation()
-            st.rerun()
-
-    with col3:
-        messages = get_current_messages()
-        if messages and st.button("🗑️ Clear", use_container_width=True, help="Clear current conversation"):
-            set_current_messages([])
-            st.rerun()
-
-    with col4:
-        messages = get_current_messages()
-        if messages:
-            export_text = "\n\n".join([
-                f"{msg['role'].upper()}: {msg['content']}"
-                for msg in messages
-            ])
-            st.download_button(
-                "💾 Export",
-                export_text,
-                file_name=f"chat_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
-                mime="text/plain",
-                use_container_width=True,
-                help="Export conversation"
-            )
-
-    with col5:
-        mode_icon = "🌙" if not st.session_state.dark_mode else "☀️"
-        if st.button(mode_icon, use_container_width=True, help="Toggle dark/light mode"):
-            st.session_state.dark_mode = not st.session_state.dark_mode
-            st.rerun()
-
-
-def render_sidebar():
-    """Render the sidebar with conversation history."""
-    with st.sidebar:
-        # Logo and title
-        logo_path = branding.get("logo_path", None)
-        if logo_path and Path(logo_path).exists():
-            st.image(str(logo_path), width=80)
-
-        st.title("💬 Conversations")
-
-        if st.button("➕ New Chat", use_container_width=True, type="primary"):
-            create_new_conversation()
-            st.rerun()
-
-        st.markdown("---")
-
-        # List conversations
-        if st.session_state.conversations:
-            st.subheader("History")
-
-            # Sort conversations by creation time (newest first)
-            sorted_convs = sorted(
-                st.session_state.conversations.items(),
-                key=lambda x: x[1].get("created_at", datetime.now()),
-                reverse=True
-            )
-
-            for conv_id, conv_data in sorted_convs:
-                messages = conv_data.get("messages", [])
-                title = conv_data.get("title", "Untitled")
-                created_at = conv_data.get("created_at", datetime.now())
-
-                # Show conversation preview
-                preview = f"📝 {title}"
-                if messages:
-                    preview += f" ({len(messages)} msgs)"
-
-                is_active = conv_id == st.session_state.current_conversation_id
-
-                col1, col2 = st.columns([4, 1])
-                with col1:
-                    if st.button(
-                        preview,
-                        key=f"conv_{conv_id}",
-                        use_container_width=True,
-                        type="primary" if is_active else "secondary"
-                    ):
-                        st.session_state.current_conversation_id = conv_id
-                        st.rerun()
-
-                with col2:
-                    if st.button("🗑️", key=f"del_{conv_id}", help="Delete conversation"):
-                        del st.session_state.conversations[conv_id]
-                        if st.session_state.current_conversation_id == conv_id:
-                            st.session_state.current_conversation_id = None
-                        st.rerun()
-        else:
-            st.info("No conversations yet. Click 'New Chat' to start!")
-
-        st.markdown("---")
-
-        # Settings
-        with st.expander("⚙️ Settings"):
-            if st.checkbox("Show timestamps", value=st.session_state.show_timestamps, key="show_timestamps_check"):
-                st.session_state.show_timestamps = True
-            else:
-                st.session_state.show_timestamps = False
-
-
-
-
-def render_message(message: dict):
-    """Render a single message in the chat."""
-    role = message["role"]
-    content = message["content"]
-    timestamp = message.get("timestamp", "")
-
-    is_user = role == "user"
-    avatar = "👤" if is_user else "🤖"
-
-    # Use Streamlit's chat message component for better streaming support
-    with st.chat_message(name=role, avatar=avatar):
-        st.markdown(content)
-        if st.session_state.show_timestamps and timestamp:
-            st.caption(timestamp)
-
-
-def handle_user_input(user_input: str):
-    """Handle user input and generate response."""
-    if not user_input or not user_input.strip():
-        return
-
-    # Create new conversation if none exists
-    if st.session_state.current_conversation_id is None:
-        create_new_conversation()
-
-    # Get current messages
-    messages = get_current_messages()
-
-    # Add user message
-    timestamp = datetime.now().strftime("%H:%M")
-    messages.append({
-        "role": "user",
-        "content": user_input,
-        "timestamp": timestamp
-    })
-
-    # Save messages with user input
-    set_current_messages(messages)
-
-    # TODO: Integrate your AI/API logic here to generate assistant response
-    # For streaming responses, use this pattern:
-    # with st.chat_message("assistant", avatar="🤖"):
-    #     message_placeholder = st.empty()
-    #     full_response = ""
-    #     for chunk in your_streaming_api(user_input):
-    #         full_response += chunk
-    #         message_placeholder.markdown(full_response + "▌")
-    #     message_placeholder.markdown(full_response)
-    #     if st.session_state.show_timestamps:
-    #         st.caption(datetime.now().strftime("%H:%M"))
-
-    # Placeholder response (replace with your streaming logic)
-    assistant_response = "This is a placeholder response. Please integrate your AI/API logic here."
-
-    # Add assistant message
-    messages.append({
-        "role": "assistant",
-        "content": assistant_response,
-        "timestamp": datetime.now().strftime("%H:%M")
-    })
-
-    # Update conversation title based on first message
-    if len(messages) == 2:  # First exchange
-        title = user_input[:30] + "..." if len(user_input) > 30 else user_input
-        st.session_state.conversations[st.session_state.current_conversation_id]["title"] = title
-
-    # Save messages
-    set_current_messages(messages)
+def render_header() -> None:
+    """Render the header with logo and name."""
+    if branding["logo_path"]:
+        img_data = image_to_base64(branding["logo_path"])
+        st.markdown(
+            f"""
+            <h1 style='display: flex; align-items: center; gap: 10px;'>
+                <img src='{img_data}' style='height: 1.2em; vertical-align: middle;' />
+                mac_claude
+            </h1>
+            """,
+            unsafe_allow_html=True
+        )
+    else:
+        st.header(branding["name"])
+    border_color =  branding.get("primary_color", "#1B54FF")
+    st.markdown(f"<hr style='border: 0.1em solid {border_color};'>", unsafe_allow_html=True)
 
 
 def main():
     """Main application function."""
+    # Sidebar: Uncomment the line below to enable conversation history sidebar
+    # render_sidebar()
 
-    # Render header with controls
+    # Render header
     render_header()
 
-    # Render sidebar
-    render_sidebar()
+    # Display chat messages
+    for message in st.session_state.messages:
+        role = message["role"]
+        content = message["content"]
+        with st.chat_message(name=role):
+            st.markdown(content)
 
-    st.markdown("---")
+    # Chat input
+    if user_input := st.chat_input("Type your message here..."):
+        # Add user message
+        st.session_state.messages.append({
+            "role": "user",
+            "content": user_input,
+            "timestamp": datetime.now().strftime("%H:%M")
+        })
 
-    # Get current messages
-    messages = get_current_messages()
+        # Display user message
+        with st.chat_message("user"):
+            st.markdown(user_input)
 
-    # Main chat area
-    if not messages:
-        # Welcome screen
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.markdown("""
-            <div class='welcome-box'>
-                <h2>👋 Welcome</h2>
-                <p>Start a conversation by typing a message below.</p>
-            </div>
-            """, unsafe_allow_html=True)
+        # TODO: Integrate your AI/API logic here
+        # For streaming responses, use this pattern:
+        # with st.chat_message("assistant"):
+        #     st.write_stream(response_generator(history))
 
-            # Sample conversation starters
-            st.markdown("### Try asking:")
-            starter_cols = st.columns(2)
-            starters = [
-                "👋 Hello",
-                "❓ Help",
-                "💬 What can you do?",
-                "🎯 Get started"
-            ]
-            for idx, starter in enumerate(starters):
-                with starter_cols[idx % 2]:
-                    if st.button(starter, key=f"starter_{idx}", use_container_width=True):
-                        handle_user_input(starter.split(" ", 1)[1])
-                        st.rerun()
-    else:
-        # Display chat messages
-        for message in messages:
-            render_message(message)
+        # Placeholder response
+        assistant_response = "This is a placeholder. Integrate your AI/API here."
 
-    # Chat input (always at bottom)
-    st.markdown("---")
-    user_input = st.chat_input("Type your message here...", key="chat_input")
+        # Display assistant message
+        with st.chat_message("assistant"):
+            st.markdown(assistant_response)
 
-    if user_input:
-        handle_user_input(user_input)
-        st.rerun()
+        # Add assistant message to history
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": assistant_response,
+            "timestamp": datetime.now().strftime("%H:%M")
+        })
+
+        # Save to current conversation if sidebar is enabled
+        if st.session_state.current_conversation_id:
+            st.session_state.conversations[st.session_state.current_conversation_id]["messages"] = st.session_state.messages
 
 
 if __name__ == "__main__":
