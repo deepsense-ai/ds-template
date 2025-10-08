@@ -20,8 +20,8 @@ pip install -e packages/{{ pkg_name }}
 ## Usage
 
 ```python
-from {{ pkg_name }}.config import settings
-from {{ pkg_name }}.logging import get_logger
+from {{ pkg_name | slugify }}.config import settings
+from {{ pkg_name | slugify }}.logging import get_logger
 
 logger = get_logger(__name__)
 

@@ -24,6 +24,7 @@ class PackageGenerator:
         self.templates_dir = templates_dir
         self.registry = TemplateRegistry(templates_dir)
         self.renderer = TemplateRenderer()
+        self.coding_instructions = ""
 
     def find_project_root(self, start_path: pathlib.Path = None) -> pathlib.Path:
         """

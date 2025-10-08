@@ -14,10 +14,10 @@ import pathlib
 import re
 import subprocess
 import tempfile
-from typing import Any
+from typing import Any, Optional
 
 import yaml
-from claude_agent_sdk import AssistantMessage, ClaudeAgentOptions, ClaudeSDKClient, TextBlock
+from claude_agent_sdk import AssistantMessage, ClaudeSDKClient, TextBlock
 from loguru import logger
 from rich.console import Console
 from rich.tree import Tree
@@ -123,13 +123,18 @@ Your task will be to generate tree-like structure with what components should be
 
 {component_types}
 
+IMPORTANT: For any frontend packages (pkg_frontend_streamlit), you MUST include branding requirements in the functions list. 
+The branding directory contains branding.json with branding color, company name and logo path that are OBLIGATORY to use in frontend applications.
+Include "branding integration" or "branding configuration" in the functions list for frontend packages.
+
 You will be also provided with user responses on the follow-up questions that you have previously prepared.
 
 Please respond in following format:
 
 {{"packages": [
     {{"type": "pkg_core", "name": "my-project", "functions": ["common configuration", "logging", "common data models and services"]}},
-    {{"type": "pkg_api", "name": "my-project-api", "functions": ["REST endpoints", "authentication", "data validation"]}}
+    {{"type": "pkg_api", "name": "my-project-api", "functions": ["REST endpoints", "authentication", "data validation"]}},
+    {{"type": "pkg_frontend_streamlit", "name": "my-project-frontend", "functions": ["interactive dashboard", "data visualization", "branding integration"]}}
 ]}}
 
 Please respond only with JSON - no other comments.
@@ -370,27 +375,15 @@ def display_project_tree(project_structure: dict[str, Any], console: Console) ->
 
     # Group packages by type for better visualization
     packages_by_type = {}
-    packages = project_structure.get("packages", project_structure.get("components", []))
+    packages: Optional[dict] = project_structure.get("packages", project_structure.get("components", None))
 
-    for package in packages:
-        pkg_type = package["type"]
-        if pkg_type not in packages_by_type:
-            packages_by_type[pkg_type] = []
-        packages_by_type[pkg_type].append(package)
-
-    # Add packages to tree
-    for pkg_type, packages in packages_by_type.items():
-        type_branch = tree.add(f"[bold yellow]{pkg_type}[/bold yellow]")
+    if packages is not None:
         for package in packages:
-            pkg_text = f"[green]{package['name']}[/green]"
-
-            # Add functions if available
+            pkg_type = package["type"]
+            type_branch = tree.add(f"[bold green]{package['name']}[/bold green] [bold yellow]({pkg_type})[/bold yellow]")
             functions = package.get("functions", [])
-            if functions:
-                for func in functions:
-                    type_branch.add(f"  • {func}")
-            else:
-                type_branch.add(pkg_text)
+            for func in functions:
+                type_branch.add(f"  • {func}")
 
     console.print("\n[bold]Proposed Project Structure:[/bold]")
     console.print(tree)
@@ -484,7 +477,6 @@ async def generate_packages(project_structure: dict[str, Any], project_path: pat
     from rich.console import Console as RichConsole
     from rich.progress import Progress, SpinnerColumn, TextColumn
 
-    project_name = project_structure.get("project_name", "my-ds-project")
     packages = project_structure.get("packages", project_structure.get("components", []))
 
     try:
@@ -520,7 +512,6 @@ async def generate_packages(project_structure: dict[str, Any], project_path: pat
                     template_name=pkg_type,
                     package_name=pkg_name,
                     output_dir=output_dir,
-                    project_name=project_name,
                 )
 
                 # Register package in workspace
@@ -574,6 +565,9 @@ The project has been created at: {project_path}
 
 Please help me adapt and customize this project according to my requirements.
 You can edit files, add new functionality, and help me implement the specific features I need.
+
+Remember that in the case of the frontend, it is **mandatory** to use 
+the branding (colors, name and provided logo) from branding/branding.json
 """
 
     # Create temporary file with context
@@ -692,7 +686,7 @@ async def continue_workflow_with_answers(
         display_project_tree(project_structure, console)
 
         # Ask if user wants to edit
-        console.print("\n[bold cyan]Would you like to edit the structure? (y/N):[/bold cyan]", end=" ")
+        console.print("\n[bold cyan]Would you like to edit the structure including packages names? (y/N):[/bold cyan]", end=" ")
         edit_response = input()
         if edit_response.lower() == "y":
             edited_structure = edit_project_structure(project_structure, console)
@@ -710,7 +704,9 @@ async def continue_workflow_with_answers(
             success = await generate_packages(project_structure, project_path, console)
 
             if success:
-                # Step 6: Adapt with Claude in interactive mode
+                # TODO: Step 6: Prepare a milestone list from generated structure
+
+                # Step 7: Adapt with Claude in interactive mode
                 console.print("\n[bold]Step 5:[/bold] Adapting project with Claude...")
                 await adapt_with_claude(project_path, user_instructions, project_structure, console)
             else:

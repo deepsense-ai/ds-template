@@ -19,6 +19,11 @@ from .config import SimpleTypes, TemplateConfig
 console = Console()
 
 
+def slugify(text: str) -> str:
+    """Convert text to slug format by replacing hyphens with underscores."""
+    return text.replace("-", "_")
+
+
 class TemplateRenderer:
     """Handles template rendering and project creation."""
 
@@ -105,7 +110,9 @@ class TemplateRenderer:
                     template_content = f.read()
 
                 # Render template with context
-                template = jinja2.Template(template_content)
+                env = jinja2.Environment()
+                env.filters['slugify'] = slugify
+                template = env.from_string(template_content)
                 rendered_content = template.render(**context)
 
                 # Remove .j2 extension for target
@@ -148,10 +155,12 @@ class TemplateRenderer:
 
                 # Process path parts for Jinja templating (for directory names)
                 path_parts = []
+                env = jinja2.Environment()
+                env.filters['slugify'] = slugify
                 for part in pathlib.Path(rel_path).parts:
                     if "{{" in part and "}}" in part:
                         # Render the directory name as a template
-                        name_template = jinja2.Template(part)
+                        name_template = env.from_string(part)
                         rendered_part = name_template.render(**context)
                         path_parts.append(rendered_part)
                     else:

@@ -29,7 +29,7 @@ class StandardTemplateConfig(TemplateConfig):
 
     def get_project_directory_name(self, context: dict[str, Any]) -> str:
         """Get the project directory name based on the context."""
-        return context["project_name"].replace("-", "_")
+        return context["project_name"]
 
     def should_include_file(self, file_path: pathlib.Path, context: dict[str, Any]) -> bool:
         """

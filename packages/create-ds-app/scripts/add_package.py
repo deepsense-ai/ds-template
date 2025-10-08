@@ -51,7 +51,10 @@ def add_package(
             return False
 
         # Map type to template name
-        template_map = {"cli": "pkg_cli", "lib": "pkg_lib"}
+        template_map = {
+            "cli": "pkg_frontend_streamlit",
+            # "lib": "pkg_lib"
+        }
 
         if package_type not in template_map:
             print(f"Error: Invalid package type '{package_type}'. Must be 'cli' or 'lib'")
@@ -63,18 +66,21 @@ def add_package(
         print(f"Creating {package_type} package '{package_name}' using template '{template_name}'...")
 
         # Get additional parameters for the template
-        context = {"pkg_name": package_name}
-
-        # For CLI packages, we might want to set some defaults
-        if package_type == "cli":
-            context.update(
-                {
-                    "cli_command": package_name.replace("-", "_"),
-                    "version": "0.1.0",
-                    "author": "Your Name <your.email@example.com>",
-                    "keywords": f"{package_type}, tool",
-                }
-            )
+        from create_ds_app.template_utils import get_template_defaults
+        
+        # Get project name from pyproject.toml or use default
+        project_name = "my-project"  # Default fallback
+        try:
+            import tomllib
+            pyproject_path = project_root / "pyproject.toml"
+            if pyproject_path.exists():
+                with open(pyproject_path, "rb") as f:
+                    pyproject_data = tomllib.load(f)
+                    project_name = pyproject_data.get("project", {}).get("name", project_name)
+        except Exception:
+            pass  # Use default if we can't read pyproject.toml
+        
+        context = get_template_defaults(template_name, package_name, project_name)
 
         # Find packages directory
         packages_dir = generator.find_packages_directory(project_root)
