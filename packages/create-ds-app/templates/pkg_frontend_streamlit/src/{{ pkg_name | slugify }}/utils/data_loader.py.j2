@@ -36,7 +36,7 @@ def load_csv(file_path: str) -> pd.DataFrame:
 def fetch_api_data(endpoint: str, params: dict = None) -> dict:
     """Fetch data from API with caching."""
     import requests
-    from {{ pkg_name | replace("-", "_") }}.config import settings
+    from {{ pkg_name | slugify }}.config import settings
 
     url = f"{settings.api_url}/{endpoint}"
     response = requests.get(url, params=params)

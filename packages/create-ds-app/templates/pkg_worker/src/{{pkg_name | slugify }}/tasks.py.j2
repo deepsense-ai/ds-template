@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 from celery import Task
 from celery.utils.log import get_task_logger
 
-from {{ pkg_name | replace("-", "_") }}.worker import celery_app
-from {{ pkg_name | replace("-", "_") }}.config import settings
+from {{ pkg_name | slugify }}.worker import celery_app
+from {{ pkg_name | slugify }}.config import settings
 
 logger = get_task_logger(__name__)
 

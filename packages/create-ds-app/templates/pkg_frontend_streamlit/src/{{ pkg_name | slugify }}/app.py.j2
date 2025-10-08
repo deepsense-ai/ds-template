@@ -3,8 +3,8 @@
 import streamlit as st
 from datetime import datetime
 
-from {{ pkg_name | replace("-", "_") }}.utils.branding import load_branding_config, image_to_base64
-from {{ pkg_name | replace("-", "_") }}.components.sidebar import render_sidebar
+from {{ pkg_name | slugify }}.utils.branding import load_branding_config, image_to_base64
+from {{ pkg_name | slugify }}.components.sidebar import render_sidebar
 
 branding = load_branding_config()
 

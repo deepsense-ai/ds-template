@@ -208,7 +208,6 @@ class TemplateConfig:
     location: str = ...
     slug: str = ...
     welcome_message: str | None = None
-    instructions: str = ""
 
     questions: list[Question] = []
 

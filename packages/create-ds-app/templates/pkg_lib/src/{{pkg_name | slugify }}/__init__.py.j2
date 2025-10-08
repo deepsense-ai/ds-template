@@ -2,6 +2,6 @@
 
 __version__ = "{{ version }}"
 
-from {{ pkg_name | replace("-", "_") }}.core import hello_world
+from {{ pkg_name | slugify }}.core import hello_world
 
 __all__ = ["hello_world"]

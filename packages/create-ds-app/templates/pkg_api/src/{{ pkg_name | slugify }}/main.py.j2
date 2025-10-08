@@ -5,8 +5,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from {{ pkg_name | replace("-", "_") }}.config import settings
-from {{ pkg_name | replace("-", "_") }}.routers import health, items
+from {{ pkg_name | slugify }}.config import settings
+from {{ pkg_name | slugify }}.routers import health, items
 
 
 @asynccontextmanager

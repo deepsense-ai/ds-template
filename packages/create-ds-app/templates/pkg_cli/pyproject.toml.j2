@@ -41,7 +41,7 @@ build-backend = "hatchling.build"
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/{{ pkg_name | replace("-", "_") }}"]
+packages = ["src/{{ pkg_name | slugify }}"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

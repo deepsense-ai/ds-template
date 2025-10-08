@@ -11,7 +11,7 @@ Let's start with understanding a design considerations. **There is not really a 
 1. **Adapting to software house project style** - more than a product or a single project needs.
 1. **Adding tools and configuration that are useful** - usually they would take too much time to setup or read about. It is easier to edit existing file for specific project needs.
 1. **Providing sensible defaults** - we mostly work with quite short living projects like PoC, where it is important to move fast and rarely we hit any production, but we should keep highest quality possible.
-1. **Making onboarding as easy as possibleg** - similar structure, enforced code style and tools allow to faster onboard someone or switch between projects.
+1. **Making onboarding as easy as possible** - similar structure, enforced code style and tools allow to faster onboard someone or switch between projects.
 1. **Handing over ownership to ensure independence** - after the template is used, the team takes ownership and can adapt it quickly to specific needs of a project or client.
 1. **Being PEP and other best practices complaint** - unless experience suggest otherwise or they would be impossible to provide in a satisfying way.
 1. **Being cautious** - preference is given to battle-tested, stable with known drawbacks, issues and workarounds approaches, so it should work in more broad situations and be more flexible with different clients.
