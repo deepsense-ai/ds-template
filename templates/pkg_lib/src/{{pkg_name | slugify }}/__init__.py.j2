@@ -1,0 +1,7 @@
+"""{{ pkg_name }} - A Python library package."""
+
+__version__ = "{{ version }}"
+
+from {{ pkg_name | slugify }}.core import hello_world
+
+__all__ = ["hello_world"]

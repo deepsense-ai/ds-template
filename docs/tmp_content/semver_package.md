@@ -1,52 +1,65 @@
-# Packaging & semantic version
+# Semantic Versioning & Packaging
 
-```{note}
-GitLab CI by default provides manual deploy to private GitLab Package Registry - _development_ version, as well as _release_.
-```
+The ds-template includes semantic versioning support for distributing your Python packages.
 
-It is a good practice to have semantic versions, especially when one wants to distribute software.
+## What's Included
 
-This is not required for many research projects, but it is essential and very useful when one wants to share his work.
+### Semantic Versioning
+- **Standard versioning** using `major.minor.patch` scheme
+- **Development versions** with `dev` suffix for pre-release packages
+- **Automated versioning** through CI/CD pipelines
+- **Version file** for easy inspection and automation
 
-We strongly recommend to learn more about semantic version and read [semver dedicated page](https://semver.org/).
+### Package Building
+- **Modern packaging** with `pyproject.toml` configuration
+- **uv build** for fast, reliable package building
+- **Multi-platform support** for different operating systems
+- **Dependency management** with lock files for reproducible builds
 
-By default `(major.minor.patch)` numbering scheme is provided by a bash script wrapper on `bump2version` tool:
+## Version Management
 
+### Development Workflow
 ```bash
-./bump_version.sh [major|minor|patch]
+# Check current version
+cat src/my_package/VERSION
+
+# Build package
+uv build
+
+# Install locally for testing
+uv pip install dist/my_package-0.1.0-py3-none-any.whl
 ```
 
-The script makes a new commit with a message and modifies `src/<name>/VERSION` file.
-Detailed configuration is in `.bumpconfig.cfg` file.
+### CI/CD Integration
+- **GitHub Actions** automatically builds and uploads packages
+- **GitLab CI** publishes to GitLab Package Registry
+- **Version tagging** creates releases automatically
+- **Development builds** include build numbers
 
-`VERSION` file is introduced as it allows to inspect/modify version reliable with simple UNIX tools, without need to parse python code. It simplifies greatly automated builds or introspection capabilities.
+## Configuration
 
-```{tip}
-`bump2version` tool is chosen, because it helps you to follow semantic versioning scheme but also can modify different files as it is _language agnostic_ and can work with non-python code as well and centralizes version string control in one place. 
+Version management is configured in:
+- **`pyproject.toml`** - Package metadata and build settings
+- **`VERSION` file** - Current version number
+- **CI/CD workflows** - Automated versioning and publishing
 
-Check [documentation](https://pypi.org/project/bump2version/) for more details.
-```
+## Publishing
 
-By default, all version will have `dev` suffix (and `dev<build_number>` on CI is recommended) - this informs that package is made during _development_.
+### GitHub Packages
+- **Automatic publishing** on version tags
+- **Public or private** package repositories
+- **Easy installation** with `uv pip install`
 
-During release the "dev<number>" should be dropped to signal it is no more development preview but that it is suitable to be used by other people.
+### GitLab Package Registry
+- **Private package registry** for internal use
+- **Manual deployment** for development versions
+- **Release deployment** for stable versions
 
+## Best Practices
 
-```{note}
-`.bumpconfig.cfg` configuration could be moved to `pyproject.toml` but it modifies the file during use and it resulted in conflicts with linters, which is why it is done the way it is now.
-```
+- **Use semantic versioning** for all packages you plan to distribute
+- **Tag releases** with version numbers (e.g., `v1.0.0`)
+- **Test packages** before publishing
+- **Document changes** in release notes
 
-Example usage:
-
-```bash
-# assume current_version = 0.1.3 and we want to increase the middle number (minor)
-$ ./bump_version.sh minor
-# current_version = 0.2.0 and it executes
-# git commit -m “Bump version 0.1.3 - 0.2.0”
-```
-
-```{warning}
-`./bump_version.sh release` - should be called only on CI job to ensure proper release cycle.
-
-You also need to be aware of valid version format, you can read about regex rules on [GitLab rules](https://docs.gitlab.com/ee/user/packages/pypi_repository/#ensure-your-version-string-is-valid).
-```
+For detailed versioning configuration, see the `[project]` section in your package's `pyproject.toml` file.

@@ -1,2 +1,8 @@
 [env]
 _.python.venv = '.venv'
+[hooks]
+enter = [
+  "echo 'Welcome!'",
+  "uv sync",
+  "echo 'Project ready.'"
+]

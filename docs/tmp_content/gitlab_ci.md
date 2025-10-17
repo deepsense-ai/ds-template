@@ -1,127 +1,166 @@
-# GitLab CI configuration
+# GitLab CI Configuration
 
-This is **optional** template option, which results in `.gitlab-ci.yml` file creation.
+This is an **optional** template option that creates a comprehensive CI/CD pipeline for your project.
 
-File has comments for jobs so it should be relatively easy to understand and adapt.
+## What's Included
 
-It generates automated pipeline to ensure code quality, tests and other goodies.
+The GitLab CI pipeline includes seven stages:
 
-We also optimized the pipeline so it should take 2-4 minutes to run on an empty project.
+1. **Preparation** - Docker image building and caching
+2. **Lint** - Code quality and style checks
+3. **Test** - Unit testing and coverage analysis
+4. **Package** - Python package building
+5. **Pages** - Documentation generation
+6. **Security** - Vulnerability scanning
+7. **Deploy** - Artifact deployment and publishing
 
 ```{note}
-To reduce computations and costs CI is only executed when a developer opens a Merge Request and on a default branch.
-Moreover, almost all unfinished jobs can be interrupted by more recent code change.
-It is controlled by `interruptible: true` [flag](https://docs.gitlab.com/ee/ci/yaml/).
+To reduce computations and costs, CI is only executed on Merge Requests and the default branch.
+Most jobs can be interrupted by newer code changes using the `interruptible: true` flag.
 ```
 
-## Context-sensitive stages
+## Modern Tooling Integration
 
-### Merge Request
+### Ruff for Code Quality
+The pipeline uses **Ruff** for fast, comprehensive code quality checks:
+- **Unified linting** - Replaces multiple individual tools
+- **Automatic formatting** - Black-compatible code formatting
+- **Import sorting** - isort-compatible import organization
+- **Security scanning** - bandit-compatible security checks
 
-When a developer opens a Merge Request we run linters and tests stages. 
+### uv Package Management
+Modern Python package management with **uv**:
+- **Fast dependency resolution** - Significantly faster than pip
+- **Workspace support** - Monorepo package management
+- **Lock file generation** - Reproducible builds
+- **Cross-platform compatibility** - Works on all platforms
 
-Optionally a development package can be released to PIP registry with a manual trigger.
+### MkDocs Documentation
+Modern documentation generation with **MkDocs**:
+- **Material theme** - Professional documentation appearance
+- **Interactive features** - Search, navigation, diagrams
+- **Auto-generation** - Package documentation and API references
+- **GitLab Pages** - Automatic documentation hosting
+
+## Pipeline Stages
+
+### Merge Request Pipeline
+When a developer opens a Merge Request, the pipeline runs:
+- **Lint stage** - Code quality and style validation
+- **Test stage** - Unit testing and coverage analysis
+- **Package stage** - Python package building
+- **Security stage** - Vulnerability scanning
 
 ![Merge Request stages](../_static/stages_mr.png)
 
-### Main branch
-
-After merge is concluded, we execute more stages - documentation build & upload to GitLab Pages and option to release non-development package with manual trigger.
+### Main Branch Pipeline
+After merge completion, additional stages execute:
+- **Pages stage** - Documentation generation and hosting
+- **Deploy stage** - Artifact deployment and publishing
+- **Manual triggers** - Optional package releases
 
 ![Main branch stage](../_static/stages_main.png)
 
-
-### On pre-commit changes
-
-When a `pre-commit` configuration file is changed or `docker/precommit/Dockerfile` additional stage appears - its role is to build and 
-upload the docker image to GitLab Container Registry.
-
-This is quite complex due to the need to work with new repository or existing branch and it has to provide bootstrapping for image.
+### Docker Image Management
+When pre-commit configuration changes, a preparation stage builds Docker images:
+- **Image building** - Creates optimized pre-commit environment
+- **Registry upload** - Stores images in GitLab Container Registry
+- **Caching** - Reduces build times for subsequent runs
+- **Versioning** - Tags images with commit SHA and latest
 
 ![Preparation stage](../_static/stage_preparation.png)
 
-On Merge Request it builds, uploads and tests the image tagged with git commit SHA. 
+The Docker image is defined as `PRECOMMIT_IMAGE: $CI_REGISTRY_IMAGE/precommit` and includes:
+- **Pre-commit hooks** - All linting and formatting tools
+- **uv package manager** - Fast dependency management
+- **Python environment** - Configured Python runtime
 
-Default docker name is `precommit` and in `.gitlab-ci.yml` is defined as: `PRECOMMIT_IMAGE: $DOCKER_REGISTRY/precommit`.
+## Detailed Stage Information
 
-On master it does the same but also tags the docker image with `latest` tag.
+### Preparation Stage
+- **Purpose**: Build and cache Docker images for faster subsequent runs
+- **Triggers**: Changes to `docker/precommit/Dockerfile` or pre-commit configuration
+- **Duration**: 3-5 minutes for initial build, faster with caching
+- **Output**: Docker image with pre-commit environment and tools
 
-It takes 3-5 minutes to build a docker image from scratch, future builds should be faster due to docker image caching.
+### Lint Stage
+- **Purpose**: Code quality and style validation
+- **Tools**: Ruff (linting, formatting, import sorting), mypy (type checking), bandit (security)
+- **Duration**: ~20 seconds with Docker image, ~2 minutes without
+- **Output**: Code quality reports and formatted code
 
-```{warning}
-If possible adapt gitlab `linter` tasks to always use a SHA tagged image instead of using `latest` tag - the only
-reason we could not do it is due to a need to provide automatic setup without manual intervention.
+### Test Stage
+- **Purpose**: Unit testing and coverage analysis
+- **Tools**: pytest with coverage reporting
+- **Coverage**: 
+  - ![Code coverage](../_static/coverage.png)
+  - Red lines = not covered, green lines = covered
+  - Percentage coverage reporting
+  - ![Tests](../_static/tests.png)
+- **License checking**: Validates package licenses against allowlist
+- **Artifacts**: Test results, coverage reports, license information
 
-By using SHA tags, you can simplify `linter` stage and have more reproducible pipelines.
+### Package Stage
+- **Purpose**: Build Python packages for distribution
+- **Tools**: uv build for modern package building
+- **Output**: Wheel (.whl) and source distribution (.tar.gz) files
+- **Artifacts**: Built packages available for download
 
-To switch you must replace `precommit:latest` to `precommit:dev-<GIT COMMIT SHA>`.
+### Pages Stage
+- **Purpose**: Generate and host documentation
+- **Tools**: MkDocs with Material theme
+- **Features**: Interactive documentation with search and navigation
+- **Output**: Static documentation site hosted on GitLab Pages
+- **Package info**: ![Licenses in documentation](../_static/docs_lic.png)
 
-Commit SHA is the long hash for each git commit, to get one for your current one you can 
-use `git rev-parse HEAD`, also GitLab has `$CI_COMMIT_SHA` environment variable.
+### Security Stage
+- **Purpose**: Vulnerability scanning and security analysis
+- **Tools**: Trivy for comprehensive security scanning
+- **Compliance**: Required for SOC 2 Certification
+- **Output**: Security reports in JSON and HTML formats
+- **Artifacts**: Detailed vulnerability information
 
-```
+### Deploy Stage (Main Branch Only)
+- **Purpose**: Deploy artifacts and publish packages
+- **Documentation**: Uploads to GitLab Pages for team access
+- **Packages**: Uploads to GitLab Package Registry
+- **Manual triggers**: Optional package releases
+- **Output**: ![Package in registry](../_static/pip_reg.png)
 
-## Stages summary
-
-* **preparation** stage:
-    - runs only to bootstrap or update pre-commit docker image
-    - it reduces linter stage from ~2 minutes to ~20 seconds on empty project.
-* **lint** stage:
-    - ensures code style consistency
-    - checks for code mistakes
-    - provides basic safety checks
-    - **see:** {ref}`precommit page <_precommit>`
-* **tests** stage:
-    - runs `pytest` tests
-    - calculates code coverage:
-        - ![Code coverage](../_static/coverage.png)
-        - red marks lines not covered by tests, green are covered
-        - reports code % coverage
-        - ![Tests](../_static/tests.png)
-    - checks for licenses
-        - fails if any third-party installed python package license is not present on allowlist (`.license-whitelist.txt`).
-    - generates `pip freeze`
-    - **artifacts:** exact pinned package versions + licenses can be downloaded from this stage
-* **package** stage:
-    - builds pip `*.tar.gz` and `*.whl` python packages
-    - adds build number to package
-* **pages** stage:
-    - generates and builds Sphinx documentation
-    - scans and generate information table for all used python packages
-        -  ![Licenses in documentation](../_static/docs_lic.png)
-* **security** stage:
-    - runs `trivy` and fails on critical security vulnerability - required for SOC 2 Certification - do not remove it
-    - **artifacts:** json and html generated by trivy
-* **deploy** stage - only on **main/master** branch:
-    - uploads generated Sphinx docs to `GitLab Pages`. All project members can access it
-    - build and upload release (non-development) package to private `GitLab Package Registry`
-        -  ![Package in registry](../_static/pip_reg.png)
-
-## Artifacts
+## Artifacts and Reports
 
 ![Artifacts](../_static/artifacts.png)
 
-Pipelines and jobs provide a set of artifacts. Aside of required ones for tests/coverage especially interesting are:
+The pipeline generates comprehensive artifacts for analysis and deployment:
 
-1. **tests:archive**
-    - **licenses.txt** - contains dump of libraries with detected licenses
-    - **requirements-freeze.txt** - pip freeze to provide reproducible build
-    - **dist/** - contains built python packages
-1. **trivy security scan:archive**:
-    - security report in html file
-1. **trivy security scan:dependency_scanning**:
-    - security report in json file, however it is easier to read job logs
+### Test Artifacts
+- **licenses.txt** - Detected package licenses and compliance information
+- **requirements-freeze.txt** - Pinned package versions for reproducible builds
+- **dist/** - Built Python packages (wheel and source distributions)
+- **coverage.xml** - Code coverage data in XML format
+- **test-results.xml** - JUnit XML test results
 
-## License check
+### Security Artifacts
+- **trivy-report.json** - Security scan results in JSON format
+- **trivy-report.txt** - Human-readable security report
+- **dependency-scanning** - GitLab dependency scanning integration
 
-We use `pip-licenses` to extract installed packages and obtain license information.
+### Documentation Artifacts
+- **public/** - Generated MkDocs documentation site
+- **Package information** - License and dependency documentation
 
-By default, we accept only those selected licenses from `.license-whitelist.txt`. 
-Each short license must be in new line and it is matched by checking if string exists in line.
+## License Validation
 
-Sometimes there are situations when a license library detection does not work or there is a justified decision
-to accept some license - to accept such library edit `.libraries-whitelist.txt`.
-All libraries must be put in single line.
+The pipeline includes automated license checking using `pip-licenses`:
+
+- **License extraction** - Automatically detects package licenses
+- **Allowlist validation** - Checks against approved licenses in `.license-whitelist.txt`
+- **Exception handling** - Exempted libraries in `.libraries-whitelist.txt`
+- **CI integration** - Fails pipeline on license violations
+
+### Configuration Files
+- **`.license-whitelist.txt`** - Approved licenses (one per line)
+- **`.libraries-whitelist.txt`** - Exempted libraries (single line)
 
 ```{warning}
 `.license-whitelist.txt` must have a license in each distinct line.
@@ -129,52 +168,46 @@ All libraries must be put in single line.
 `.libraries-whitelist.txt` must be contained in single line (e.g. "foo bar").
 ```
 
-## GitLab details
-
-Please get familiar with official documentation before you modify the yaml configuration.
-
-Changing YAML is error-prone so here are protips:
-
-1. Use YAML validator in your editor to fix wrong whitespaces.
-1. Operate on branch first or create a temporary test repository.
-1. Use GitLab [validator & simulator](https://docs.gitlab.com/ee/ci/lint.html)
-1. `if` and similar conditions should be added last, after testing a job.
+## GitLab Integration
 
 ### GitLab Pages
-
-GitLab Pages is static hosting solution which is used to host documentation.
-
-```{warning}
-Name `pages` for job name and stage is important! Changing this name will break GitLab feature to automatically upload and host documentation.
-```
-
-```{note}
-Due to using `deepsense.ai` there is always error raised by browsers due to certificate not covering the subdomain. This is known issue due to "." appear in name.
-
-There is no known workaround, except user accepting and adding exception for it.
-```
+Static documentation hosting with automatic deployment:
+- **Job name**: Must be `pages` for automatic hosting
+- **Documentation**: MkDocs-generated site with Material theme
+- **Access**: Available to all project members
+- **Custom domain**: Can be configured for custom URLs
 
 ### GitLab Package Registry
+Python package distribution and storage:
+- **Manual triggers** - Package uploads require manual approval
+- **Version management** - Automatic versioning and tagging
+- **Private registry** - Secure package storage
+- **Integration** - Works with pip and uv package managers
 
-All master and merge requests are set to manual trigger to build and upload python pip package to the related private repository.
+### GitLab Container Registry
+Docker image storage and management:
+- **Pre-commit images** - Optimized development environments
+- **Versioning** - SHA-tagged and latest images
+- **Caching** - Faster subsequent builds
+- **Security** - Private image storage
 
-Essential read is [GitLab documentation](https://docs.gitlab.com/ee/user/packages/package_registry/).
+## Best Practices
 
-```{tip}
+### YAML Configuration
+1. **Use YAML validator** in your editor for syntax checking
+2. **Test on branches** - Create temporary repositories for testing
+3. **Use GitLab validator** - [CI Lint tool](https://docs.gitlab.com/ee/ci/lint.html)
+4. **Add conditions last** - Test jobs before adding `if` conditions
 
-It can be also customized to adapt `bump2config` to tag and make GitLab to release a new package on git tag event.
-Check also {ref}`packaging page <_packaging_semver>`.
+### Pipeline Optimization
+- **Docker caching** - Use prepared images for faster builds
+- **Parallel jobs** - Run independent jobs simultaneously
+- **Artifact management** - Clean up old artifacts regularly
+- **Resource limits** - Set appropriate resource constraints
 
-Some projects might benefit from switching to automatic uploads instead of manual.
-```
-
-### GitLab Docker Registry
-
-By default we use it for `pre-commit` docker image - so each project can have it's own. 
-
-There is also a **company-wide [docker registry](http://docker.intra.deepsense.ai/)**. Ask IT about it.
-
-### Other GitLab featurs
-
-The template targets only GitLab **free** mode which is limiting many functionalities.
+### Security Considerations
+- **Secret management** - Use GitLab CI/CD variables for sensitive data
+- **Access control** - Limit pipeline access to authorized users
+- **Vulnerability scanning** - Regular security assessments
+- **Compliance** - Maintain SOC 2 certification requirements
 
