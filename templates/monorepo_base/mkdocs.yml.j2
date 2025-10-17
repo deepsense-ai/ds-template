@@ -1,10 +1,11 @@
-site_name: "ds-template"
-site_description: "A comprehensive project template generator for data science and Python projects with AI-powered generation capabilities"
+site_name: "{{ project_name }}"
+site_description: "{{ project_name }} - A modern data science project"
 site_author: "deepsense.ai"
-copyright: "2023, deepsense.ai"
+copyright: "deepsense.ai"
 
-repo_url: https://github.com/deepsense-ai/ds-template/
-repo_name: ds-template
+repo_url: https://github.com/{{ project_name | lower | replace('_', '-') }}/
+repo_name: {{ project_name | lower | replace('_', '-') }}
+
 
 # Theme configuration - using Material theme for modern appearance
 theme:
@@ -41,15 +42,10 @@ theme:
 nav:
   - Home: index.md
   - Quick Start: quickstart.md
-  - AI-Powered Generation: ai_features.md
-  - Template Content:
-    - template_content.md
-    - Python Structure: tmp_content/python_structure.md
-    - Code Quality: tmp_content/precommit.md
-    - Development Tools: tmp_content/mise.md
-    - GitLab CI: tmp_content/gitlab_ci.md
-    - GitHub CI: tmp_content/github_ci.md
-    - Semantic Versioning: tmp_content/semver_package.md
+  - Development:
+    - Setup: development/setup.md
+    - Project Structure: development/project_structure.md
+    - CI/CD: development/ci_cd.md
 
 # Plugins
 plugins:
@@ -70,7 +66,7 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+          format: python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite

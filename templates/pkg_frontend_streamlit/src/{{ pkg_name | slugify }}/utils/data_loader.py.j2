@@ -1,0 +1,95 @@
+"""Data loading utilities."""
+
+from datetime import datetime, timedelta
+
+import numpy as np
+import pandas as pd
+import requests
+import streamlit as st
+
+from {{ pkg_name | slugify }}.config import settings
+
+rng = np.random.default_rng()
+
+@st.cache_data(ttl=3600)
+def load_sample_data() -> pd.DataFrame:
+    """Load sample data for demonstration."""
+    # Generate sample time series data
+    dates = pd.date_range(
+        start=datetime.now() - timedelta(days=90),
+        end=datetime.now(),
+        freq="D"
+    )
+
+    df = pd.DataFrame({
+        "date": dates,
+        "value": np.cumsum(rng.standard_normal(len(dates))) + 100,
+        "volume": rng.integers(1000, 5000, size=len(dates)),
+        "category": rng.choice(["A", "B", "C", "D"], size=len(dates)),
+    })
+
+    return df
+
+
+@st.cache_data
+def load_csv(file_path: str) -> pd.DataFrame:
+    """Load CSV file with caching."""
+    return pd.read_csv(file_path)
+
+
+@st.cache_data
+def fetch_api_data(endpoint: str, params: dict | None= None, timeout: int = 15) -> dict:
+    """Fetch data from API with caching."""
+    url = f"{settings.api_url}/{endpoint}"
+    response = requests.get(url, params=params, timeout=timeout)
+    response.raise_for_status()
+
+    return response.json()
+
+
+def filter_dataframe(df: pd.DataFrame, filters: dict) -> pd.DataFrame:
+    """Apply filters to a dataframe."""
+    filtered_df = df.copy()
+
+    # Date range filter
+    if "start_date" in filters and "end_date" in filters and "date" in filtered_df.columns:
+        filtered_df = filtered_df[
+            (filtered_df["date"] >= pd.to_datetime(filters["start_date"])) &
+            (filtered_df["date"] <= pd.to_datetime(filters["end_date"]))
+        ]
+
+    # Category filter
+    if "categories" in filters and filters["categories"] and "category" in filtered_df.columns:
+        filtered_df = filtered_df[filtered_df["category"].isin(filters["categories"])]
+
+    # Numeric range filter
+    if "min_value" in filters and "max_value" in filters and "value" in filtered_df.columns:
+        filtered_df = filtered_df[
+            (filtered_df["value"] >= filters["min_value"]) &
+            (filtered_df["value"] <= filters["max_value"])
+        ]
+
+    return filtered_df
+
+
+def aggregate_data(df: pd.DataFrame, aggregation: str = "Daily") -> pd.DataFrame:
+    """Aggregate data based on specified frequency."""
+    if "date" not in df.columns:
+        return df
+
+    freq_map = {
+        "Daily": "D",
+        "Weekly": "W",
+        "Monthly": "M",
+    }
+
+    freq = freq_map.get(aggregation, "D")
+
+    # Group by date with specified frequency
+    df["date"] = pd.to_datetime(df["date"])
+    aggregated = df.set_index("date").resample(freq).agg({
+        col: "sum" if df[col].dtype in ["int64", "float64"] else "first"
+        for col in df.columns if col != "date"
+    }).reset_index()
+
+    return aggregated

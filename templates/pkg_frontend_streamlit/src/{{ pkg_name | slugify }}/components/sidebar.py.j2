@@ -1,0 +1,72 @@
+"""Sidebar component for conversation history."""
+
+from datetime import datetime
+
+import streamlit as st
+
+
+def render_sidebar() -> None:
+    """Render the sidebar with conversation history."""
+    with st.sidebar:
+        if st.button("➕ New Chat", use_container_width=True, type="primary"):
+            create_new_conversation()
+            st.rerun()
+
+        st.markdown("---")
+
+        # List conversations
+        if st.session_state.conversations:
+            st.subheader("History")
+
+            # Sort conversations by creation time (newest first)
+            sorted_convs = sorted(
+                st.session_state.conversations.items(),
+                key=lambda x: x[1].get("created_at", datetime.now()),
+                reverse=True
+            )
+
+            for conv_id, conv_data in sorted_convs:
+                messages = conv_data.get("messages", [])
+                title = conv_data.get("title", "Untitled")
+
+                # Show conversation preview
+                preview = f"📝 {title}"
+                if messages:
+                    preview += f" ({len(messages)} msgs)"
+
+                is_active = conv_id == st.session_state.current_conversation_id
+
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    if st.button(
+                        preview,
+                        key=f"conv_{conv_id}",
+                        use_container_width=True,
+                        type="primary" if is_active else "secondary"
+                    ):
+                        st.session_state.current_conversation_id = conv_id
+                        st.session_state.messages = conv_data.get("messages", [])
+                        st.rerun()
+
+                with col2:
+                    if st.button("🗑️", key=f"del_{conv_id}", help="Delete conversation"):
+                        del st.session_state.conversations[conv_id]
+                        if st.session_state.current_conversation_id == conv_id:
+                            st.session_state.current_conversation_id = None
+                            st.session_state.messages = []
+                        st.rerun()
+        else:
+            st.info("No conversations yet. Click 'New Chat' to start!")
+
+
+def create_new_conversation() -> None:
+    """Create a new conversation."""
+    st.session_state.conversation_counter += 1
+    conv_id = f"conv_{st.session_state.conversation_counter}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    st.session_state.conversations[conv_id] = {
+        "messages": [],
+        "created_at": datetime.now(),
+        "title": f"Chat {st.session_state.conversation_counter}"
+    }
+    st.session_state.current_conversation_id = conv_id
+    st.session_state.messages = []

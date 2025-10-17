@@ -1,0 +1,45 @@
+"""API configuration."""
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    """API settings."""
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    # API Configuration
+    api_host: str = Field(default="localhost", description="API host")
+    api_port: int = Field(default={{ api_port }}, description="API port")
+
+    # CORS
+    cors_origins: list[str] = Field(
+        default=["http://localhost:3000", "http://localhost:{{ api_port }}"],
+        description="Allowed CORS origins"
+    )
+
+    # Database
+    database_url: str = Field(
+        default="sqlite:///./api.db",
+        description="Database connection URL"
+    )
+
+    # Security
+    secret_key: str = Field(
+        default="your-secret-key-change-in-production",
+        description="Secret key for JWT tokens"
+    )
+
+    # Logging
+    log_level: str = Field(
+        default="INFO",
+        description="Logging level"
+    )
+
+
+settings = Settings()
