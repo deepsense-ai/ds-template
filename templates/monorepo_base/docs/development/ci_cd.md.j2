@@ -13,7 +13,7 @@ The project uses {% if ci == "GitHub" %}GitHub Actions{% elif ci == "GitLab" %}G
 - Tests code quality (ruff, mypy, bandit)
 - Runs test suite with pytest
 - Generates coverage reports
-- Supports Python {{ python_version }}, 3.12, 3.11
+- Supports Python {{ python_version }}+
 
 ### Release Pipeline (`.github/workflows/release.yml`)
 - Triggered by version tags (e.g., `v1.0.0`)
@@ -32,7 +32,7 @@ The project uses {% if ci == "GitHub" %}GitHub Actions{% elif ci == "GitLab" %}G
 - Tests code quality (ruff, mypy, bandit)
 - Runs test suite with pytest
 - Generates coverage reports
-- Supports Python {{ python_version }}, 3.12, 3.11
+- Supports Python {{ python_version }}+
 
 ### Release Pipeline (`.gitlab-ci.yml`)
 - Triggered by version tags (e.g., `v1.0.0`)

@@ -3,8 +3,9 @@ site_description: "{{ project_name }} - A modern data science project"
 site_author: "deepsense.ai"
 copyright: "deepsense.ai"
 
-repo_url: https://github.com/{{ project_name | lower | replace('_', '-') }}/
-repo_name: {{ project_name | lower | replace('_', '-') }}
+site_url: https://deepsense-ai.{% if ci == "GitHub" %}github.io{% elif ci == "GitLab" %}gitlab.io{% endif %}/{{ project_name | slugify }}/
+repo_url: https://{% if ci == "GitHub" %}github.com{% elif ci == "GitLab" %}gitlab.com{% endif %}/{{ project_name | slugify }}/
+repo_name: {{ project_name | slugify }}
 
 
 # Theme configuration - using Material theme for modern appearance
