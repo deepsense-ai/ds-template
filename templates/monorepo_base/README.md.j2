@@ -1,7 +1,9 @@
 # {{ project_name }}
 
-Repository is created with deepsense.ai project template boilerplate. Adapt to your needs.
-Documentation is available at [https://deepsense-ai.github.io/ds-template/](https://deepsense-ai.github.io/ds-template/).
+This repository was created using the deepsense.ai project template boilerplate. Adapt it to your needs.
+Basic documentation is provided in this README and in the local `docs/` directory using MkDocs.  
+For more detailed documentation or guidance, please visit [https://deepsense-ai.github.io/ds-template/](https://deepsense-ai.github.io/ds-template/).
+
 
 This is a uv workspace project containing multiple packages.
 
@@ -19,6 +21,15 @@ Then setup the project:
 
 ```bash
 uv sync
+```
+
+### Initialize Git and Pre-commit
+
+```bash
+git init
+git add .
+git commit -m "initial commit"
+uv run pre-commit install
 ```
 
 ### Running Tests
@@ -42,6 +53,15 @@ uv run mkdocs serve
 The documentation will be available at `http://127.0.0.1:8000` when using `mkdocs serve`.
 
 ## Development
+
+### Dev Tools
+
+- uv (dependency and task runner)
+- mise (toolchain/version manager)
+- ruff (lint + format)
+- mypy (type checking)
+- pytest (tests)
+- mkdocs (docs)
 
 ### Code Quality
 
@@ -68,14 +88,30 @@ uv run mypy packages/
 
 ```
 {{ project_name }}/
-├── packages/          # Individual Python packages
-├── docs/             # Documentation source files
-├── site/             # Built documentation (generated)
-├── scripts/          # Utility scripts
-├── tests/            # Test files
-├── mkdocs.yml        # MkDocs configuration
-└── pyproject.toml    # Project configuration
+{% if ci == "GitHub" %}├── .github/workflows/     # CI workflows
+{% elif ci == "GitLab" %}├── .gitlab-ci.yml         # GitLab CI pipeline
+{% endif %}├── packages/              # Workspace packages (apps/libs)
+│   └── <pkg>/
+│       ├── pyproject.toml     # Package config
+│       └── src/<pkg>/         # Package sources
+├── docs/                  # Documentation sources
+├── site/                  # Built docs (generated)
+├── scripts/               # Utility scripts
+├── mkdocs.yml             # Docs configuration
+├── mise.toml              # Tool versions and tasks
+└── pyproject.toml         # Workspace + tooling config
 ```
+
+### pyproject.toml
+
+- Defines uv workspace, dependencies, tool configs (ruff, mypy, pytest)
+- Per-package `pyproject.toml` lives under each `packages/<pkg>/`
+
+### mise
+
+- Manage toolchain and tasks
+- Install tools: `mise install`
+- Run tasks (if defined): `mise run <task>`
 
 ## Documentation
 

@@ -1,31 +1,50 @@
 # Development Setup
 
+Initial setup and environment configuration for development.
+
 ## Prerequisites
 
 - Python {{ python_version }} or higher
-- uv package manager
+- [uv](https://docs.astral.sh/uv/) package manager
+- [mise](https://mise.jdx.dev/) toolchain manager
 - Git
 
-## Setup
+
+## Initial Setup
 
 ```bash
-# Clone and install
-git clone {{ repo_url }}
-cd {{ project_name | lower | replace('_', '-') }}
-uv sync --dev
-pre-commit install
+# Clone the repository
+git clone <GIT-SSH>
+cd {{ project_name | slugify }}
+
+# Trust the project with mise
+mise trust
+
+# Install dependencies
+uv sync
+
+# Enable pre-commit hooks
+uv run pre-commit install
 ```
 
-## Running the App
+## Verification
+
+Verify your setup is working:
 
 ```bash
-# Run the application
-uv run python -m {{ pkg_name }}.cli --help
+# Check tool versions
+mise current
+
+# Run code quality checks
+uv run pre-commit run --all-files
 
 # Run tests
 uv run pytest
 
-# Code quality checks
-uv run ruff check .
-uv run ruff format .
+# Build documentation
+uv run mkdocs build
 ```
+
+## Next Steps
+
+- [Project Structure](project_structure.md) - Understanding the codebase

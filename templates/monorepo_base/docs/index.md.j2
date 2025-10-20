@@ -12,36 +12,17 @@ This project provides a solid foundation for data science applications with:
 - **Code quality** - Pre-commit hooks, linting, and type checking
 - **Documentation** - Comprehensive guides and API documentation
 
-## Quick Start
-
-Get started with {{ project_name }} in minutes:
-
-```bash
-# Install the package
-pip install {{ project_name | lower | replace('_', '-') }}
-
-# Or install in development mode
-git clone {{ repo_url }}
-cd {{ project_name | lower | replace('_', '-') }}
-uv sync --dev
-```
-
-## Features
-
-- 🚀 **Fast and reliable** - Built with modern Python tooling
-- 🔒 **Secure** - Regular security scanning and dependency updates
-- 🧪 **Well tested** - Comprehensive test coverage{% if ci != "None" %} with automated CI{% endif %}
-- 📚 **Well documented** - Clear guides and API documentation
-- 🔧 **Developer friendly** - Pre-configured development environment
-
 ## Getting Started
 
-- [Quick Start Guide](quickstart.md) - Get up and running quickly
-- [Development Setup](development/setup.md) - Set up your development environment
-- [Project Structure](development/project_structure.md) - Understand the codebase
+- [Quick Start Guide](quickstart.md) - Local setup, quality checks, tests, docs
+- [Development Setup](development/setup.md) - Configure tools (uv, mise, ruff, mypy, pytest)
+- [Project Structure](development/project_structure.md) - Monorepo layout and packages
 
 ## Development
 
-- [Setup](development/setup.md) - Development environment setup
-- [Project Structure](development/project_structure.md) - Code organization
+- [Setup](development/setup.md) - Environment setup, pyproject.toml, mise usage
+- [Project Structure](development/project_structure.md) - Code organization and workspaces
 {% if ci != "None" %}- [CI/CD](development/ci_cd.md) - Continuous integration and deployment{% endif %}
+
+> To learn how repositories are generated from the template, see the
+> ds-template documentation at `https://deepsense-ai.github.io/ds-template/`.
