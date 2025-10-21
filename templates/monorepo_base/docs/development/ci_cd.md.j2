@@ -3,14 +3,14 @@
 {% if ci != "None" %}
 ## Overview
 
-The project uses {% if ci == "GitHub" %}GitHub Actions{% elif ci == "GitLab" %}GitLab CI{% endif %} for automated testing, building, and deployment.
+The project uses {% if ci == "GitHub" %}GitHub Actions{% elif ci == "GitLab" %}GitLab CI (`.gitlab-ci.yml`){% endif %} for automated testing, building, and deployment.
 
 ## Workflows
 
 {% if ci == "GitHub" %}
 ### CI Pipeline (`.github/workflows/ci.yml`)
 - Runs on every push and pull request
-- Tests code quality (ruff, mypy, bandit)
+- Tests code quality (ruff, mypy)
 - Runs test suite with pytest
 - Generates coverage reports
 - Supports Python {{ python_version }}+
@@ -27,20 +27,20 @@ The project uses {% if ci == "GitHub" %}GitHub Actions{% elif ci == "GitLab" %}G
 - Code security analysis
 
 {% elif ci == "GitLab" %}
-### CI Pipeline (`.gitlab-ci.yml`)
+### CI Pipeline
 - Runs on every push and merge request
-- Tests code quality (ruff, mypy, bandit)
+- Tests code quality (ruff, mypy)
 - Runs test suite with pytest
 - Generates coverage reports
 - Supports Python {{ python_version }}+
 
-### Release Pipeline (`.gitlab-ci.yml`)
+### Release Pipeline
 - Triggered by version tags (e.g., `v1.0.0`)
 - Builds and tests the package
 - Publishes to PyPI
 - Creates GitLab releases
 
-### Security Pipeline (`.gitlab-ci.yml`)
+### Security Pipeline
 - Daily security scanning
 - Dependency vulnerability checks
 - Code security analysis
