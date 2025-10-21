@@ -1,25 +1,51 @@
-# deepsense.ai Project Template
+---
+<h1 align="center" id="main-header">🚀 ds-template</h1>
+<p align="center">
+  <em size="">Create custom projects from templates.</em>
+</p>
+---
 
-This documentation provides information about a basic template to bootstrap new data science application projects, as well as contains some details about design choices and tools used.
+A comprehensive project template generator for data science and Python projects that combines traditional template-based generation with **AI-powered project generation** capabilities.
 
-It is a result of our experiences at [deepsense.ai](https://deepsense.ai/) with building AI projects and is a part of our internal best practices.
-Some settings might be less/more restrictive than you need, but we believe it is better to start with a good baseline and modify it later than to start from scratch.
 
-Even if it is not a silver bullet, it is a great starting point for your project if you care about quality and security and you want to focus on building rather than spending a lot of time setting up the project.
+This tool is designed to bootstrap professional data science and Python projects with modern tooling and best practices. The process starts with basic questions (project name, Python version, CI/CD provider) and then offers two approaches:
 
-## Quick Start
+### 📋 Traditional Template Generation
+- **Package Selection**: Choose which packages you want to include (core, api, frontend, etc.)
+- **Proven Templates**: Uses predefined package types and configurations
+- **Modern Tooling**: Ruff, uv, MkDocs, pytest, and more
+- **Monorepo Support**: Multi-package workspace structure
 
-To create a new data science project, simply run:
+### 🤖 AI-Powered Generation *(Recommended)*
+- **Natural Language Descriptions**: Describe your project
+- **Intelligent Follow-up Questions**: AI generates relevant questions to understand your requirements
+- **Optimal Structure Proposal**: AI suggests the best project architecture
+- **Template-Based Implementation**: Uses proven templates from the `templates/` directory
+- **Interactive Customization**: Claude Code integration for real-time project adaptation
 
-```bash
-uvx create-ds-app
-```
+## Key Features
 
-This will guide you through the project creation process with interactive prompts.
+- **Modern Python Workspace**: uv-based project management with workspace support
+- **Development Environment**: mise for tool versioning and environment management
+- **Code Quality**: Ruff for fast linting, formatting, and type checking
+- **Testing**: pytest with coverage reporting and async support
+- **Documentation**: MkDocs with Material theme and interactive features
+- **CI/CD**: Optional GitHub Actions or GitLab CI pipelines
+- **AI Integration**: Claude Code for intelligent project generation and customization
 
-## Contents
+## Key Benefits
 
-- [Quick Start](quickstart.md)
-- [Template Content](template_content.md)
-- [Template Structure](template_structure.md)
-- [Overall Design](overall_design.md)
+- **Modern tooling** - Latest Python packaging, testing, and development tools
+- **AI-powered generation** - Intelligent project creation based on natural language descriptions
+- **Proven templates** - Battle-tested patterns and best practices
+- **Flexible architecture** - Monorepo structure with independent packages
+- **Comprehensive CI/CD** - Optional automation with GitHub Actions or GitLab CI
+- **Professional documentation** - Modern documentation with interactive features
+- **Easy customization** - Claude Code integration for real-time assistance
+
+
+## Documentation
+
+- [Quick Start](quickstart.md) - Get up and running quickly
+- [AI-Powered Generation](ai_features.md) - Learn about AI features and workflow
+- [Template Content](template_content.md) - What's included in generated projects

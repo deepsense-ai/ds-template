@@ -1,61 +1,92 @@
 # GitHub Actions CI
 
-This is **optional** template option, which results in `.github` directory creation which contains workflows.
+This is an **optional** template option that creates comprehensive CI workflows for your project.
 
-It generates two workflows: one standard CI and second only for building documentation.
+## What's Included
 
-## CI Workflow
+The GitHub Actions workflow includes four main jobs:
 
-By default each base branch and pull request will trigger CI workflow.
+### 1. **Lint and Static Analysis**
+- **Ruff** - Fast linting and formatting checks
+- **mypy** - Type checking and type safety validation
+- **bandit** - Security vulnerability scanning
+- **License checking** - Validates package licenses against allowlist
 
-The workflow is defined in `.github/workflows/ci.yml` file.
+### 2. **Unit Tests**
+- **pytest** - Comprehensive test suite execution
+- **Coverage reporting** - Code coverage analysis and reporting
+- **Multi-Python support** - Tests across Python versions
+- **Test artifacts** - JUnit XML reports for GitHub integration
 
-It consists of two major jobs:
-1. **Run linters**
-  - runs `pre-commit` checks to validate formatting, code style, type hints, security and other checks.
-  - runs `trivy` to check for security vulnerabilities (will add new comment to PR).
-  - checks licenses against list of allowed licenses.
-  - generates `pip freeze` to provide reproducible build.
-  - validate if python package can be build with thebuild tool.
-1. **Run tests**
-  - runs `pytest` tests with code coverage (cobertura format).
-  - report test results to GitHub (will add new check).
-  - report code coverage  (will add new comment to PR).
+### 3. **Security Scanning**
+- **Trivy** - Container and filesystem vulnerability scanning
+- **SARIF reporting** - Security results integration with GitHub Security tab
+- **Dependency scanning** - Third-party package vulnerability detection
+
+### 4. **Package Building**
+- **uv build** - Modern Python package building
+- **Artifact upload** - Built packages available for download
+- **Multi-platform support** - Cross-platform package compatibility
 
 ![Main CI workflow](../_static/gh.png)
 
-### Code coverage
+## Modern Tooling
 
-Default code coverage recommended setup is one which uses additional branch to track coverage changes and comment on PRs.
+### Ruff Integration
+The workflow uses **Ruff** for fast, comprehensive code quality checks:
+- **10-100x faster** than traditional linters
+- **Unified tooling** - replaces black, isort, flake8, pylint
+- **Automatic fixes** - Many issues can be auto-corrected
+- **Comprehensive rules** - Style, logic, security, and documentation
+
+### uv Package Management
+Modern Python package management with **uv**:
+- **Fast dependency resolution** - Significantly faster than pip
+- **Workspace support** - Monorepo package management
+- **Lock file generation** - Reproducible builds
+- **Cross-platform compatibility** - Works on all platforms
+
+### Code Coverage
+
+Default code coverage setup uses Codecov integration:
+- **Coverage reporting** - Detailed coverage metrics
+- **PR comments** - Coverage changes in pull requests
+- **Coverage badges** - Visual coverage status
+- **Historical tracking** - Coverage trends over time
 
 ![Code coverage comment preview](../_static/gh_coverage.png)
 
-### Artifacts
+## Artifacts
 
-There are generated artifacts which can be downloaded from GitHub UI.
+Generated artifacts available for download from GitHub UI:
 
 ![Github artifacts](../_static/gh_artifacts.png)
 
+### Build Artifacts
+- **dist/** - Built Python packages (wheel and source distribution)
+- **Coverage reports** - HTML and XML coverage reports
+- **Test results** - JUnit XML test reports
 
-1. **packages**:
-    - **dist/** - contains built python package
-1. **results**:
-    - **trivy-scanning-results.txt** - contains trivy security scan results rendered as ascii table
-    - **licenses.txt** - contains dump of libraries with detected licenses
-    - **requirements-freeze.txt** - pip freeze to provide reproducible build
-1. **test-report**:
-    - contains just `report.xml` with results of executed tests
+### Security Artifacts
+- **trivy-results.sarif** - Security scan results in SARIF format
+- **Security reports** - Detailed vulnerability information
 
-### License validation
+### License Artifacts
+- **licenses.txt** - Detected package licenses
+- **License validation** - Compliance checking results
 
-We use `pip-licenses` to extract installed packages and obtain license information.
+## License Validation
 
-By default, we accept only those selected licenses from `.license-whitelist.txt`. 
-Each short license must be in new line and it is matched by checking if string exists in line.
+The workflow includes automated license checking:
 
-Sometimes there are situations when a license library detection does not work or there is a justified decision
-to accept some license - to accept such library edit `.libraries-whitelist.txt`.
-All libraries must be put in single line.
+- **pip-licenses** - Extracts package license information
+- **Allowlist validation** - Checks against approved licenses
+- **Compliance reporting** - Detailed license analysis
+- **CI integration** - Fails build on license violations
+
+### Configuration Files
+- **`.license-whitelist.txt`** - Approved licenses (one per line)
+- **`.libraries-whitelist.txt`** - Exempted libraries (single line)
 
 ```{warning}
 `.license-whitelist.txt` must have a license in each distinct line.
@@ -74,18 +105,39 @@ Changing YAML is error-prone so here are protips:
 1. Operate on branch first or create a temporary test repository.
 1. `if` and similar conditions should be added last, after testing a job.
 
-## Documentation workflow
+## Workflow Features
 
-### GitHub Pages
+### Multi-Python Support
+The workflow supports multiple Python versions:
+- **Python 3.11** - Minimum supported version
+- **Python 3.12** - Current stable version  
+- **Python 3.13** - Latest version
 
-By default **Github Actions** pipelines have `documentation` workflow which will build sphinx documentation automatically on main branch - and it will push it to a branch - it can be hosted on **Github Pages** if you enable it.
+### Monorepo Support
+- **Workspace management** - Handles multiple packages
+- **Package-specific testing** - Tests individual packages
+- **Dependency resolution** - Manages inter-package dependencies
+- **Selective building** - Builds only changed packages
 
-To access it, you need to enable it, on **Github repository -> Settings -> Pages** page select **Deploy from a branch** and select **gh-pages**. Link will appear here after deployment.
+### Security Integration
+- **Trivy scanning** - Comprehensive vulnerability detection
+- **SARIF reporting** - GitHub Security tab integration
+- **Dependency scanning** - Third-party package analysis
+- **License compliance** - Automated license validation
 
-```{warning}
-Only on Github Enterprise you can make it private and limit it to only people with repository access.
-```
+## GitHub Actions Tips
 
-Please read more about it [here](https://docs.github.com/en/pages/quickstart).
+Please get familiar with official documentation before modifying YAML configuration.
 
-![Github Pages setup for hosting documentation](../_static/gh_pages.png)
+### Best Practices
+1. **Visual Studio Code** has a GitHub Actions extension for YAML validation
+2. **Use YAML validator** in your editor to fix whitespace issues
+3. **Test on branches** - Create temporary repositories for testing
+4. **Add conditions last** - Test jobs before adding `if` conditions
+5. **Use marketplace actions** - Prefer official and well-maintained actions
+
+### Common Modifications
+- **Add Python versions** - Extend matrix strategy
+- **Modify triggers** - Change `on` conditions
+- **Add environment variables** - Use `env` section
+- **Customize artifacts** - Modify `artifacts` configuration

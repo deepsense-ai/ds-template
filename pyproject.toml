@@ -1,9 +1,21 @@
 [project]
-name = "create-ds-app-monorepo"
+name = "create-ds-app"
 version = "0.1.0"
 description = "Monorepo containing data science project creation tools"
+readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["ds-templater", "ds-repo", "create-ds-app", "ds-code-generator"]
+dependencies = [
+    "ds-templater",
+    "typer>=0.9.0",
+    "rich>=13.9.4",
+    "questionary>=2.1.0",
+    "loguru>=0.7.3",
+    "tomlkit>=0.13.3",
+    "claude-agent-sdk>=0.1.0",
+]
+
+[project.scripts]
+create-ds-app = "create_ds_app.main:entrypoint"
 
 [tool.uv]
 dev-dependencies = [
@@ -21,14 +33,22 @@ dev-dependencies = [
     "mkdocs-mermaid2-plugin>=1.1.0",
 ]
 
-[tool.uv.workspace]
-members = ["packages/ds-templater", "packages/ds-repo", "packages/create-ds-app", "packages/ds-code-generator"]
-
 [tool.uv.sources]
-ds-templater = { workspace = true }
-ds-repo = { workspace = true }
-create-ds-app = { workspace = true }
-ds-code-generator = { workspace = true }
+ds-templater = { path = "../ds-templater" }
+#ds-templater = { git = "https://github.com/deepsense-ai/ds-templater.git", rev = "bb/feat-create-ds-templater" }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/create_ds_app"]
+
+[tool.hatch.build]
+include = ['src/**/*']
 
 [tool.pytest]
 norecursedirs = [
@@ -69,10 +89,10 @@ check_untyped_defs = true
 no_implicit_optional = true
 explicit_package_bases = true
 mypy_path = ["src"]
-exclude = ["src/create_ds_app/templates/*/src/{{pkg_name}}/__init__.py"]
+exclude = ["templates/*/src/{{pkg_name}}/__init__.py"]
 
 [[tool.mypy.overrides]]
-module = ["create-ds-app.*", "ds-templater.*", "ds-repo.*", "ds-code-generator.*"]
+module = ["create_ds_app.*"]
 ignore_missing_imports = false
 disallow_untyped_defs = true
 
@@ -155,7 +175,7 @@ docstring-code-format = true
 docstring-code-line-length = 120
 
 [tool.ruff.lint.isort]
-known-first-party = ["create-ds-app", "ds-templater", "ds-repo", "ds-code-generator"]
+known-first-party = ["create-ds-app"]
 known-third-party = [
     "IPython",
     "PIL",

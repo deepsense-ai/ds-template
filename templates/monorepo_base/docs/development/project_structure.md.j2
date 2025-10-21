@@ -1,0 +1,20 @@
+# Project Structure
+
+## Directory Structure
+
+```
+{{ project_name | slugify }}/
+{% if ci == "GitHub" %}├── .github/workflows/         # CI/CD workflows
+{% elif ci == "GitLab" %}├── .gitlab-ci.yml             # GitLab CI configuration
+{% endif %}├── packages/                 # Workspace packages (apps/libs)
+│   └── <pkg>/
+│       ├── pyproject.toml        # Package configuration
+│       └── src/{{ pkg_name }}/   # Package sources
+├── docs/                      # Documentation
+├── site/                      # Built docs (generated)
+├── scripts/                   # Utility scripts
+├── mkdocs.yml                 # Docs configuration
+├── mise.toml                  # Tool versions and tasks
+├── pyproject.toml             # Workspace configuration
+└── README.md
+```

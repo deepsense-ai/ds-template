@@ -1,5 +1,5 @@
-site_name: "Project Template"
-site_description: "A basic template to bootstrap new data science or python application project"
+site_name: "ds-template"
+site_description: "A comprehensive project template generator for data science and Python projects with AI-powered generation capabilities"
 site_author: "deepsense.ai"
 copyright: "2023, deepsense.ai"
 
@@ -10,8 +10,22 @@ repo_name: ds-template
 theme:
   name: material
   palette:
-    primary: blue
-    accent: light blue
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   features:
     - navigation.tabs
     - navigation.sections
@@ -21,21 +35,21 @@ theme:
     - search.share
     - toc.follow
     - toc.integrate
+    - palette
 
 # Navigation structure
 nav:
   - Home: index.md
   - Quick Start: quickstart.md
+  - AI-Powered Generation: ai_features.md
   - Template Content:
     - template_content.md
-    - Template Overview: tmp_content/overview.md
     - Python Structure: tmp_content/python_structure.md
-    - Pre-commit: tmp_content/precommit.md
+    - Code Quality: tmp_content/precommit.md
+    - Development Tools: tmp_content/mise.md
     - GitLab CI: tmp_content/gitlab_ci.md
     - GitHub CI: tmp_content/github_ci.md
     - Semantic Versioning: tmp_content/semver_package.md
-  - Template Structure: template_structure.md
-  - Overall Design: overall_design.md
 
 # Plugins
 plugins:

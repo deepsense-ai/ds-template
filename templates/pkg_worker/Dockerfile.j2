@@ -1,0 +1,18 @@
+FROM python:{{ python_version }}-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY pyproject.toml ./
+COPY src/ ./src/
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -e .
+
+# Run the worker
+CMD ["celery", "-A", "{{ pkg_name }}.worker", "worker", "--loglevel=info"]

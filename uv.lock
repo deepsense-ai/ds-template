@@ -2,15 +2,6 @@ version = 1
 revision = 2
 requires-python = ">=3.13"
 
-[manifest]
-members = [
-    "create-ds-app",
-    "create-ds-app-monorepo",
-    "ds-code-generator",
-    "ds-repo",
-    "ds-templater",
-]
-
 [[package]]
 name = "aiohappyeyeballs"
 version = "2.6.1"
@@ -293,7 +284,7 @@ wheels = [
 [[package]]
 name = "create-ds-app"
 version = "0.1.0"
-source = { editable = "packages/create-ds-app" }
+source = { editable = "." }
 dependencies = [
     { name = "claude-agent-sdk" },
     { name = "ds-templater" },
@@ -302,28 +293,6 @@ dependencies = [
     { name = "rich" },
     { name = "tomlkit" },
     { name = "typer" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "claude-agent-sdk", specifier = ">=0.1.0" },
-    { name = "ds-templater", editable = "packages/ds-templater" },
-    { name = "loguru", specifier = ">=0.7.3" },
-    { name = "questionary", specifier = ">=2.1.0" },
-    { name = "rich", specifier = ">=13.9.4" },
-    { name = "tomlkit", specifier = ">=0.13.3" },
-    { name = "typer", specifier = ">=0.9.0" },
-]
-
-[[package]]
-name = "create-ds-app-monorepo"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "create-ds-app" },
-    { name = "ds-code-generator" },
-    { name = "ds-repo" },
-    { name = "ds-templater" },
 ]
 
 [package.dev-dependencies]
@@ -344,10 +313,13 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "create-ds-app", editable = "packages/create-ds-app" },
-    { name = "ds-code-generator", editable = "packages/ds-code-generator" },
-    { name = "ds-repo", editable = "packages/ds-repo" },
-    { name = "ds-templater", editable = "packages/ds-templater" },
+    { name = "claude-agent-sdk", specifier = ">=0.1.0" },
+    { name = "ds-templater", directory = "../ds-templater" },
+    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "questionary", specifier = ">=2.1.0" },
+    { name = "rich", specifier = ">=13.9.4" },
+    { name = "tomlkit", specifier = ">=0.13.3" },
+    { name = "typer", specifier = ">=0.9.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -376,53 +348,9 @@ wheels = [
 ]
 
 [[package]]
-name = "ds-code-generator"
-version = "0.1.0"
-source = { editable = "packages/ds-code-generator" }
-dependencies = [
-    { name = "claude-agent-sdk" },
-    { name = "jinja2" },
-    { name = "loguru" },
-    { name = "pydantic" },
-    { name = "pyyaml" },
-    { name = "questionary" },
-    { name = "rich" },
-    { name = "typer" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "claude-agent-sdk", specifier = ">=0.1.0" },
-    { name = "jinja2", specifier = ">=3.1.6" },
-    { name = "loguru", specifier = ">=0.7.3" },
-    { name = "pydantic", specifier = ">=2.10.6" },
-    { name = "pyyaml", specifier = ">=6.0.2,<7.0.0" },
-    { name = "questionary", specifier = ">=2.1.0" },
-    { name = "rich", specifier = ">=13.9.4" },
-    { name = "typer", specifier = ">=0.9.0" },
-]
-
-[[package]]
-name = "ds-repo"
-version = "0.1.0"
-source = { editable = "packages/ds-repo" }
-dependencies = [
-    { name = "pydantic" },
-    { name = "rich" },
-    { name = "typer" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pydantic", specifier = ">=2.10.6" },
-    { name = "rich", specifier = ">=13.9.4" },
-    { name = "typer", specifier = ">=0.9.0" },
-]
-
-[[package]]
 name = "ds-templater"
 version = "0.1.0"
-source = { editable = "packages/ds-templater" }
+source = { directory = "../ds-templater" }
 dependencies = [
     { name = "jinja2" },
     { name = "loguru" },
@@ -442,6 +370,22 @@ requires-dist = [
     { name = "questionary", specifier = ">=2.1.0" },
     { name = "rich", specifier = ">=13.9.4" },
     { name = "typer", specifier = ">=0.9.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mkdocs", specifier = ">=1.4.0" },
+    { name = "mkdocs-material", specifier = ">=9.0.0" },
+    { name = "mkdocs-mermaid2-plugin", specifier = ">=1.1.0" },
+    { name = "mypy", specifier = "==1.15.0" },
+    { name = "pre-commit", specifier = "==4.2.0" },
+    { name = "pytest", specifier = "==8.3.5" },
+    { name = "pytest-asyncio", specifier = "==0.24.0" },
+    { name = "pytest-cov", specifier = "==5.0.0" },
+    { name = "ruff", specifier = "==0.11.5" },
+    { name = "textual-dev", specifier = ">=1.7.0" },
+    { name = "tomli-w", specifier = ">=1.0.0" },
+    { name = "types-pyyaml", specifier = ">=6.0.12.20250516" },
 ]
 
 [[package]]
