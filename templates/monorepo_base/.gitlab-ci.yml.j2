@@ -4,10 +4,7 @@ stages:
   - lint
   - test
   - security
-  - package
   - pages
-  - deploy
-  - release
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -41,7 +38,7 @@ test:
   script:
     - uv sync --dev
     - |
-      uv run pytest --cov-report=xml --cov-report=html --junitxml=test-results.xml || exit_code=$?
+      uv run pytest --cov=. --cov-report=xml --cov-report=html --junitxml=test-results.xml || exit_code=$?
       if [ $exit_code -eq 5 ]; then
         echo "No tests collected, treating as success."
         exit_code=0
@@ -90,30 +87,6 @@ security:
       sast: trivy-results.sarif
     expire_in: 1 week
 
-# Package stage - build Python packages
-package:
-  stage: package
-  image: python:{{ python_version }}
-  before_script:
-    - python -m pip install --upgrade pip
-    - pip install uv
-  script:
-    - uv sync --dev
-    - |
-      for dir in packages/*/; do
-        echo "Building $dir"
-        uv build "$dir" --out-dir dist
-      done
-  artifacts:
-    paths:
-      - dist/
-    expire_in: 1 week
-  only:
-    - merge_requests
-    - main
-    - develop
-  interruptible: true
-
 # Pages stage - build documentation
 pages:
   stage: pages
@@ -130,117 +103,4 @@ pages:
       - public
   only:
     - main
-  interruptible: true
-
-# Deploy stage - deploy to GitLab Pages and Package Registry
-deploy:
-  stage: deploy
-  image: python:{{ python_version }}
-  before_script:
-    - python -m pip install --upgrade pip
-    - pip install uv
-  script:
-    - uv sync --dev
-    - uv build
-    - echo "Package built successfully"
-  artifacts:
-    paths:
-      - dist/
-  only:
-    - main
-  when: manual
-  interruptible: true
-
-# Release stage - publish to PyPI and create GitLab release
-release:
-  stage: release
-  image: python:{{ python_version }}
-  before_script:
-    - python -m pip install --upgrade pip
-    - pip install uv
-    - pip install twine
-  script:
-    # Install dependencies
-    - uv sync --dev
-    
-    # Run tests to ensure quality before release
-    - |
-      uv run pytest --cov-report=xml --cov-report=html --junitxml=test-results.xml || exit_code=$?
-      if [ $exit_code -eq 5 ]; then
-        echo "No tests collected, treating as success."
-        exit_code=0
-      fi
-
-      if [ ! -f coverage.xml ]; then
-        echo "No tests ran, creating empty coverage.xml"
-        echo '<?xml version="1.0"?><coverage line-rate="0" branch-rate="0" version="5.0" timestamp="0"></coverage>' > coverage.xml
-      fi
-
-      exit $exit_code
-    
-    # Build packages
-    - |
-      for dir in packages/*/; do
-        echo "Building $dir"
-        uv build "$dir" --out-dir dist
-      done
-    
-    # Publish to PyPI
-    - |
-      if [ -n "$PYPI_API_TOKEN" ]; then
-        echo "Publishing to PyPI..."
-        twine upload --username __token__ --password "$PYPI_API_TOKEN" dist/*
-      else
-        echo "PYPI_API_TOKEN not set, skipping PyPI upload"
-      fi
-    
-    # Create GitLab release
-    - |
-      # Extract version from tag (remove 'v' prefix if present)
-      VERSION=${CI_COMMIT_TAG#v}
-      
-      # Create release notes
-      cat > release_notes.md << EOF
-      ## Release $VERSION
-      
-      This release includes:
-      - All packages from the monorepo
-      - Built and tested with Python {{ python_version }}
-      
-      ### Packages
-      EOF
-      
-      # List built packages
-      for pkg in dist/*.whl; do
-        if [ -f "$pkg" ]; then
-          echo "- $(basename "$pkg")" >> release_notes.md
-        fi
-      done
-      
-      # Create GitLab release using API
-      if [ -n "$GITLAB_TOKEN" ]; then
-        echo "Creating GitLab release..."
-        curl --request POST \
-          --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-          --header "Content-Type: application/json" \
-          --data "{
-            \"name\": \"Release $VERSION\",
-            \"tag_name\": \"$CI_COMMIT_TAG\",
-            \"description\": \"$(cat release_notes.md)\",
-            \"assets\": {
-              \"links\": []
-            }
-          }" \
-          "$CI_API_V4_URL/projects/$CI_PROJECT_ID/releases"
-      else
-        echo "GITLAB_TOKEN not set, skipping GitLab release creation"
-      fi
-  artifacts:
-    paths:
-      - dist/
-      - release_notes.md
-    expire_in: 1 week
-  only:
-    - tags
-  when: manual
   interruptible: true
