@@ -1,0 +1,106 @@
+# GitLab CI configuration for {{ project_name }}
+
+stages:
+  - lint
+  - test
+  - security
+  - pages
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+
+# Lint stage - code quality checks
+lint:
+  stage: lint
+  image: python:{{ python_version }}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install uv
+  script:
+    - uv sync --dev
+    - uv run ruff check .
+    - uv run mypy .
+    - uv run bash check_licenses.sh
+  only:
+    - merge_requests
+    - main
+    - develop
+  interruptible: true
+
+# Test stage - run test suite
+test:
+  stage: test
+  image: python:{{ python_version }}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install uv
+  script:
+    - uv sync --dev
+    - |
+      uv run pytest --cov=. --cov-report=xml --cov-report=html --junitxml=test-results.xml || exit_code=$?
+      if [ $exit_code -eq 5 ]; then
+        echo "No tests collected, treating as success."
+        exit_code=0
+      fi
+
+      if [ ! -f coverage.xml ]; then
+        echo "No tests ran, creating empty coverage.xml"
+        echo '<?xml version="1.0"?><coverage line-rate="0" branch-rate="0" version="5.0" timestamp="0"></coverage>' > coverage.xml
+      fi
+
+      exit $exit_code
+  artifacts:
+    reports:
+      junit: test-results.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - htmlcov/
+      - dist/
+      - licenses.txt
+      - requirements-freeze.txt
+      - coverage.xml
+    expire_in: 1 week
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  only:
+    - merge_requests
+    - main
+    - develop
+  interruptible: true
+
+# Security stage - vulnerability scanning
+security:
+  stage: security
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  script:
+    - echo "Starting Trivy scan on source code..."
+    # Scan the filesystem (source code) and output SARIF format to a file
+    - trivy fs --format sarif --output trivy-results.sarif .
+  artifacts:
+    paths:
+      - trivy-results.sarif
+    reports:
+      sast: trivy-results.sarif
+    expire_in: 1 week
+
+# Pages stage - build documentation
+pages:
+  stage: pages
+  image: python:{{ python_version }}
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install uv
+  script:
+    - uv sync --dev
+    - uv run mkdocs build
+    - mv site public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+  interruptible: true
