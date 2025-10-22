@@ -1,0 +1,89 @@
+# {{ pkg_name }}
+
+Background worker service for processing asynchronous tasks.
+
+## Features
+
+- **Celery Integration**: Distributed task queue for background processing
+- **Multiple Worker Types**: Support for periodic tasks, event-driven processing
+- **Task Monitoring**: Built-in task tracking and monitoring
+- **Error Handling**: Retry logic and dead letter queues
+- **Docker Ready**: Containerized for easy deployment
+
+## Installation
+
+For development:
+
+```bash
+pip install -e "packages/{{ pkg_name }}[dev]"
+```
+
+## Running the Worker
+
+### Development
+
+Start Redis (required for Celery):
+
+```bash
+docker run -d -p 6379:6379 redis:alpine
+```
+
+Start the worker:
+
+```bash
+cd packages/{{ pkg_name }}
+celery -A {{ pkg_name }}.worker worker --loglevel=info
+```
+
+Start the beat scheduler (for periodic tasks):
+
+```bash
+celery -A {{ pkg_name }}.worker beat --loglevel=info
+```
+
+### Production with Docker
+
+```bash
+cd packages/{{ pkg_name }}
+docker build -t {{ pkg_name }} .
+docker run {{ pkg_name }}
+```
+
+## Configuration
+
+Create a `.env` file:
+
+```env
+REDIS_URL=redis://localhost:6379/0
+CELERY_BROKER_URL=redis://localhost:6379/0
+CELERY_RESULT_BACKEND=redis://localhost:6379/0
+LOG_LEVEL=INFO
+```
+
+## Adding Tasks
+
+Create new tasks in the `tasks` directory:
+
+```python
+from {{ pkg_name }}.worker import celery_app
+
+@celery_app.task(bind=True, max_retries=3)
+def process_item(self, item_id: int):
+    try:
+        # Process the item
+        return {"status": "completed", "item_id": item_id}
+    except Exception as exc:
+        # Retry the task
+        raise self.retry(exc=exc, countdown=60)
+```
+
+## Monitoring
+
+Monitor tasks using Flower:
+
+```bash
+pip install flower
+celery -A {{ pkg_name }}.worker flower
+```
+
+Access the monitoring dashboard at http://localhost:5555

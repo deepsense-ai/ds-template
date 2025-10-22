@@ -7,8 +7,7 @@ from ds_templater import TemplateConfig
 
 def validate_monorepo() -> bool:
     """Check if we're inside a monorepo by looking for pyproject.toml at root."""
-    current_dir = Path.cwd()
-    pyproject_path = current_dir / "pyproject.toml"
+    pyproject_path = Path.cwd() / "pyproject.toml"
 
     if not pyproject_path.exists():
         raise ValueError("pyproject.toml not found in current directory. Make sure you're in a monorepo root.")
@@ -27,11 +26,11 @@ def get_pyproject_data() -> dict:
     return data
 
 
-class PkgCoreTemplateConfig(TemplateConfig):
-    """Core package template configuration"""
+class PkgFrontendStreamlitTemplateConfig(TemplateConfig):
+    """Streamlit frontend package template configuration"""
 
-    name: str = "Core package"
-    description: str = "Core logic, configuration and utilities used by every component in the project"
+    name: str = "Streamlit Frontend"
+    description: str = "Interactive web application using Streamlit framework for rapid prototyping"
     template_group: str = "package"
 
     def __init__(self):
@@ -41,14 +40,21 @@ class PkgCoreTemplateConfig(TemplateConfig):
 
         # Extract Python version from pyproject.toml
         requires_python = self.pyproject_data.get("project", {}).get("requires-python", "3.13")
-        # Extract just the version number without the >= prefix
         self.python_version = requires_python.replace(">=", "")
 
     def build_context(self, context: dict[str, Any]) -> dict[str, Any]:
         """Build additional context including pyproject data."""
         additional_context = super().build_context(context)
-        additional_context.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
+        additional_context.update(
+            {
+                "python_version": self.python_version,
+                "pyproject_data": self.pyproject_data,
+                "app_port": context.get("app_port", "8501"),
+                "app_title": context.get("app_title", "My Streamlit App"),
+            }
+        )
         return additional_context
 
+
 # Create instance of the config to be imported
-config = PkgCoreTemplateConfig()
+config = PkgFrontendStreamlitTemplateConfig()

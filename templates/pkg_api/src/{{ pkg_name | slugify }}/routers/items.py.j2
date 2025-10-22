@@ -1,0 +1,98 @@
+"""Example items router."""
+
+from typing import Any
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+
+
+class Item(BaseModel):
+    """Item model."""
+    id: int | None = None
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
+
+class ItemCreate(BaseModel):
+    """Item creation model."""
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
+
+class ItemStore:
+    """In-memory store for items."""
+
+    def __init__(self) -> None:
+        self.items_db: dict[int, Item] = {}
+        self.next_id: int = 1
+
+    def create_item(self, item: ItemCreate) -> Item:
+        """Create a new item."""
+        new_item = Item(id=self.next_id, **item.dict())
+        self.items_db[self.next_id] = new_item
+        self.next_id += 1
+        return new_item
+
+    def list_items(self, skip: int, limit: int) -> list[Item]:
+        """List all items."""
+        return list(self.items_db.values())[skip : skip + limit]
+
+    def get_item(self, item_id: int) -> Item:
+        """Get a specific item."""
+        if item_id not in self.items_db:
+            raise HTTPException(status_code=404, detail="Item not found")
+        return self.items_db[item_id]
+
+    def update_item(self, item_id: int, item: ItemCreate) -> Item:
+        """Update an existing item."""
+        if item_id not in self.items_db:
+            raise HTTPException(status_code=404, detail="Item not found")
+        updated = Item(id=item_id, **item.dict())
+        self.items_db[item_id] = updated
+        return updated
+
+    def delete_item(self, item_id: int) -> None:
+        """Delete an item."""
+        if item_id not in self.items_db:
+            raise HTTPException(status_code=404, detail="Item not found")
+        del self.items_db[item_id]
+
+
+router = APIRouter()
+store = ItemStore()
+
+
+@router.get("/items")
+async def list_items(skip: int = 0, limit: int = 10) -> dict[str, Any]:
+    """List all items."""
+    items = store.list_items(skip, limit)
+    return {"items": items, "total": len(store.items_db)}
+
+
+@router.get("/items/{item_id}")
+async def get_item(item_id: int) -> Item:
+    """Get a specific item."""
+    return store.get_item(item_id)
+
+
+@router.post("/items")
+async def create_item(item: ItemCreate) -> Item:
+    """Create a new item."""
+    return store.create_item(item)
+
+
+@router.put("/items/{item_id}")
+async def update_item(item_id: int, item: ItemCreate) -> Item:
+    """Update an existing item."""
+    return store.update_item(item_id, item)
+
+
+@router.delete("/items/{item_id}")
+async def delete_item(item_id: int) -> dict[str, str]:
+    """Delete an item."""
+    store.delete_item(item_id)
+    return {"message": "Item deleted"}

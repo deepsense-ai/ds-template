@@ -1,0 +1,81 @@
+# {{ pkg_name }}
+
+{{ app_title }} - Interactive web application built with Streamlit.
+
+## Features
+
+- **Rapid Development**: Quick prototyping with Streamlit's simple API
+- **Interactive Widgets**: Built-in components for user interaction
+- **Data Visualization**: Support for Plotly, Altair, and matplotlib charts
+- **Real-time Updates**: Auto-refresh and reactive components
+- **Session State**: Maintain state across user interactions
+
+## Installation
+
+For development:
+
+```bash
+pip install -e "packages/{{ pkg_name }}[dev]"
+```
+
+## Running the Application
+
+### Development
+
+```bash
+cd packages/{{ pkg_name }}
+streamlit run src/{{ pkg_name }}/app.py --server.port {{ app_port }}
+```
+
+### Production with Docker
+
+```bash
+cd packages/{{ pkg_name }}
+docker build -t {{ pkg_name }} .
+docker run -p {{ app_port }}:{{ app_port }} {{ pkg_name }}
+```
+
+## Project Structure
+
+```
+{{ pkg_name }}/
+├── src/
+│   └── {{ pkg_name }}/
+│       ├── app.py           # Main application entry point
+│       ├── pages/           # Multi-page app pages
+│       ├── components/      # Reusable UI components
+│       ├── utils/           # Utility functions
+│       └── config.py        # Configuration settings
+```
+
+## Configuration
+
+Create a `.env` file:
+
+```env
+APP_TITLE={{ app_title }}
+APP_PORT={{ app_port }}
+API_URL=http://localhost:8000
+DEBUG_MODE=true
+```
+
+## Adding Pages
+
+Create new pages in the `pages` directory:
+
+```python
+# pages/1_📊_Dashboard.py
+import streamlit as st
+
+st.set_page_config(page_title="Dashboard", page_icon="📊")
+st.title("Dashboard")
+# Your page content here
+```
+
+## Development Tips
+
+1. Use `st.cache_data` for expensive computations
+2. Leverage session state for maintaining user data
+3. Use columns and containers for layout
+4. Add progress indicators for long-running operations
+5. Include error handling with `st.error()` and `st.exception()`
