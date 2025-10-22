@@ -8,28 +8,40 @@ on:
     branches: 
       - main 
 
+permissions:
+  contents: write
+
 jobs:
 
   tests:
     runs-on: ubuntu-latest
-    container: python:3.11
+    container: python:3.13
 
     steps:
       - uses: actions/checkout@v4
-      
+
+      - name: Install uv
+        run: pip install uv
+
       - name: Cache Dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/pyproject.toml') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-uv-
 
       - name: Install Dependencies
-        run: pip install -r requirements.txt
+        run: uv sync --dev
+
+      - name: Run ruff
+        run: uv run ruff .
+
+      - name: Run mypy
+        run: uv run mypy .
 
       - name: Run Tests
-        run: pytest -v -p no:warnings --junitxml=report.xml tests/
+        run: uv run pytest -v -p no:warnings --junitxml=report.xml tests/
 
       - name: Publish Test Report
         uses: actions/upload-artifact@v4
@@ -40,21 +52,24 @@ jobs:
 
   pages:
     runs-on: ubuntu-latest
-    container: python:3.9-buster
+    container: python:3.13
 
     steps:
       - uses: actions/checkout@v4
-      
+
+      - name: Install uv
+        run: pip install uv
+
       - name: Cache Dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/pyproject.toml') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-uv-
 
       - name: Install Dependencies
-        run: pip install -r requirements.txt
+        run: uv sync --dev
 
       - name: Build docs
         run: ./build_docs.sh
@@ -63,4 +78,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./site

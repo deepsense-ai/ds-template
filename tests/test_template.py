@@ -1,166 +1,152 @@
-import os
-import re
-import shlex
-import subprocess
-from contextlib import contextmanager
+import tempfile
 from pathlib import Path
-from typing import Sequence
+
+import pytest
+import tomlkit
+
+from ds_template.banners import BLUE, RESET, create_banner, create_divider, join_multiline_texts, wrap_with_dividers
+from ds_template.hooks import _get_available_package_types, _get_package_choices
+from ds_template.main import TEMPLATES_DIR, entrypoint
+from ds_template.package_generator import PackageGenerator
 
 
-class JinjaSolvedValidator:
-    """Tests if all jinja templates are matched."""
-    def __init__(self):
-        self.brackets_matcher = re.compile("(?:\{\{|\{\%).*cookiecutter.*(?:\}\}|\%\})")
+def test_banners_join_multiline_texts():
+    """Test joining two multi-line texts side by side."""
+    left = "line1\nline2"
+    right = "right1\nright2\nright3"
+    result = join_multiline_texts(left, right, spacing=2)
 
-    def has_unresolved(self, content: str) -> bool:
-        return self.brackets_matcher.search(content) is not None
-
-
-def test_regex():
-    val = JinjaSolvedValidator()
-    assert val.has_unresolved('asd {{cookiecutter.foo }}{{ cookie.foo }} {{ % {{ }} }}are a') == True
-    assert val.has_unresolved('{{ % {{ }} }}') == False
-    assert val.has_unresolved('''maa aal
-                              asd dd {%- cookiecutter.zlo -%}
-                              ''') == True
-    assert val.has_unresolved('}} {{') == False
-
-@contextmanager
-def change_dir(dir : Path):
-    assert dir.is_dir()
-    assert dir.exists()
-    cwd = Path.cwd()
-    try:
-        os.chdir(dir)
-        yield
-    finally:
-        os.chdir(cwd)
+    lines = result.split("\n")
+    assert len(lines) == 3  # max height of both inputs
+    assert "line1" in lines[0]
+    assert "right1" in lines[0]
+    assert "line2" in lines[1]
+    assert "right2" in lines[1]
+    assert "right3" in lines[2]
 
 
-def run_command(command: str, dir: Path):
-    with change_dir(dir):
-        try:
-            return subprocess.check_call(shlex.split(command))
-        except subprocess.CalledProcessError as ex:
-            print(ex)
-            return ex.returncode
+def test_banners_create_divider():
+    """Test divider creation with specified width."""
+    width = 10
+    divider = create_divider(width)
+    assert divider.startswith(BLUE)
+    assert divider.endswith(RESET)
+    # Check that the actual divider content has the right width
+    content = divider[len(BLUE) : len(divider) - len(RESET)]
+    assert len(content) == width
+    assert content == "═" * width
 
 
-def assert_jinja_resolved(files: Sequence[Path]) -> None:
-    """Asserts to make sure no curly braces appear in a file name nor in it's content.
-    """
-    text_files = ['.txt', '.py', '.rst', '.md', '.cfg', '.toml', '.json', '.yaml', '.yml', '.ini', '.sh', '.ipynb']
-    validator = JinjaSolvedValidator()
-    for file in files:
-        assert validator.has_unresolved(file.name) == False
-        if file.is_file() and file.suffix in text_files:
-            content = file.read_text(encoding="utf-8")
-            assert validator.has_unresolved(content) == False
+def test_banners_wrap_with_dividers():
+    """Test wrapping content with dividers."""
+    content = "test content"
+    width = 20
+    wrapped = wrap_with_dividers(content, width)
+
+    lines = wrapped.split("\n")
+    assert len(lines) == 3  # top divider, content, bottom divider
+    assert lines[0] == lines[2]  # top and bottom dividers should be identical
+    assert lines[1] == content
 
 
-def test_template_project(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "ds.ai",
-        "project_name": "hello",
-        "ci": "GitLab"
-        })
+def test_banners_create_banner():
+    """Test banner creation with project info."""
+    project_info = "Test Project\nVersion 1.0"
+    banner = create_banner(project_info)
 
-    assert result.exit_code == 0
-    assert result.exception is None
-
-    assert result.project_path.name == "ds-ai-hello"
-    assert result.project_path.is_dir()
-
-    rpath: Path = result.project_path
-    assert_jinja_resolved(rpath.rglob("*"))
+    assert isinstance(banner, str)
+    assert len(banner) > 0
+    # Should contain dividers (blue equals signs)
+    assert "═" in banner
+    # Should contain project info
+    assert "Test Project" in banner
+    assert "Version 1.0" in banner
 
 
-def test_template_creates_package(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "test",
-        "project_name": "test",
-        "ci": "None"
-    })
-    assert result.exit_code == 0
-    assert result.exception is None
+def test_package_generator_find_project_root():
+    """Test finding project root with valid pyproject.toml."""
+    # Create a temporary directory structure
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
 
-    rpath: Path = result.project_path
-    assert run_command("uv build", rpath) == 0, "uv build failed!"
+        # Create a valid pyproject.toml with workspace config
+        pyproject_content = {"tool": {"uv": {"workspace": {"members": ["packages/*"]}}}}
 
-    dist_path = rpath / "dist"
-    assert dist_path.is_dir() is True, "The dist directory was not created"
+        pyproject_path = temp_path / "pyproject.toml"
+        with open(pyproject_path, "w") as f:
+            f.write(tomlkit.dumps(pyproject_content))
 
-    dist_files = ["test-0.0.1.dev0.tar.gz", "test-0.0.1.dev0-py3-none-any.whl"]
-    assert all((dist_path / file).exists() for file in dist_files), "Some distribution files were not found"
+        # Create packages directory
+        (temp_path / "packages").mkdir()
 
+        generator = PackageGenerator(Path(__file__).parent.parent / "templates")
+        found_root = generator.find_project_root(temp_path)
 
-def test_template_project_no_cicd(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "no",
-        "project_name": "cicd",
-        "ci": "None"
-    })
-    assert result.exit_code == 0
-    assert result.exception is None
-
-    rpath: Path = result.project_path
-    assert (rpath / ".gitlab-ci.yml").exists() is False
-    assert (rpath / ".github").exists() is False
+        assert found_root == temp_path
 
 
-def test_template_project_with_gitlab(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "with",
-        "project_name": "gitlab",
-        "ci": "GitLab"
-    })
-    assert result.exit_code == 0
-    assert result.exception is None
+def test_package_generator_find_project_root_not_found():
+    """Test that ValueError is raised when no project root is found."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+        generator = PackageGenerator(Path(__file__).parent.parent / "templates")
 
-    rpath: Path = result.project_path
-    assert (rpath / ".gitlab-ci.yml").exists() is True
-    assert (rpath / ".github").exists() is False
+        with pytest.raises(ValueError, match="No valid monorepo project root found"):
+            generator.find_project_root(temp_path)
 
 
-def test_template_project_with_github(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "with",
-        "project_name": "github",
-        "ci": "Github"
-    })
-    assert result.exit_code == 0
-    assert result.exception is None
+def test_package_generator_find_packages_directory():
+    """Test finding packages directory."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+        packages_dir = temp_path / "packages"
+        packages_dir.mkdir()
 
-    rpath: Path = result.project_path
-    assert (rpath / ".gitlab-ci.yml").exists() is False
-    assert (rpath / ".github").exists() is True
+        generator = PackageGenerator(Path(__file__).parent.parent / "templates")
+        found_packages = generator.find_packages_directory(temp_path)
 
-
-def test_template_project_with_jupytext(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "no",
-        "project_name": "jupytext",
-        "jupytext": "Yes"
-        })
-    assert result.exit_code == 0
-    assert result.exception is None
-
-    rpath: Path = result.project_path
-    jupytext_pos = (rpath / ".pre-commit-config.yaml").read_text(encoding="utf-8").find("jupytext")
-    assert jupytext_pos != -1
-    assert len(list((rpath / "notebooks").glob("*.py"))) > 0, "Notebook should have py:percent file"
+        assert found_packages == packages_dir
 
 
-def test_template_project_no_jupytext(cookies):
-    result = cookies.bake(extra_context={
-        "client_name": "no",
-        "project_name": "jupytext",
-        "jupytext": "No"
-        })
-    assert result.exit_code == 0
-    assert result.exception is None
+def test_package_generator_find_packages_directory_not_found():
+    """Test that ValueError is raised when packages directory is not found."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+        generator = PackageGenerator(Path(__file__).parent.parent / "templates")
 
-    rpath: Path = result.project_path
-    jupytext_pos = (rpath / ".pre-commit-config.yaml").read_text(encoding="utf-8").find("jupytext")
-    assert jupytext_pos == -1
-    assert len(list((rpath / "notebooks").glob("*.py"))) == 0, "Notebook should not have a py:percent file"
+        with pytest.raises(ValueError, match="Packages directory not found"):
+            generator.find_packages_directory(temp_path)
+
+
+def test_hooks_get_available_package_types():
+    """Test getting available package types from hooks."""
+    package_types = _get_available_package_types()
+
+    assert isinstance(package_types, dict)
+    # Should have some package types available
+    assert len(package_types) > 0
+    # All values should be strings (descriptions)
+    for description in package_types.values():
+        assert isinstance(description, str)
+
+
+def test_hooks_get_package_choices():
+    """Test getting package choices for multi-select."""
+    choices = _get_package_choices()
+
+    assert isinstance(choices, list)
+    assert len(choices) > 0
+
+    for choice in choices:
+        assert "name" in choice
+        assert "value" in choice
+        assert isinstance(choice["name"], str)
+        assert isinstance(choice["value"], str)
+        assert choice["value"].startswith("pkg_")
+
+
+def test_main_entrypoint_import():
+    """Test that main module can be imported and has expected functions."""
+    assert callable(entrypoint)
+    assert isinstance(TEMPLATES_DIR, Path)
+    assert TEMPLATES_DIR.exists()
