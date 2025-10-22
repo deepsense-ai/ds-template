@@ -50,6 +50,7 @@ def _get_available_package_types() -> dict[str, str]:
         result[template.location] = template.description
     return result
 
+
 def _get_package_choices() -> list[dict[str, str]]:
     """Get package type choices for multi-select question."""
     package_types = _get_available_package_types()
@@ -59,6 +60,7 @@ def _get_package_choices() -> list[dict[str, str]]:
         display_name = pkg_type.replace("pkg_", "").replace("_", " ").title()
         choices.append({"name": f"{display_name} - {description}", "value": pkg_type})
     return choices
+
 
 def generate_packages_hook(project_path: pathlib.Path, context: dict[str, Any], console: Console) -> None:
     """
@@ -91,7 +93,6 @@ def generate_packages_hook(project_path: pathlib.Path, context: dict[str, Any], 
         return
 
     console.print("\n[bold cyan]Generating selected packages...[/bold cyan]")
-
 
     project_name = context.get("project_name", "my-ds-project")
 
@@ -131,6 +132,7 @@ def generate_packages_hook(project_path: pathlib.Path, context: dict[str, Any], 
 
         console.print(f"[dim]{traceback.format_exc()}[/dim]")
 
+
 def uv_sync_hook(project_path: pathlib.Path, context: dict[str, Any], console: Console) -> None:
     """
     Run uv sync to install dependencies.
@@ -142,7 +144,7 @@ def uv_sync_hook(project_path: pathlib.Path, context: dict[str, Any], console: C
     """
     console.print("\n[bold cyan]Running uv sync to install dependencies...[/bold cyan]")
     try:
-        subprocess.run(["uv", "sync"], cwd=project_path, capture_output=True, text=True, check=True) # noqa: S607
+        subprocess.run(["uv", "sync"], cwd=project_path, capture_output=True, text=True, check=True)  # noqa: S607
         console.print("[green]✓ Dependencies installed successfully![/green]")
     except subprocess.CalledProcessError as e:
         console.print("[yellow]Warning: uv sync failed with error:[/yellow]")

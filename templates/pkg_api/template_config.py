@@ -27,11 +27,11 @@ def get_pyproject_data() -> dict:
     return data
 
 
-class PkgCoreTemplateConfig(TemplateConfig):
-    """Core package template configuration"""
+class PkgApiTemplateConfig(TemplateConfig):
+    """API package template configuration"""
 
-    name: str = "Core package"
-    description: str = "Core logic, configuration and utilities used by every component in the project"
+    name: str = "API package"
+    description: str = "RESTful API service that will be dockerized and deployed to servers"
     template_group: str = "package"
 
     def __init__(self):
@@ -47,8 +47,16 @@ class PkgCoreTemplateConfig(TemplateConfig):
     def build_context(self, context: dict[str, Any]) -> dict[str, Any]:
         """Build additional context including pyproject data."""
         additional_context = super().build_context(context)
-        additional_context.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
+        additional_context.update(
+            {
+                "python_version": self.python_version,
+                "pyproject_data": self.pyproject_data,
+                "api_port": context.get("api_port", "8000"),
+                "api_title": context.get("api_title", "My API Service"),
+            }
+        )
         return additional_context
 
+
 # Create instance of the config to be imported
-config = PkgCoreTemplateConfig()
+config = PkgApiTemplateConfig()

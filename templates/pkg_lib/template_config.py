@@ -27,11 +27,11 @@ def get_pyproject_data() -> dict:
     return data
 
 
-class PkgCoreTemplateConfig(TemplateConfig):
-    """Core package template configuration"""
+class PkgLibTemplateConfig(TemplateConfig):
+    """Python package / Library code template configuration"""
 
-    name: str = "Core package"
-    description: str = "Core logic, configuration and utilities used by every component in the project"
+    name: str = "Library"
+    description: str = "Shared library that may be used between one or more components, packaged as a Python module"
     template_group: str = "package"
 
     def __init__(self):
@@ -40,7 +40,7 @@ class PkgCoreTemplateConfig(TemplateConfig):
         self.pyproject_data = get_pyproject_data()
 
         # Extract Python version from pyproject.toml
-        requires_python = self.pyproject_data.get("project", {}).get("requires-python", "3.13")
+        requires_python = self.pyproject_data.get("project", {}).get("requires-python", ">=3.10")
         # Extract just the version number without the >= prefix
         self.python_version = requires_python.replace(">=", "")
 
@@ -50,5 +50,6 @@ class PkgCoreTemplateConfig(TemplateConfig):
         additional_context.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
         return additional_context
 
+
 # Create instance of the config to be imported
-config = PkgCoreTemplateConfig()
+config = PkgLibTemplateConfig()

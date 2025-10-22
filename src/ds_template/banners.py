@@ -59,7 +59,7 @@ PEPES = [PEPE_1, PEPE_2, PEPE_3, PEPE_4]
 
 def get_random_pepe() -> str:
     """Select a random Pepe from the collection."""
-    return random.choice(PEPES) # noqa: S311
+    return random.choice(PEPES)  # noqa: S311
 
 
 def colorize_pepe(pepe: str) -> str:

@@ -1,0 +1,59 @@
+"""Worker configuration."""
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    """Worker settings."""
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    # Redis Configuration
+    redis_url: str = Field(
+        default="redis://localhost:6379/0",
+        description="Redis connection URL"
+    )
+
+    # Celery Configuration
+    celery_broker_url: str = Field(
+        default="redis://localhost:6379/0",
+        description="Celery broker URL"
+    )
+    celery_result_backend: str = Field(
+        default="redis://localhost:6379/0",
+        description="Celery result backend URL"
+    )
+
+    # Worker Configuration
+    worker_concurrency: int = Field(
+        default=4,
+        description="Number of concurrent worker processes"
+    )
+    worker_max_tasks_per_child: int = Field(
+        default=1000,
+        description="Maximum number of tasks a worker can execute before being recycled"
+    )
+
+    # Task Configuration
+    task_default_retry_delay: int = Field(
+        default=60,
+        description="Default retry delay in seconds"
+    )
+    task_max_retries: int = Field(
+        default=3,
+        description="Maximum number of task retries"
+    )
+
+    # Logging
+    log_level: str = Field(
+        default="INFO",
+        description="Logging level"
+    )
+
+
+settings = Settings()
