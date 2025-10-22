@@ -1,20 +1,29 @@
-# Minimal makefile for Sphinx documentation
+# Minimal makefile for MkDocs documentation
 #
 
-# You can set these variables from the command line, and also
-# from the environment for the first two.
-SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = .
-BUILDDIR      = _build
+# You can set these variables from the command line
+MKDOCS ?= mkdocs
+SOURCEDIR = .
+BUILDDIR = site
 
-# Put it first so that "make" without argument is like "make help".
+# Put it first so that "make" without argument is like "make help"
 help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo "MkDocs documentation build commands:"
+	@echo "  serve    Start development server"
+	@echo "  build    Build the documentation"
+	@echo "  clean    Clean the build directory"
+	@echo "  deploy   Deploy to GitHub Pages"
 
-.PHONY: help Makefile
+.PHONY: help serve build clean deploy
 
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+serve:
+	@$(MKDOCS) serve
+
+build:
+	@$(MKDOCS) build
+
+clean:
+	@rm -rf "$(BUILDDIR)"
+
+deploy:
+	@$(MKDOCS) gh-deploy
