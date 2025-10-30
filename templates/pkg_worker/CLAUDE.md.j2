@@ -1,0 +1,54 @@
+# Worker Package Rules
+
+This package provides a **Celery-based background worker** for processing asynchronous and scheduled tasks with Redis as the message broker.
+
+## Task Definition Rules
+
+- **ALWAYS** use package-prefixed task names: `{{ pkg_name }}.tasks.task_name`
+- **ALWAYS** import the Celery app: `from {{ pkg_name }}.worker import celery_app`
+- Use `@celery_app.task()` decorator for all tasks
+- **ALWAYS** use type hints for task function parameters and return values
+
+## Task Design Rules
+
+- Keep tasks focused and single-purpose
+- Use descriptive task names with package prefix
+- For tasks that may fail, use `bind=True` and set `max_retries`
+- Consider task time limits for long-running operations
+
+## Error Handling Rules
+
+- Use `bind=True` for tasks that need retry logic
+- **MUST** implement exponential backoff: `countdown=60 * (2 ** self.request.retries)`
+- Set appropriate `max_retries` based on task type
+- **ALWAYS** use Celery's task logger: `from celery.utils.log import get_task_logger` then `logger = get_task_logger(__name__)`
+
+## Logging Rules
+
+- **MUST** use Celery's task logger, never Python's standard logging in tasks
+- Import: `from celery.utils.log import get_task_logger` then `logger = get_task_logger(__name__)`
+- Log errors with context before retrying
+
+## Periodic Tasks Rules
+
+- Define periodic tasks in `worker.py` using `celery_app.conf.beat_schedule`
+- Use `crontab()` from `celery.schedules` for cron-like scheduling
+- Use float values for interval-based scheduling (seconds)
+
+## Configuration Rules
+
+- **ALL** configuration must use Pydantic Settings in `config.py`
+- **ALL** settings must load from `.env` file via `env_file = ".env"`
+- Redis URLs, concurrency, retry settings must be configurable via environment variables
+
+## File Structure Rules
+
+- `worker.py` - Celery app configuration and beat schedule
+- `tasks.py` - Task definitions and implementations
+- `config.py` - Pydantic settings for worker configuration
+
+## Performance Rules
+
+- Set `worker_prefetch_multiplier=1` for fair task distribution
+- Configure `worker_max_tasks_per_child` to prevent memory leaks
+- Use task routing and queues for load distribution

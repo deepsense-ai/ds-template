@@ -29,7 +29,23 @@ When you run `uvx ds-template`, you'll be guided through this process:
 2. **Python version** 
 3. **CI/CD provider selection:** GitHub, GitLab, or None
 
-### Step 2:Template Generation
+### Step 2A: AI-Powered Generation *(Recommended)*
+
+**Best for: Prototyping and getting structural suggestions**
+
+1. **Describe your project** in natural language  
+   (_Example: "I want a REST API with background worker and Streamlit dashboard"_)
+2. **Answer follow-up questions** to refine requirements
+3. **Review proposed structure** and make adjustments if needed
+4. **Generate initial project** using proven templates
+5. **Customize with Claude Code** for real-time assistance
+
+> **Learn more about the AI workflow:**  
+> See [AI-Powered Generation](ai_features.md) for details and examples.
+
+### Step 2B: Traditional Template Generation
+
+**Best for: Quickly setting up a typical project with selected package types**
 
 1. **Select which packages** you want to include (e.g., `core`, `api`, `frontend`)
 2. **Generate initial project** with selected components
@@ -38,7 +54,6 @@ When you run `uvx ds-template`, you'll be guided through this process:
 > The generated project is a solid starting point and should be treated as a demo or basic skeleton. You'll likely want to tailor it to your real-world needs!
 
 ---
-
 
 ## Generated Project Structure
 
@@ -134,4 +149,5 @@ git push origin main
 ```
 
 ## Learn More
+- [AI-Powered Features](ai_features.md) - Detailed guide to AI capabilities and workflow
 - [Template Content](template_content.md) - What's included in generated projects

@@ -17,6 +17,13 @@ The process starts with basic questions (project name, Python version, CI/CD pro
 - **Modern Tooling**: Ruff, uv, MkDocs, pytest, and more
 - **Monorepo Support**: Multi-package workspace structure
 
+### AI-Powered Generation *(Recommended)*
+- **Natural Language Descriptions**: Describe your project in natural language
+- **Intelligent Follow-up Questions**: AI generates relevant questions to understand your requirements
+- **Optimal Structure Proposal**: AI suggests the best project architecture
+- **Template-Based Implementation**: Uses proven templates from the `templates/` directory
+- **Interactive Customization**: Claude Code integration for real-time project adaptation
+
 ## Key Features & Benefits
 
 - **Modern Python Workspace**: uv-based project management with workspace support enables flexible monorepo structures with independent packages.

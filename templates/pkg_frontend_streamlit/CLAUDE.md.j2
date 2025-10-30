@@ -1,0 +1,36 @@
+# Frontend Package Rules
+
+This package provides a **Streamlit** web application with branding integration and component-based architecture.
+
+## Branding Rules
+
+- **MANDATORY**: **ALWAYS** use branding from `{{ project_name }}/branding/branding.json`
+- **MUST** load branding using: `from .utils.branding import load_branding` then `branding = load_branding()`
+- **MUST** use branding colors, name, and logo in UI
+- **NEVER** hardcode colors or company name - always use branding values
+
+## Component Rules
+
+- **ALL** reusable UI components must be in `components/` directory
+- Use component functions/classes for repeated UI patterns
+- Keep components focused and single-purpose
+
+## App Structure Rules
+
+- Main app logic in `app.py`
+- Utilities in `utils/` directory
+- Configuration in `config.py` with Pydantic Settings
+- **MUST** use `st.set_page_config()` at the start of the app
+
+## Streamlit Best Practices Rules
+
+- **ALWAYS** use Streamlit's caching (`@st.cache_data`, `@st.cache_resource`) for performance
+- Use `st.error()` for errors and `st.exception()` for exception display
+- Structure app with clear page sections using Streamlit's layout functions
+
+## File Structure Rules
+
+- `app.py` - Main Streamlit application
+- `components/` - Reusable UI components
+- `utils/` - Utility functions (including branding loader)
+- `config.py` - Pydantic settings configuration
