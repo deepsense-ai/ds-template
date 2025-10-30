@@ -41,6 +41,7 @@ theme:
 nav:
   - Home: index.md
   - Quick Start: quickstart.md
+  - AI-Powered Generation: ai_features.md
   - Template Content:
     - template_content.md
     - Project Structure: tmp_content/project_structure.md

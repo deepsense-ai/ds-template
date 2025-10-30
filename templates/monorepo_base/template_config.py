@@ -20,6 +20,15 @@ class StandardTemplateConfig(TemplateConfig):
             default="3.13",
         ),
         ListQuestion(name="ci", message="Select CI provider", choices=["GitHub", "GitLab", "None"], default="GitHub"),
+        ListQuestion(
+            name="claude-code",
+            message="How would you like to initialize your project?",
+            choices=[
+                "Just generate packages (core by default, more to choose)",
+                "Run Claude-based workflow to create the app",
+            ],
+            default="Just generate packages (core by default, more to choose)",
+        ),
     ]
 
     def get_project_directory_name(self, context: dict[str, Any]) -> str:

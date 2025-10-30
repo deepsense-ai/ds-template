@@ -54,5 +54,6 @@ class PkgCoreTemplateConfig(TemplateConfig):
         additional_context.update({"python_version": self.python_version, "pyproject_data": self.pyproject_data})
         return additional_context
 
+
 # Create instance of the config to be imported
 config = PkgCoreTemplateConfig()

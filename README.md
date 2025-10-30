@@ -11,11 +11,25 @@ Useful template to bootstrap new professional data science and python projects.
 
 # What is it?
 
-A comprehensive project template generator for data science and Python projects, which generates basic, 
-most common configuration using proven templates.
+A comprehensive project template generator for data science and Python projects that combines traditional template-based generation with AI-powered project generation capabilities.
 
-It is a result of our experiences with building data science projects and is a part of our internal best practices, however it is not a silver bullet and should be treated as a starting point for your project.
-Especially some settings might be less/more restrictive than you need, but we believe it is better to start with a good baseline and modify it later than to start from scratch.
+## Core Features
+
+**Template-Based Generation**: Generate basic, most common configuration using proven templates.
+
+**AI-Powered Project Generation**: Integration with Claude Code that allows you to describe your project in natural language and have it automatically:
+- Generate intelligent follow-up questions to understand your requirements
+- Propose optimal project structure with appropriate components
+- Create packages using templates from the `templates/` directory
+- Adapt and customize the generated code through interactive Claude sessions
+
+It is a result of our experiences with building data science projects and is a part of our internal best practices, 
+however it is not a silver bullet and should be treated as a starting point for your project.
+Especially some settings might be less/more restrictive than you need, 
+but we believe it is better to start with a good baseline and modify it later than to start from scratch.
+
+The AI-powered project generation feature bridges the gap between high-level project vision and implementation details, 
+making it easier to bootstrap complex data science projects while maintaining the flexibility to customize every aspect.
 
 # What are the benefits?
 
@@ -66,6 +80,11 @@ Generated project consists of:
     * **Docker support** - pre-commit Docker image for consistent environments
     * **Scripts** - utility scripts for package creation and management
 
+7. **AI-Powered Features**:
+    * **Intelligent project generation** - describe your project and let AI create the structure
+    * **Interactive customization** - Claude Code integration for project adaptation
+    * **Template-based packages** - AI selects appropriate package types from available templates
+
 Most up-to date descriptions, tips and explanations are in the [documentation](https://deepsense-ai.github.io/ds-template/).
 
 # Getting started
@@ -74,9 +93,25 @@ Most up-to date descriptions, tips and explanations are in the [documentation](h
 
 ```bash
 # Create a new data science application
-uvx ds-template
+uvx create-ds-app
 ```
-Select from predefined package types and generate a standard project structure
+
+When you run the command, you'll be presented with options including:
+- **Traditional Template Generation**: Select from predefined package types and generate a standard project structure
+- **AI-Powered Generation**: Describe your project in natural language and let AI generate the optimal structure and code
+
+## AI-Powered Generation Workflow
+
+When you choose the AI-powered generation option, the tool will:
+
+1. **Project Description**: You describe your project in natural language
+2. **Intelligent Questions**: Claude generates follow-up questions to better understand your requirements
+3. **Structure Proposal**: AI proposes an optimal project structure with appropriate components
+4. **Interactive Editing**: You can review and edit the proposed structure before generation
+5. **Template-Based Generation**: Uses templates from the `templates/` directory to generate actual code
+6. **Claude Integration**: Launches an interactive Claude session to help you customize and adapt the generated code
+
+This workflow combines the reliability of proven templates with the intelligence of AI to create projects that match your exact vision.
 
 ## Development
 
